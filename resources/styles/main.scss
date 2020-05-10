@@ -1,5 +1,17 @@
 @import "variables";
 
+$BORDER_COLOR_DARK_DISABLED: alpha($BORDER_COLOR_DARK, $DISABLED_ALPHA);
+$BORDER_COLOR_NORMAL_DISABLED: alpha($BORDER_COLOR_NORMAL, $DISABLED_ALPHA);
+$COLOR_FOREGROUND_DARK_DISABLED: alpha($COLOR_FOREGROUND_DARK, $DISABLED_ALPHA);
+$COLOR_BACKGROUND_LIGHT_DISABLED: alpha($COLOR_BACKGROUND_LIGHT, $DISABLED_ALPHA);
+
+$BORDER_DARK: 1px solid $BORDER_COLOR_DARK;
+$BORDER_NORMAL: 1px solid $BORDER_COLOR_NORMAL;
+$BORDER_LIGHT_SELECTED: 1px solid $BORDER_COLOR_LIGHT_SELECTED;
+$BORDER_NORMAL_SELECTED: 1px solid $BORDER_COLOR_NORMAL_SELECTED;
+$BORDER_DARK_DISABLED: 1px solid $BORDER_COLOR_DARK_DISABLED;
+$BORDER_NORMAL_DISABLED: 1px solid $BORDER_COLOR_NORMAL_DISABLED;
+
 .themeable-panel,
 QTabWidget.themeable-panel::pane {
   background-color: $PANEL_BACKGROUND_COLOR;
@@ -62,7 +74,7 @@ QPushButton {
 
     &:selected {
       color: $COLOR_BACKGROUND_NORMAL;
-      background: $BORDER_SELECTION_COLOR_NORMAL;
+      background: $BORDER_COLOR_NORMAL_SELECTED;
     }
   }
 
@@ -77,27 +89,27 @@ QPushButton {
     border: $BORDER_DARK;
 
     &:hover {
-      border: $BORDER_SELECTION_LIGHT;
+      border: $BORDER_LIGHT_SELECTED;
     }
   }
 
   &:hover {
     color: $COLOR_FOREGROUND_LIGHT;
-    border: $BORDER_SELECTION_LIGHT;
+    border: $BORDER_LIGHT_SELECTED;
   }
 
   &:selected {
     color: $COLOR_BACKGROUND_NORMAL;
-    background: $BORDER_SELECTION_COLOR_NORMAL;
+    background: $BORDER_COLOR_NORMAL_SELECTED;
   }
 
   &:hover {
     color: $COLOR_FOREGROUND_LIGHT;
-    border: $BORDER_SELECTION_LIGHT;
+    border: $BORDER_LIGHT_SELECTED;
   }
 
   &:focus {
-    border: $BORDER_SELECTION_NORMAL;
+    border: $BORDER_NORMAL_SELECTED;
   }
 }
 
@@ -107,7 +119,7 @@ QComboBox {
   min-height: 1.5em;
   border: $BORDER_NORMAL;
   border-radius: $SIZE_BORDER_RADIUS;
-  selection-background-color: $BORDER_SELECTION_COLOR_NORMAL;
+  selection-background-color: $BORDER_COLOR_NORMAL_SELECTED;
 
   QAbstractItemView {
     padding-top: 5px;
@@ -116,7 +128,7 @@ QComboBox {
 
     &:selected {
       color: $COLOR_BACKGROUND_NORMAL;
-      background: $BORDER_SELECTION_COLOR_NORMAL;
+      background: $BORDER_COLOR_NORMAL_SELECTED;
     }
   }
 
@@ -127,15 +139,15 @@ QComboBox {
   }
 
   &:hover {
-    border: $BORDER_SELECTION_LIGHT;
+    border: $BORDER_LIGHT_SELECTED;
   }
 
   &:focus {
-    border: $BORDER_SELECTION_NORMAL;
+    border: $BORDER_NORMAL_SELECTED;
   }
 
   &:on {
-    selection-background-color: $BORDER_SELECTION_COLOR_NORMAL;
+    selection-background-color: $BORDER_COLOR_NORMAL_SELECTED;
   }
 
   &::indicator {
@@ -154,11 +166,11 @@ QComboBox {
   &::item {
     &:checked {
       color: white;
-      background-color: $BORDER_SELECTION_COLOR_NORMAL;
+      background-color: $BORDER_COLOR_NORMAL_SELECTED;
     }
 
     &:selected {
-      border: $BORDER_SELECTION_NORMAL;
+      border: $BORDER_NORMAL_SELECTED;
     }
   }
 
@@ -259,16 +271,16 @@ QAbstractSpinBox {
 
   &:hover {
     color: $COLOR_FOREGROUND_LIGHT;
-    border: $BORDER_SELECTION_LIGHT;
+    border: $BORDER_LIGHT_SELECTED;
   }
 
   &:focus {
-    border: $BORDER_SELECTION_NORMAL;
+    border: $BORDER_NORMAL_SELECTED;
   }
 
   &:selected {
     color: $COLOR_BACKGROUND_NORMAL;
-    background: $BORDER_SELECTION_COLOR_NORMAL;
+    background: $BORDER_COLOR_NORMAL_SELECTED;
   }
 }
 
@@ -285,7 +297,7 @@ QTabWidget {
 
     &:selected {
       background-color: $COLOR_BACKGROUND_NORMAL;
-      border: $BORDER_SELECTION_NORMAL;
+      border: $BORDER_NORMAL_SELECTED;
     }
   }
 
@@ -316,7 +328,7 @@ QTabBar {
       &:selected {
         color: $COLOR_FOREGROUND_LIGHT;
         background-color: $COLOR_BACKGROUND_LIGHT;
-        border-bottom: 3px solid $BORDER_SELECTION_COLOR_NORMAL;
+        border-bottom: 3px solid $BORDER_COLOR_NORMAL_SELECTED;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
 
@@ -343,8 +355,8 @@ QTabBar {
         &:hover {
           padding-left: 4px;
           padding-right: 4px;
-          border: $BORDER_SELECTION_LIGHT;
-          border-bottom: 3px solid $BORDER_SELECTION_COLOR_LIGHT;
+          border: $BORDER_LIGHT_SELECTED;
+          border-bottom: 3px solid $BORDER_COLOR_LIGHT_SELECTED;
         }
       }
     }

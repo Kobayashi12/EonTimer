@@ -1,0 +1,39 @@
+# EonTimer Theming Support
+
+## Known IDs
+- Timer Display Pane
+  - ID: `#timerDisplayPane`
+  - Current Stage
+    - ID: `#currentStageValue`
+  - Minutes Before Target
+    - Label ID: `#minutesBeforeTargetLbl`
+    - Value ID: `#minutesBeforeTargetValue`
+  - Next Stage
+    - Label ID: `#nextStageLbl`
+    - Value ID: `#nextStageValue`
+- Timer Selection Pane
+  - ID: `#timerSelectionPane`
+  - Generation 5 Timer Pane
+    - ID: `#gen5TimerPane`
+  - Generation 4 Timer Pane
+    - ID: `#gen4TimerPane`
+    - Calibrated Delay
+      - Label: `#gen4CalibratedDelayLbl`
+      - Field: `#gen4CalibratedDelayField`
+    - Calibrated Second
+      - Label: `#gen4CalibratedSecondLbl`
+      - Field: `#gen4CalibratedSecondField`
+    - Target Delay
+      - Label: `#gen4TargetDelayLbl`
+      - Field: `#gen4TargetDelayField`
+    - Target Second
+      - Label: `#gen4TargetSecondLbl`
+      - Field: `#gen4TargetSecondField`
+  - Generation 3 Timer Pane
+    - ID: `#gen3TimerPane`
+- Start/Stop Button
+  - ID: `#timerBtn`
+- Update Button
+  - ID: `#updateBtn`
+- Settings Button
+  - ID: `#settingsBtn`
