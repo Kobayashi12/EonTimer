@@ -4,10 +4,8 @@ import io.github.dylmeadows.eontimer.model.TimerState
 import io.github.dylmeadows.eontimer.model.timer.Gen4TimerMode
 import io.github.dylmeadows.eontimer.model.timer.Gen4TimerModel
 import io.github.dylmeadows.eontimer.service.factory.Gen4TimerFactory
-import io.github.dylmeadows.eontimer.util.bindBidirectional
 import io.github.dylmeadows.eontimer.util.javafx.asChoiceField
 import io.github.dylmeadows.eontimer.util.javafx.spinner.LongValueFactory
-import io.github.dylmeadows.eontimer.util.javafx.spinner.commitValue
 import io.github.dylmeadows.eontimer.util.javafx.spinner.setOnFocusLost
 import io.github.dylmeadows.eontimer.util.javafx.spinner.text
 import io.github.dylmeadows.eontimer.util.javafx.spinner.valueProperty
@@ -42,27 +40,27 @@ class Gen4TimerPane @Autowired constructor(
         modeField.parent.disableProperty().bind(timerState.runningProperty)
 
         calibratedDelayField.valueFactory = LongValueFactory()
-        calibratedDelayField.valueProperty!!.bindBidirectional(model.calibratedDelayProperty)
+        calibratedDelayField.valueProperty!!.bindBidirectional(model.calibratedDelayProperty.asObject())
         calibratedDelayField.parent.disableProperty().bind(timerState.runningProperty)
         calibratedDelayField.setOnFocusLost(calibratedDelayField::commitValue)
 
         calibratedSecondField.valueFactory = LongValueFactory()
-        calibratedSecondField.valueProperty!!.bindBidirectional(model.calibratedSecondProperty)
+        calibratedSecondField.valueProperty!!.bindBidirectional(model.calibratedSecondProperty.asObject())
         calibratedSecondField.parent.disableProperty().bind(timerState.runningProperty)
         calibratedSecondField.setOnFocusLost(calibratedSecondField::commitValue)
 
         targetDelayField.valueFactory = LongValueFactory(0)
-        targetDelayField.valueProperty!!.bindBidirectional(model.targetDelayProperty)
+        targetDelayField.valueProperty!!.bindBidirectional(model.targetDelayProperty.asObject())
         targetDelayField.parent.disableProperty().bind(timerState.runningProperty)
         targetDelayField.setOnFocusLost(targetDelayField::commitValue)
 
         targetSecondField.valueFactory = LongValueFactory(0)
-        targetSecondField.valueProperty!!.bindBidirectional(model.targetSecondProperty)
+        targetSecondField.valueProperty!!.bindBidirectional(model.targetSecondProperty.asObject())
         targetSecondField.parent.disableProperty().bind(timerState.runningProperty)
         targetSecondField.setOnFocusLost(targetSecondField::commitValue)
 
         delayHitField.valueFactory = LongValueFactory(0)
-        delayHitField.valueProperty!!.bindBidirectional(model.delayHitProperty)
+        delayHitField.valueProperty!!.bindBidirectional(model.delayHitProperty.asObject())
         delayHitField.parent.disableProperty().bind(timerState.runningProperty)
         delayHitField.setOnFocusLost(delayHitField::commitValue)
         delayHitField.text = ""

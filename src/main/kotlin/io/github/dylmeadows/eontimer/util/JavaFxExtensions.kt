@@ -1,37 +1,13 @@
 package io.github.dylmeadows.eontimer.util
 
 import com.sun.javafx.binding.BidirectionalBinding
-import io.github.dylmeadows.common.javafx.util.Nodes
 import io.github.dylmeadows.eontimer.model.resource.CssResource
-import io.github.dylmeadows.eontimer.model.resource.FxmlResource
-import io.github.dylmeadows.springboot.javafx.SpringJavaFxApplication
-import javafx.beans.binding.BooleanBinding
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.DoubleProperty
-import javafx.beans.property.FloatProperty
-import javafx.beans.property.IntegerProperty
-import javafx.beans.property.LongProperty
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.Property
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleLongProperty
-import javafx.beans.property.StringProperty
-import javafx.beans.value.ObservableBooleanValue
-import javafx.beans.value.ObservableDoubleValue
-import javafx.beans.value.ObservableFloatValue
-import javafx.beans.value.ObservableIntegerValue
-import javafx.beans.value.ObservableLongValue
-import javafx.beans.value.ObservableValue
-import javafx.scene.Node
+import javafx.beans.property.*
+import javafx.beans.value.*
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.Label
-import javafx.scene.control.Spinner
-import javafx.scene.control.SpinnerValueFactory
 import javafx.stage.Stage
-import javafx.util.converter.IntegerStringConverter
-import javafx.util.converter.LongStringConverter
-import java.util.*
 import kotlin.reflect.KProperty
 
 operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = this.value!!
@@ -57,11 +33,11 @@ fun ObjectProperty<Int>.asIntegerProperty(): IntegerProperty {
 }
 
 fun IntegerProperty.bindBidirectional(property: ObjectProperty<Int>) {
-    BidirectionalBinding.bindNumber(this, property)
+    bindBidirectional(property.asIntegerProperty())
 }
 
 fun ObjectProperty<Int>.bindBidirectional(property: IntegerProperty) {
-    BidirectionalBinding.bindNumber(this, property)
+    bindBidirectional(property.asObject())
 }
 
 fun ObjectProperty<Long>.asLongProperty(): LongProperty {
@@ -69,17 +45,11 @@ fun ObjectProperty<Long>.asLongProperty(): LongProperty {
 }
 
 fun LongProperty.bindBidirectional(property: ObjectProperty<Long>) {
-    BidirectionalBinding.bindNumber(this, property)
+    bindBidirectional(property.asLongProperty())
 }
 
 fun ObjectProperty<Long>.bindBidirectional(property: LongProperty) {
-    BidirectionalBinding.bindNumber(this, property)
-}
-
-
-
-fun <T : Parent> SpringJavaFxApplication.load(resource: FxmlResource): T {
-    return load(resource.get())
+    bindBidirectional(property.asObject())
 }
 
 fun Scene.addCss(resource: CssResource) {
@@ -98,10 +68,6 @@ var Stage.size: Dimension
         width = value.width
         height = value.height
     }
-
-fun Node.showWhen(condition: BooleanBinding) {
-    Nodes.hideAndResizeParentIf(this, condition.not())
-}
 
 var Label.isActive: Boolean
     get() = this.styleClass.contains("active")

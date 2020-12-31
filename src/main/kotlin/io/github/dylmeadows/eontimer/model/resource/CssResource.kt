@@ -1,11 +1,12 @@
 package io.github.dylmeadows.eontimer.model.resource
 
-import io.github.dylmeadows.common.core.io.Resource
+import io.github.dylmeadows.commonkt.core.io.Resource
 
-enum class CssResource(private val path: String) : Resource {
+enum class CssResource(
+    relativePath: String
+) : Resource {
+
     MAIN("main.css");
 
-    override fun getPath(): String {
-        return "$BASE_RESOURCE_PATH/css/${this.path}"
-    }
+    override val path: String = "$BASE_RESOURCE_PATH/css/$relativePath"
 }

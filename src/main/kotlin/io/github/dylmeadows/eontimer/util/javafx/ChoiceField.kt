@@ -1,7 +1,7 @@
 package io.github.dylmeadows.eontimer.util.javafx
 
-import io.github.dylmeadows.common.javafx.util.Choice
-import io.github.dylmeadows.common.javafx.util.ChoiceConverter
+import io.github.dylmeadows.commonkt.javafx.util.Choice
+import io.github.dylmeadows.commonkt.javafx.util.ChoiceConverter
 import io.github.dylmeadows.eontimer.util.getValue
 import io.github.dylmeadows.eontimer.util.setValue
 import javafx.beans.property.ObjectProperty
@@ -21,6 +21,6 @@ inline fun <reified T> ChoiceBox<T>.asChoiceField(): ChoiceField<T>
           T : Choice {
     val choices = T::class.java.enumConstants
     items = FXCollections.observableArrayList(*choices)
-    converter = ChoiceConverter.forChoice(T::class.java)
+    converter = ChoiceConverter(T::class)
     return ChoiceField(this)
 }

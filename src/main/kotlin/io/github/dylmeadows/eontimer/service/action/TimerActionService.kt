@@ -20,7 +20,7 @@ class TimerActionService @Autowired constructor(
     private val timerActionSettingsModel: ActionSettingsModel,
     private val soundPlayer: SoundPlayer) {
 
-    var actionInterval: List<Duration> = Collections.emptyList()
+    final var actionInterval: List<Duration> = Collections.emptyList()
         private set
 
     val activeProperty: BooleanProperty = SimpleBooleanProperty(false)

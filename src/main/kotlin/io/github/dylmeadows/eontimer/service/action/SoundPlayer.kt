@@ -25,7 +25,7 @@ class SoundPlayer @Autowired constructor(
     @PostConstruct
     private fun initialize() {
         actionSettings.soundProperty.asFlux()
-            .map(SoundResource::get)
+            .map(SoundResource::url)
             .map(::createMediaPlayer)
             .subscribe { mediaPlayer = it }
         // NOTE: this buffers the MediaPlayer.

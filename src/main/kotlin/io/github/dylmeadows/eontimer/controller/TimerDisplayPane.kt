@@ -1,15 +1,10 @@
 package io.github.dylmeadows.eontimer.controller
 
-import io.github.dylmeadows.common.javafx.scene.paint.Colors
+import io.github.dylmeadows.commonkt.javafx.scene.paint.toHex
 import io.github.dylmeadows.eontimer.model.TimerState
 import io.github.dylmeadows.eontimer.model.settings.ActionSettingsModel
 import io.github.dylmeadows.eontimer.service.action.TimerActionService
-import io.github.dylmeadows.eontimer.util.INDEFINITE
-import io.github.dylmeadows.eontimer.util.JavaFxScheduler
-import io.github.dylmeadows.eontimer.util.anyChangesOf
-import io.github.dylmeadows.eontimer.util.asFlux
-import io.github.dylmeadows.eontimer.util.isActive
-import io.github.dylmeadows.eontimer.util.toSeconds
+import io.github.dylmeadows.eontimer.util.*
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,12 +15,15 @@ import java.time.Duration
 class TimerDisplayPane @Autowired constructor(
     private val timerState: TimerState,
     private val timerActionService: TimerActionService,
-    private val actionSettingsModel: ActionSettingsModel) {
+    private val actionSettingsModel: ActionSettingsModel
+) {
 
     @FXML
     lateinit var currentStageLbl: Label
+
     @FXML
     lateinit var minutesBeforeTargetLbl: Label
+
     @FXML
     lateinit var nextStageLbl: Label
 
@@ -40,7 +38,8 @@ class TimerDisplayPane @Autowired constructor(
             .subscribe(currentStageLbl::setText)
         anyChangesOf(
             timerState.totalTimeProperty,
-            timerState.totalElapsedProperty)
+            timerState.totalElapsedProperty
+        )
             .subscribeOn(JavaFxScheduler.platform())
             .subscribe {
                 minutesBeforeTargetLbl.text =
@@ -54,8 +53,7 @@ class TimerDisplayPane @Autowired constructor(
             .subscribe { currentStageLbl.isActive = it }
 
         actionSettingsModel.colorProperty.asFlux()
-            .map { Colors.toHex(it) }
-            .map { "-theme-active: $it" }
+            .map { "-theme-active: ${it.toHex()}" }
             .subscribe(currentStageLbl::setStyle)
     }
 
@@ -72,10 +70,12 @@ class TimerDisplayPane @Autowired constructor(
     private fun formatTime(duration: Duration): String {
         return when (duration) {
             INDEFINITE -> "?:??"
-            else -> String.format("%d:%02d",
+            else -> String.format(
+                "%d:%02d",
                 duration.toSeconds(),
                 duration.toMillis()
-                    / 10 % 100)
+                    / 10 % 100
+            )
         }
     }
 }

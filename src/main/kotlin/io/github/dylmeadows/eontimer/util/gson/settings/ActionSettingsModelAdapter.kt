@@ -3,7 +3,7 @@ package io.github.dylmeadows.eontimer.util.gson.settings
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import io.github.dylmeadows.common.javafx.scene.paint.Colors
+import io.github.dylmeadows.commonkt.javafx.scene.paint.toHex
 import io.github.dylmeadows.eontimer.model.resource.SoundResource
 import io.github.dylmeadows.eontimer.model.settings.ActionMode
 import io.github.dylmeadows.eontimer.model.settings.ActionSettingsModel
@@ -19,7 +19,7 @@ class ActionSettingsModelAdapter : TypeAdapter<ActionSettingsModel>() {
             .name("mode")
             .value(value.mode.name)
             .name("color")
-            .value(Colors.toHex(value.color))
+            .value(value.color.toHex())
             .name("sound")
             .value(value.sound.name)
             .name("interval")

@@ -30,7 +30,7 @@ class TimerRunnerService @Autowired constructor(
     private val timerActionService: TimerActionService) {
 
     private lateinit var timerJob: Job
-    var stages: MutableList<Duration> = Collections.emptyList()
+    final var stages: MutableList<Duration> = Collections.emptyList()
         private set
     private var mStages: List<Duration> = Collections.emptyList()
 

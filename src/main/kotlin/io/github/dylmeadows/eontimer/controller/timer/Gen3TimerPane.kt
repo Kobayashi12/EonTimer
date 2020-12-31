@@ -1,5 +1,6 @@
 package io.github.dylmeadows.eontimer.controller.timer
 
+import io.github.dylmeadows.commonkt.javafx.node.showWhen
 import io.github.dylmeadows.eontimer.model.TimerState
 import io.github.dylmeadows.eontimer.model.timer.Gen3TimerMode
 import io.github.dylmeadows.eontimer.model.timer.Gen3TimerModel
@@ -7,17 +8,14 @@ import io.github.dylmeadows.eontimer.service.CalibrationService
 import io.github.dylmeadows.eontimer.service.TimerRunnerService
 import io.github.dylmeadows.eontimer.service.factory.Gen3TimerFactory
 import io.github.dylmeadows.eontimer.util.asFlux
-import io.github.dylmeadows.eontimer.util.bindBidirectional
 import io.github.dylmeadows.eontimer.util.getValue
 import io.github.dylmeadows.eontimer.util.javafx.asChoiceField
 import io.github.dylmeadows.eontimer.util.javafx.spinner.LongValueFactory
-import io.github.dylmeadows.eontimer.util.javafx.spinner.commitValue
 import io.github.dylmeadows.eontimer.util.javafx.spinner.setOnFocusLost
 import io.github.dylmeadows.eontimer.util.javafx.spinner.text
 import io.github.dylmeadows.eontimer.util.javafx.spinner.valueProperty
 import io.github.dylmeadows.eontimer.util.milliseconds
 import io.github.dylmeadows.eontimer.util.setValue
-import io.github.dylmeadows.eontimer.util.showWhen
 import io.github.dylmeadows.eontimer.util.sum
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
@@ -58,17 +56,17 @@ class Gen3TimerPane @Autowired constructor(
         modeField.parent.disableProperty().bind(timerState.runningProperty)
 
         calibrationField.valueFactory = LongValueFactory()
-        calibrationField.valueProperty!!.bindBidirectional(model.calibrationProperty)
+        calibrationField.valueProperty!!.bindBidirectional(model.calibrationProperty.asObject())
         calibrationField.parent.disableProperty().bind(timerState.runningProperty)
         calibrationField.setOnFocusLost(calibrationField::commitValue)
 
         preTimerField.valueFactory = LongValueFactory(0)
-        preTimerField.valueProperty!!.bindBidirectional(model.preTimerProperty)
+        preTimerField.valueProperty!!.bindBidirectional(model.preTimerProperty.asObject())
         preTimerField.parent.disableProperty().bind(timerState.runningProperty)
         preTimerField.setOnFocusLost(preTimerField::commitValue)
 
         targetFrameField.valueFactory = LongValueFactory(0)
-        targetFrameField.valueProperty!!.bindBidirectional(model.targetFrameProperty)
+        targetFrameField.valueProperty!!.bindBidirectional(model.targetFrameProperty.asObject())
         targetFrameField.parent.disableProperty().bind(
             model.modeProperty.isEqualTo(Gen3TimerMode.VARIABLE_TARGET)
                 .and(timerState.runningProperty.not()
@@ -90,7 +88,7 @@ class Gen3TimerPane @Autowired constructor(
         }
 
         frameHitField.valueFactory = LongValueFactory(0)
-        frameHitField.valueProperty!!.bindBidirectional(model.frameHitProperty)
+        frameHitField.valueProperty!!.bindBidirectional(model.frameHitProperty.asObject())
         frameHitField.parent.disableProperty().bind(timerState.runningProperty)
         frameHitField.setOnFocusLost(frameHitField::commitValue)
         frameHitField.text = ""

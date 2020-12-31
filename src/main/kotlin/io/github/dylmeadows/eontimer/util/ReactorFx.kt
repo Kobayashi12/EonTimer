@@ -16,8 +16,8 @@ import reactor.util.function.Tuple2
 import reactor.util.function.Tuple3
 import reactor.util.function.Tuple4
 import reactor.util.function.Tuples
+import java.util.stream.Collectors
 import java.util.stream.Stream
-import kotlin.streams.toList
 
 fun <T> ObservableValue<T>.asFlux(emitCurrentValue: Boolean = true): Flux<T> {
     return Flux.create { emitter ->
@@ -67,7 +67,7 @@ fun <T1, T2, R> anyChangesOf(property1: ObservableValue<T1>,
             .map { it.asFlux() }
             .map { it.map { mapToValue() } }
             .map { it.subscribe(emit) }
-            .toList()
+            .collect(Collectors.toList())
         emitter.onDispose { disposables.forEach(Disposable::dispose) }
     }
 }
@@ -89,7 +89,7 @@ fun <T1, T2, T3, R> anyChangesOf(property1: ObservableValue<T1>,
             .map { it.asFlux() }
             .map { it.map { mapToValue() } }
             .map { it.subscribe(emit) }
-            .toList()
+            .collect(Collectors.toList())
         emitter.onDispose { disposables.forEach(Disposable::dispose) }
     }
 }
@@ -113,7 +113,7 @@ fun <T1, T2, T3, T4, R> anyChangesOf(property1: ObservableValue<T1>,
             .map { it.asFlux() }
             .map { it.map { mapToValue() } }
             .map { it.subscribe(emit) }
-            .toList()
+            .collect(Collectors.toList())
         emitter.onDispose { disposables.forEach(Disposable::dispose) }
     }
 }

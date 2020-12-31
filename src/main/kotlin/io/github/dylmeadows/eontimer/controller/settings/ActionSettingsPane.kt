@@ -3,10 +3,8 @@ package io.github.dylmeadows.eontimer.controller.settings
 import io.github.dylmeadows.eontimer.model.resource.SoundResource
 import io.github.dylmeadows.eontimer.model.settings.ActionMode
 import io.github.dylmeadows.eontimer.model.settings.ActionSettingsModel
-import io.github.dylmeadows.eontimer.util.bindBidirectional
 import io.github.dylmeadows.eontimer.util.javafx.asChoiceField
 import io.github.dylmeadows.eontimer.util.javafx.spinner.IntValueFactory
-import io.github.dylmeadows.eontimer.util.javafx.spinner.commitValue
 import io.github.dylmeadows.eontimer.util.javafx.spinner.setOnFocusLost
 import io.github.dylmeadows.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
@@ -39,11 +37,11 @@ class ActionSettingsPane @Autowired constructor(
         colorField.valueProperty().bindBidirectional(model.colorProperty)
 
         intervalField.valueFactory = IntValueFactory(0, 1000)
-        intervalField.valueProperty!!.bindBidirectional(model.intervalProperty)
+        intervalField.valueProperty!!.bindBidirectional(model.intervalProperty.asObject())
         intervalField.setOnFocusLost(intervalField::commitValue)
 
         countField.valueFactory = IntValueFactory(0, 50)
-        countField.valueProperty!!.bindBidirectional(model.countProperty)
+        countField.valueProperty!!.bindBidirectional(model.countProperty.asObject())
         countField.setOnFocusLost(countField::commitValue)
     }
 }

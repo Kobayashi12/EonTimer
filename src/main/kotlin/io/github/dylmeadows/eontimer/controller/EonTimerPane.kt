@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component
 @Component
 class EonTimerPane @Autowired constructor(
     private val settingsDialog: SettingsDialog,
-    private val timerState: TimerState) {
+    private val timerState: TimerState
+) {
 
     @FXML
     private lateinit var settingsBtn: Button
