@@ -1,5 +1,6 @@
 package io.github.dylmeadows.eontimer.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.github.dylmeadows.eontimer.model.settings.ActionSettingsModel
 import io.github.dylmeadows.eontimer.model.settings.TimerSettingsModel
 import io.github.dylmeadows.eontimer.model.timer.*
@@ -16,6 +17,7 @@ class ApplicationModel {
     var actionSettings = ActionSettingsModel()
     var timerSettings = TimerSettingsModel()
 
+    @JsonIgnore
     val selectedTimerTypeProperty: ObjectProperty<TimerType> = SimpleObjectProperty(TimerConstants.DEFAULT_TIMER_TYPE)
     var selectedTimerType: TimerType by selectedTimerTypeProperty
 }

@@ -21,14 +21,6 @@ fun <T> Spinner<T>.setValue(value: T) {
     valueFactory?.value = value
 }
 
-fun <T> Spinner<T>.commitValue() {
-    Optional.ofNullable(valueFactory)
-        .map { it.converter }
-        .ifPresent { converter ->
-            setValue(converter.fromString(text))
-        }
-}
-
 fun <T> Spinner<T>.setOnFocusLost(onFocusLost: () -> Unit) {
     focusedProperty().asFlux()
         .filter { isFocused -> !isFocused }

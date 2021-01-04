@@ -7,7 +7,6 @@ import io.github.dylmeadows.eontimer.model.TimerState
 import io.github.dylmeadows.eontimer.model.timer.CustomTimerModel
 import io.github.dylmeadows.eontimer.util.StageStringConverter
 import io.github.dylmeadows.eontimer.util.javafx.spinner.LongValueFactory
-import io.github.dylmeadows.eontimer.util.javafx.spinner.commitValue
 import io.github.dylmeadows.eontimer.util.javafx.spinner.setOnFocusLost
 import io.github.dylmeadows.eontimer.util.javafx.spinner.text
 import io.github.dylmeadows.eontimer.util.javafx.spinner.textProperty

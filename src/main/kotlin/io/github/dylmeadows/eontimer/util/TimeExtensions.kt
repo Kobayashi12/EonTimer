@@ -13,10 +13,6 @@ inline val Long.seconds: Duration get() = Duration.ofSeconds(this)
 inline val Long.milliseconds: Duration get() = Duration.ofMillis(this)
 inline val Long.nanoseconds: Duration get() = Duration.ofNanos(this)
 
-fun Duration.toSeconds(): Long {
-    return get(ChronoUnit.SECONDS)
-}
-
 fun List<Duration>.sum(): Duration {
     return if (!contains(INDEFINITE)) {
         Duration.ofMillis(map(Duration::toMillis).sum())
