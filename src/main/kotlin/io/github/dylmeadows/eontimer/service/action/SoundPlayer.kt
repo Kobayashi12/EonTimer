@@ -2,7 +2,7 @@ package io.github.dylmeadows.eontimer.service.action
 
 import io.github.dylmeadows.eontimer.model.resource.BASE_RESOURCE_PATH
 import io.github.dylmeadows.eontimer.model.resource.SoundResource
-import io.github.dylmeadows.eontimer.model.settings.ActionSettingsModel
+import io.github.dylmeadows.eontimer.model.settings.ActionSettings
 import io.github.dylmeadows.eontimer.util.asFlux
 import javafx.scene.media.Media
 import javafx.scene.media.MediaPlayer
@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct
 
 @Component
 class SoundPlayer @Autowired constructor(
-    private val actionSettings: ActionSettingsModel) {
+    private val actionSettings: ActionSettings) {
 
     private lateinit var mediaPlayer: MediaPlayer
 
@@ -34,6 +34,7 @@ class SoundPlayer @Autowired constructor(
         GlobalScope.launch(Dispatchers.JavaFx) {
             val path = "$BASE_RESOURCE_PATH/sounds/silence.wav"
             val resource = javaClass.classLoader.getResource(path)
+                ?: error("Unable to find resource: $path")
             createMediaPlayer(resource).play()
         }
     }

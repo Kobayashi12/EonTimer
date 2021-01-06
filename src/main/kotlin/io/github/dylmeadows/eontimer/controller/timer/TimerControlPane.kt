@@ -21,20 +21,27 @@ class TimerControlPane @Autowired constructor(
     private val timerFactory: TimerFactoryService,
     private val gen3TimerPane: Gen3TimerPane,
     private val gen4TimerPane: Gen4TimerPane,
-    private val gen5TimerPane: Gen5TimerPane) {
+    private val gen5TimerPane: Gen5TimerPane
+) {
 
     @FXML
     private lateinit var gen3Tab: Tab
+
     @FXML
     private lateinit var gen4Tab: Tab
+
     @FXML
     private lateinit var gen5Tab: Tab
+
     @FXML
     private lateinit var customTab: Tab
+
     @FXML
     private lateinit var timerTabPane: TabPane
+
     @FXML
     private lateinit var updateBtn: Button
+
     @FXML
     private lateinit var timerBtn: Button
 
@@ -54,16 +61,20 @@ class TimerControlPane @Autowired constructor(
 
         gen3Tab.disableProperty().bind(
             timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen3Tab)
-                .and(timerState.runningProperty))
+                .and(timerState.runningProperty)
+        )
         gen4Tab.disableProperty().bind(
             timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen4Tab)
-                .and(timerState.runningProperty))
+                .and(timerState.runningProperty)
+        )
         gen5Tab.disableProperty().bind(
             timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen5Tab)
-                .and(timerState.runningProperty))
+                .and(timerState.runningProperty)
+        )
         customTab.disableProperty().bind(
             timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(customTab)
-                .and(timerState.runningProperty))
+                .and(timerState.runningProperty)
+        )
 
         timerState.runningProperty.asFlux()
             .map { if (!it) "Start" else "Stop" }
@@ -77,7 +88,8 @@ class TimerControlPane @Autowired constructor(
         }
 
         updateBtn.disableProperty().bind(
-            timerState.runningProperty)
+            timerState.runningProperty
+        )
         updateBtn.setOnAction {
             calibrate()
         }

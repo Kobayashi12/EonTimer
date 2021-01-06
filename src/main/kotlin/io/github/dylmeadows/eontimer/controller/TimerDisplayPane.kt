@@ -1,8 +1,9 @@
 package io.github.dylmeadows.eontimer.controller
 
+import io.github.dylmeadows.commonkt.core.time.INDEFINITE
 import io.github.dylmeadows.commonkt.javafx.scene.paint.toHex
 import io.github.dylmeadows.eontimer.model.TimerState
-import io.github.dylmeadows.eontimer.model.settings.ActionSettingsModel
+import io.github.dylmeadows.eontimer.model.settings.ActionSettings
 import io.github.dylmeadows.eontimer.service.action.TimerActionService
 import io.github.dylmeadows.eontimer.util.*
 import javafx.fxml.FXML
@@ -15,7 +16,7 @@ import java.time.Duration
 class TimerDisplayPane @Autowired constructor(
     private val timerState: TimerState,
     private val timerActionService: TimerActionService,
-    private val actionSettingsModel: ActionSettingsModel
+    private val actionSettings: ActionSettings
 ) {
 
     @FXML
@@ -52,7 +53,7 @@ class TimerDisplayPane @Autowired constructor(
         timerActionService.activeProperty.asFlux()
             .subscribe { currentStageLbl.isActive = it }
 
-        actionSettingsModel.colorProperty.asFlux()
+        actionSettings.colorProperty.asFlux()
             .map { "-theme-active: ${it.toHex()}" }
             .subscribe(currentStageLbl::setStyle)
     }

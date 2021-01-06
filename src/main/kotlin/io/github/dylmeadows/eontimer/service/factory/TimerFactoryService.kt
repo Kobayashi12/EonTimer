@@ -2,7 +2,7 @@ package io.github.dylmeadows.eontimer.service.factory
 
 import io.github.dylmeadows.eontimer.model.ApplicationModel
 import io.github.dylmeadows.eontimer.model.TimerState
-import io.github.dylmeadows.eontimer.model.settings.TimerSettingsModel
+import io.github.dylmeadows.eontimer.model.settings.TimerSettings
 import io.github.dylmeadows.eontimer.model.timer.TimerType
 import io.github.dylmeadows.eontimer.util.asFlux
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +18,7 @@ class TimerFactoryService @Autowired constructor(
     private val gen5TimerFactory: TimerFactory,
     private val customTimerFactory: TimerFactory,
     private val applicationModel: ApplicationModel,
-    private val timerSettings: TimerSettingsModel) {
+    private val timerSettings: TimerSettings) {
 
     val stages: List<Duration> get() = timerFactory.stages
     private val timerFactory: TimerFactory get() = applicationModel.selectedTimerType.timerFactory

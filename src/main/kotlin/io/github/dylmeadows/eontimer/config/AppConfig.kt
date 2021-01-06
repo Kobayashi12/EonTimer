@@ -3,8 +3,8 @@ package io.github.dylmeadows.eontimer.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.dylmeadows.eontimer.model.ApplicationModel
-import io.github.dylmeadows.eontimer.model.settings.ActionSettingsModel
-import io.github.dylmeadows.eontimer.model.settings.TimerSettingsModel
+import io.github.dylmeadows.eontimer.model.settings.ActionSettings
+import io.github.dylmeadows.eontimer.model.settings.TimerSettings
 import io.github.dylmeadows.eontimer.model.timer.CustomTimerModel
 import io.github.dylmeadows.eontimer.model.timer.Gen3TimerModel
 import io.github.dylmeadows.eontimer.model.timer.Gen4TimerModel
@@ -42,8 +42,8 @@ class AppConfig(
     fun customTimerModel(settings: ApplicationModel): CustomTimerModel = settings.custom
 
     @Bean
-    fun actionSettingsModel(settings: ApplicationModel): ActionSettingsModel = settings.actionSettings
+    fun actionSettingsModel(settings: ApplicationModel): ActionSettings = settings.actionSettings
 
     @Bean
-    fun timerSettingsModel(settings: ApplicationModel): TimerSettingsModel = settings.timerSettings
+    fun timerSettingsModel(settings: ApplicationModel): TimerSettings = settings.timerSettings
 }

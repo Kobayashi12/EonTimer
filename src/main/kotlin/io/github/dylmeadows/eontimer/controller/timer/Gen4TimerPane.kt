@@ -1,14 +1,13 @@
 package io.github.dylmeadows.eontimer.controller.timer
 
+import io.github.dylmeadows.commonkt.javafx.node.asChoiceField
+import io.github.dylmeadows.commonkt.javafx.node.setOnFocusLost
+import io.github.dylmeadows.commonkt.javafx.node.spinner.LongValueFactory
+import io.github.dylmeadows.commonkt.javafx.node.spinner.text
 import io.github.dylmeadows.eontimer.model.TimerState
 import io.github.dylmeadows.eontimer.model.timer.Gen4TimerMode
 import io.github.dylmeadows.eontimer.model.timer.Gen4TimerModel
 import io.github.dylmeadows.eontimer.service.factory.Gen4TimerFactory
-import io.github.dylmeadows.eontimer.util.javafx.asChoiceField
-import io.github.dylmeadows.eontimer.util.javafx.spinner.LongValueFactory
-import io.github.dylmeadows.eontimer.util.javafx.spinner.setOnFocusLost
-import io.github.dylmeadows.eontimer.util.javafx.spinner.text
-import io.github.dylmeadows.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Spinner

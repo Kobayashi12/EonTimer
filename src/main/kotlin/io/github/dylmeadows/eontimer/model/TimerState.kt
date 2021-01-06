@@ -1,7 +1,7 @@
 package io.github.dylmeadows.eontimer.model
 
-import io.github.dylmeadows.eontimer.util.getValue
-import io.github.dylmeadows.eontimer.util.setValue
+import io.github.dylmeadows.commonkt.javafx.beans.property.getValue
+import io.github.dylmeadows.commonkt.javafx.beans.property.setValue
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
@@ -11,21 +11,21 @@ import java.time.Duration
 
 @Component
 class TimerState {
-    val totalTimeProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
+    final val totalTimeProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
     var totalTime: Duration by totalTimeProperty
 
-    val totalElapsedProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
+    final val totalElapsedProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
     var totalElapsed: Duration by totalElapsedProperty
 
-    val currentStageProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
+    final val currentStageProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
     var currentStage: Duration by currentStageProperty
 
-    val nextStageProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
+    final val nextStageProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
     var nextStage: Duration by nextStageProperty
 
-    val currentRemainingProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
+    final val currentRemainingProperty: ObjectProperty<Duration> = SimpleObjectProperty(Duration.ZERO)
     var currentRemaining: Duration by currentRemainingProperty
 
-    val runningProperty: BooleanProperty = SimpleBooleanProperty(false)
+    final val runningProperty: BooleanProperty = SimpleBooleanProperty(false)
     var running: Boolean by runningProperty
 }

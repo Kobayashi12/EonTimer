@@ -1,5 +1,7 @@
 package io.github.dylmeadows.eontimer.controller.timer
 
+import io.github.dylmeadows.commonkt.core.time.milliseconds
+import io.github.dylmeadows.commonkt.javafx.node.asChoiceField
 import io.github.dylmeadows.commonkt.javafx.node.showWhen
 import io.github.dylmeadows.eontimer.model.TimerState
 import io.github.dylmeadows.eontimer.model.timer.Gen3TimerMode
@@ -8,15 +10,10 @@ import io.github.dylmeadows.eontimer.service.CalibrationService
 import io.github.dylmeadows.eontimer.service.TimerRunnerService
 import io.github.dylmeadows.eontimer.service.factory.Gen3TimerFactory
 import io.github.dylmeadows.eontimer.util.asFlux
-import io.github.dylmeadows.eontimer.util.getValue
-import io.github.dylmeadows.eontimer.util.javafx.asChoiceField
-import io.github.dylmeadows.eontimer.util.javafx.spinner.LongValueFactory
-import io.github.dylmeadows.eontimer.util.javafx.spinner.setOnFocusLost
-import io.github.dylmeadows.eontimer.util.javafx.spinner.text
-import io.github.dylmeadows.eontimer.util.javafx.spinner.valueProperty
-import io.github.dylmeadows.eontimer.util.milliseconds
-import io.github.dylmeadows.eontimer.util.setValue
-import io.github.dylmeadows.eontimer.util.sum
+import io.github.dylmeadows.commonkt.javafx.beans.property.getValue
+import io.github.dylmeadows.commonkt.javafx.beans.property.setValue
+import io.github.dylmeadows.commonkt.javafx.node.setOnFocusLost
+import io.github.dylmeadows.commonkt.javafx.node.spinner.LongValueFactory
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.fxml.FXML
@@ -32,18 +29,24 @@ class Gen3TimerPane @Autowired constructor(
     private val timerState: TimerState,
     private val timerFactory: Gen3TimerFactory,
     private val timerRunnerService: TimerRunnerService,
-    private val calibrationService: CalibrationService) {
+    private val calibrationService: CalibrationService
+) {
 
     @FXML
     private lateinit var modeField: ChoiceBox<Gen3TimerMode>
+
     @FXML
     private lateinit var calibrationField: Spinner<Long>
+
     @FXML
     private lateinit var preTimerField: Spinner<Long>
+
     @FXML
     private lateinit var targetFrameField: Spinner<Long>
+
     @FXML
     private lateinit var setTargetFrameBtn: Button
+
     @FXML
     private lateinit var frameHitField: Spinner<Long>
 
@@ -69,14 +72,21 @@ class Gen3TimerPane @Autowired constructor(
         targetFrameField.valueProperty!!.bindBidirectional(model.targetFrameProperty.asObject())
         targetFrameField.parent.disableProperty().bind(
             model.modeProperty.isEqualTo(Gen3TimerMode.VARIABLE_TARGET)
-                .and(timerState.runningProperty.not()
-                    .or(isPrimedProperty.not()))
-                .or(model.modeProperty.isEqualTo(Gen3TimerMode.STANDARD)
-                    .and(timerState.runningProperty)))
+                .and(
+                    timerState.runningProperty.not()
+                        .or(isPrimedProperty.not())
+                )
+                .or(
+                    model.modeProperty.isEqualTo(Gen3TimerMode.STANDARD)
+                        .and(timerState.runningProperty)
+                )
+        )
         targetFrameField.setOnFocusLost(targetFrameField::commitValue)
 
-        setTargetFrameBtn.showWhen(model.modeProperty
-            .isEqualTo(Gen3TimerMode.VARIABLE_TARGET))
+        setTargetFrameBtn.showWhen(
+            model.modeProperty
+                .isEqualTo(Gen3TimerMode.VARIABLE_TARGET)
+        )
         setTargetFrameBtn.disableProperty().bind(isPrimedProperty.not())
         setTargetFrameBtn.setOnAction {
             if (timerState.running) {

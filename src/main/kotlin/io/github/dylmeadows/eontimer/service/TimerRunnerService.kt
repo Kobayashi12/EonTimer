@@ -1,9 +1,8 @@
 package io.github.dylmeadows.eontimer.service
 
 import io.github.dylmeadows.eontimer.model.TimerState
-import io.github.dylmeadows.eontimer.model.settings.TimerSettingsModel
+import io.github.dylmeadows.eontimer.model.settings.TimerSettings
 import io.github.dylmeadows.eontimer.service.action.TimerActionService
-import io.github.dylmeadows.eontimer.util.Stack
 import io.github.dylmeadows.eontimer.util.asStack
 import io.github.dylmeadows.eontimer.util.getStage
 import io.github.dylmeadows.eontimer.util.isIndefinite
@@ -26,7 +25,7 @@ import java.util.*
 @Service
 class TimerRunnerService @Autowired constructor(
     private val timerState: TimerState,
-    private val timerSettings: TimerSettingsModel,
+    private val timerSettings: TimerSettings,
     private val timerActionService: TimerActionService) {
 
     private lateinit var timerJob: Job

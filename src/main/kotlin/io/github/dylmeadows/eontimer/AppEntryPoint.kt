@@ -3,10 +3,10 @@ package io.github.dylmeadows.eontimer
 import io.github.dylmeadows.eontimer.config.AppProperties
 import io.github.dylmeadows.eontimer.model.resource.CssResource
 import io.github.dylmeadows.eontimer.model.resource.FxmlResource
-import io.github.dylmeadows.eontimer.util.Dimension
-import io.github.dylmeadows.eontimer.util.addCss
-import io.github.dylmeadows.eontimer.util.asScene
-import io.github.dylmeadows.eontimer.util.size
+import io.github.dylmeadows.commonkt.javafx.util.Dimension
+import io.github.dylmeadows.commonkt.javafx.scene.addCss
+import io.github.dylmeadows.commonkt.javafx.scene.asScene
+import io.github.dylmeadows.commonkt.javafx.stage.size
 import io.github.dylmeadows.springboot.javafx.ApplicationEntryPoint
 import io.github.dylmeadows.springboot.javafx.fxml.SpringFxmlLoader
 import javafx.scene.Parent

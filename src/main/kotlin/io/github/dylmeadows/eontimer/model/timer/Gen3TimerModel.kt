@@ -1,8 +1,8 @@
 package io.github.dylmeadows.eontimer.model.timer
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.github.dylmeadows.eontimer.util.getValue
-import io.github.dylmeadows.eontimer.util.setValue
+import io.github.dylmeadows.commonkt.javafx.beans.property.getValue
+import io.github.dylmeadows.commonkt.javafx.beans.property.setValue
 import javafx.beans.property.*
 
 class Gen3TimerModel {
@@ -24,6 +24,7 @@ class Gen3TimerModel {
 
     @JsonIgnore
     val frameHitProperty: LongProperty = SimpleLongProperty()
+
     @delegate:JsonIgnore
     var frameHit by frameHitProperty
 }

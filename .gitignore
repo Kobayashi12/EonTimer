@@ -8,5 +8,6 @@ out/
 *.iml
 
 EonTimer.json
+${project.name}.json
 EonTimer.log
 *.log

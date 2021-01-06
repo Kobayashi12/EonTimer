@@ -1,14 +1,14 @@
 package io.github.dylmeadows.eontimer.service
 
-import io.github.dylmeadows.eontimer.model.settings.TimerSettingsModel
+import io.github.dylmeadows.eontimer.model.settings.TimerSettings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class CalibrationService @Autowired constructor(
-    private val timerSettingsModel: TimerSettingsModel) {
+    private val timerSettings: TimerSettings) {
 
-    private val console get() = timerSettingsModel.console
+    private val console get() = timerSettings.console
 
     fun toMillis(delays: Long): Long =
         Math.round(delays * console.frameRate)
@@ -20,10 +20,10 @@ class CalibrationService @Autowired constructor(
         toMillis(delay - toDelays(second * 1000))
 
     fun calibrateToMillis(value: Long): Long {
-        return if (timerSettingsModel.precisionCalibrationMode) value else toMillis(value)
+        return if (timerSettings.precisionCalibrationMode) value else toMillis(value)
     }
 
     fun calibrateToDelays(value: Long): Long {
-        return if (timerSettingsModel.precisionCalibrationMode) value else toDelays(value)
+        return if (timerSettings.precisionCalibrationMode) value else toDelays(value)
     }
 }

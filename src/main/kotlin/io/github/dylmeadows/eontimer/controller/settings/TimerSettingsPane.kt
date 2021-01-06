@@ -1,9 +1,8 @@
 package io.github.dylmeadows.eontimer.controller.settings
 
 import io.github.dylmeadows.eontimer.model.settings.Console
-import io.github.dylmeadows.eontimer.model.settings.TimerSettingsModel
+import io.github.dylmeadows.eontimer.model.settings.TimerSettings
 import io.github.dylmeadows.eontimer.util.javafx.asChoiceField
-import io.github.dylmeadows.eontimer.util.javafx.spinner.LongValueFactory
 import io.github.dylmeadows.eontimer.util.javafx.spinner.setOnFocusLost
 import io.github.dylmeadows.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class TimerSettingsPane @Autowired constructor(
-    private val model: TimerSettingsModel) {
+    private val model: TimerSettings) {
 
     @FXML
     private lateinit var consoleField: ChoiceBox<Console>
