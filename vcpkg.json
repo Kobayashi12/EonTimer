@@ -1,0 +1,8 @@
+{
+  "name": "EonTimer",
+  "version-string": "3.0.0",
+  "dependencies": [
+    "qt5-base",
+    "sfml"
+  ]
+}
