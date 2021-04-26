@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ux
+
 git submodule update --init
 if [ "$OS" == "linux" ]; then
   sudo apt-get update
