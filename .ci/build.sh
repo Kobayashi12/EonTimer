@@ -1,11 +1,9 @@
 #!/bin/bash
 
 cmake -DCMAKE_BUILD_TYPE=RELEASE .
-case $OS in
-  linux)
-    sh .ci/linux/build.sh
-    ;;  
-  macOS)
-    sh .ci/macos/build.sh
-    ;;
-esac
+if [ "$OS" == "linux" ]; then
+  make -j $(nproc)
+elif [ "$OS" == "macOS" ]; then
+  make -j $(sysctl -n hw.physicalcpu)
+  macdeployqt EonTimer.app -dmg -verbose=2
+fi

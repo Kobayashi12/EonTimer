@@ -1,35 +1,31 @@
 environment:
   matrix:
-    - OS: win64
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      QT_PATH: C:\Qt\5.14\msvc2017_64
-      ARCH: x64
-    - OS: win32
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      QT_PATH: C:\Qt\5.14\msvc2017
-      ARCH: x86
+    - OS: linux
+      APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
     - OS: macOS
       APPVEYOR_BUILD_WORKER_IMAGE: macos-mojave
-    - OS: linux
-      APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+#    - OS: win64
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+#      ARCH: x64
+#    - OS: win32
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+#      ARCH: x86
 
 install:
-  - cmd: .ci/install.bat
   - sh: .ci/install.sh
+  - cmd: .ci/install.bat
 
 before_build:
-  - cmd: set PATH=%QT_PATH%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
-  - cmd: call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Community\VC\Auxiliary\Build\vcvarsall.bat %ARCH%
-  - cmd: .ci/before_build.bat
   - sh: .ci/before_build.sh
+  - cmd: .ci/before_build.bat
 
 build_script:
-  - cmd: .ci/build.bat
   - sh: .ci/build.sh
+  - cmd: .ci/build.bat
 
 after_build:
-  - cmd: .ci/after_build.bat
   - sh: .ci/after_build.sh
+  - cmd: .ci/after_build.bat
 
 artifacts:
   - path: EonTimer-%OS%.zip

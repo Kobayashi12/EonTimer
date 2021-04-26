@@ -1,10 +1,8 @@
 #!/bin/bash
 
-case $OS in
-  linux)
-    sh .ci/linux/install.sh
-    ;;  
-  macOS)
-    sh .ci/macos/install.sh
-    ;;
-esac
+git submodule update --init
+if [ "$OS" == "linux" ]; then
+  sudo apt-get update
+  sudo apt-get python3-pip -y
+fi
+pip3 install qtsass
