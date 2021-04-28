@@ -5,7 +5,7 @@ goto :eof
 
 :build64Bit
 echo -- :build64Bit
-set QT_PATH=C:\Qt\5.14\msvc2017_64
+set QT_PATH=C:\Qt\5.15.2\msvc2019_64
 set PATH=%QT_PATH%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
 
 call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Community\VC\Auxiliary\Build\vcvarsall.bat x64
@@ -15,7 +15,7 @@ exit
 
 :build32Bit
 echo -- :build32Bit
-set QT_PATH=C:\Qt\5.14\msvc2017
+set QT_PATH=C:\Qt\5.15.2\msvc2019
 set PATH=%QT_PATH%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
 
 call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Community\VC\Auxiliary\Build\vcvarsall.bat x86

@@ -1,19 +1,15 @@
 environment:
   matrix:
-    - OS: linux
-      APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
-    - OS: macOS
-      APPVEYOR_BUILD_WORKER_IMAGE: macos-mojave
-#    - OS: win64
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-#      ARCH: x64
-#    - OS: win32
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-#      ARCH: x86
-
-install:
-  - sh: .ci/install.sh
-  - cmd: .ci/install.bat
+#    - OS: linux
+#      APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+#    - OS: macOS
+#      APPVEYOR_BUILD_WORKER_IMAGE: macos-mojave
+    - OS: win64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      ARCH: x64
+    - OS: win32
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      ARCH: x86
 
 before_build:
   - sh: .ci/before_build.sh
@@ -30,3 +26,6 @@ after_build:
 artifacts:
   - path: EonTimer-%OS%.zip
   - path: EonTimer-%OS%.zip.sha256
+
+cache:
+  - vcpkg/installed -> vcpkg.json
