@@ -8,6 +8,8 @@
 #include <models/TimerState.h>
 #include <models/settings/ActionSettingsModel.h>
 #include <models/settings/TimerSettingsModel.h>
+#include <util/Clock.h>
+#include <util/Types.h>
 
 #include <QObject>
 #include <QThread>
@@ -20,7 +22,7 @@ namespace service {
     private:
         bool running;
         QThread *timerThread;
-        std::shared_ptr<std::vector<int>> stages;
+        std::shared_ptr<std::vector<Microseconds>> stages;
         model::settings::TimerSettingsModel *timerSettings;
         model::settings::ActionSettingsModel *actionSettings;
 
@@ -31,28 +33,29 @@ namespace service {
 
         ~TimerService() override;
 
-        void setStages(std::shared_ptr<std::vector<int>> stages);
+        [[nodiscard]] bool isRunning() const;
+
+        void setStages(std::shared_ptr<std::vector<Microseconds>> stages);
 
         void start();
 
         void stop();
 
-        bool isRunning() const;
-
     private:
         void reset();
 
-        void run();
+        void run(util::Clock &clock);
 
-        std::chrono::microseconds runStage(std::chrono::microseconds stage, std::chrono::microseconds elapsed);
+        Microseconds runStage(util::Clock &clock,
+                              const Microseconds &stage);
 
         // @formatter:off
     signals:
         void activated(bool);
         void actionTriggered();
-        void stateChanged(const model::TimerState &state);
-        void minutesBeforeTargetChanged(const std::chrono::minutes &minutesBeforeTarget);
-        void nextStageChanged(const std::chrono::milliseconds &nextStage);
+        void stateChanged(const Microseconds &elapsed, const Microseconds &stage);
+        void minutesBeforeTargetChanged(const Minutes &minutesBeforeTarget);
+        void nextStageChanged(const Microseconds &nextStage);
         // @formatter:on
     };
 }  // namespace service
