@@ -1,0 +1,14 @@
+application:
+  name: EonTimer
+  version: 2.0.1
+
+debug:
+  tags:
+    - os.name
+    - os.version
+    - os.arch
+    - java.vendor
+    - java.version
+    - java.vendor.url
+    - javafx.version
+    - sun.arch.data.model
