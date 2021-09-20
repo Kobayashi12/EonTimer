@@ -24,11 +24,11 @@ import java.time.Instant
 import java.util.*
 
 @Service
-class TimerRunnerService @Autowired constructor(
+class TimerRunnerService(
     private val timerState: TimerState,
     private val timerSettings: TimerSettingsModel,
-    private val timerActionService: TimerActionService) {
-
+    private val timerActionService: TimerActionService
+) {
     private lateinit var timerJob: Job
     var stages: MutableList<Duration> = Collections.emptyList()
         private set
@@ -121,9 +121,11 @@ class TimerRunnerService @Autowired constructor(
         }
     }
 
-    private fun updateState(stageIndex: Int = 0,
-                            delta: Duration = Duration.ZERO,
-                            elapsed: Duration = Duration.ZERO) {
+    private fun updateState(
+        stageIndex: Int = 0,
+        delta: Duration = Duration.ZERO,
+        elapsed: Duration = Duration.ZERO
+    ) {
         currentStage = stages.getStage(stageIndex)
         currentRemaining = if (!currentStage.isIndefinite)
             currentStage - elapsed

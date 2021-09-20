@@ -17,9 +17,9 @@ import java.net.URL
 import javax.annotation.PostConstruct
 
 @Component
-class SoundPlayer @Autowired constructor(
-    private val actionSettings: ActionSettingsModel) {
-
+class SoundPlayer(
+    private val actionSettings: ActionSettingsModel
+) {
     private lateinit var mediaPlayer: MediaPlayer
 
     @PostConstruct

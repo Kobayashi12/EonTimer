@@ -1,11 +1,13 @@
 package io.github.dylmeadows.eontimer.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConstructorBinding
 
+@ConstructorBinding
 @ConfigurationProperties("application")
-class AppProperties {
-    lateinit var name: String
-    lateinit var version: String
-
-    val fullApplicationName: String get() = "$name v$version"
+data class AppProperties(
+    val name: String,
+    val version: String
+) {
+    val fullApplicationName = "$name v$version"
 }
