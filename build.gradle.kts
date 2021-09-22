@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(project(":eon-timer-audio"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.5.2")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     kapt("org.springframework.boot:spring-boot-autoconfigure-processor")
