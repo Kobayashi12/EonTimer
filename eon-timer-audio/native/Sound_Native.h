@@ -11,7 +11,7 @@
 
 #include <jni.h>
 
-
+namespace Sound {
 namespace Native {
 
 // DO NOT modify
@@ -78,5 +78,5 @@ inline bool registerNativeFunctions(JNIEnv* env) {
 }
 
 } // endof namespace Native
-
+} // endof namespace Sound
 

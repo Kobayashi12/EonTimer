@@ -1,7 +1,6 @@
 package io.eontimer.audio
 
 import io.github.landerlyoung.jenny.NativeClass
-import io.github.landerlyoung.jenny.NativeCode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import java.io.FileInputStream
@@ -23,7 +22,7 @@ class Sound private constructor(
 
     fun play() = Native.play(pointer.rawAddress)
 
-    @NativeClass
+    @NativeClass(namespace = "Sound")
     object Native {
         // @formatter:off
         @JvmStatic internal external fun allocate(buffer: LongBuffer)
@@ -34,11 +33,13 @@ class Sound private constructor(
 }
 
 fun main(args: Array<String>) {
-    System.load("/home/dmeadows/Workspace/EonTimer/modules/audio/src/main/cpp/cmake-build-debug/libaudio.so")
+    val library = Sound::class.java.classLoader.getResource("libEonTimerAudio.so")!!
+    println(library.file)
+    System.load(library.file)
     runBlocking {
         val stream = FileInputStream("/home/dmeadows/Workspace/EonTimer/src/main/resources/io/eontimer/sounds/beep.wav")
         val sound = Sound(stream)
-        repeat(6) {
+        repeat(3) {
             delay(500)
             sound.play()
         }
