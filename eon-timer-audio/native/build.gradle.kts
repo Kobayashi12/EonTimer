@@ -1,4 +1,5 @@
 val other = project(":eon-timer-audio")
+val copyJniLibrary by other.tasks
 val generateJniHeaders by other.tasks
 
 tasks.create<Delete>("clean") {
@@ -17,7 +18,8 @@ val cmake = tasks.create<Exec>("cmake") {
 
 tasks.create<Exec>("build") {
     group = "build"
-    dependsOn(cmake)
     workingDir = buildDir
     commandLine = listOf("make", "-j")
+    dependsOn(cmake)
+    finalizedBy(copyJniLibrary)
 }

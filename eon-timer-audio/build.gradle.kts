@@ -36,6 +36,7 @@ val generateJniHeaders = tasks.create<Copy>("generateJniHeaders") {
 val copyJniLibrary = tasks.create<Copy>("copyJniLibrary") {
     dependsOn(":eon-timer-audio:native:build")
     from(file("native/build/libEonTimerAudio.so"))
+    from(file("native/build/libEonTimerAudio.dylib"))
     into(file("src/main/resources"))
 }
 
