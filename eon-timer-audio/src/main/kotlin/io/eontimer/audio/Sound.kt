@@ -37,7 +37,7 @@ fun main(args: Array<String>) {
     println(library.file)
     System.load(library.file)
     runBlocking {
-        val stream = FileInputStream("/home/dmeadows/Workspace/EonTimer/src/main/resources/io/eontimer/sounds/beep.wav")
+        val stream = FileInputStream("/home/dylanmeadows/Projects/EonTimer/src/main/resources/io/eontimer/sounds/beep.wav")
         val sound = Sound(stream)
         repeat(3) {
             delay(500)

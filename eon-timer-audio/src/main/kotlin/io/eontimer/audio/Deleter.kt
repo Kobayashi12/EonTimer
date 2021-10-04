@@ -2,7 +2,7 @@ package io.eontimer.audio
 
 import io.github.landerlyoung.jenny.NativeClass
 
-internal class DeleteFn(
+internal class Deleter(
     private val rawAddress: Long
 ) {
     init {

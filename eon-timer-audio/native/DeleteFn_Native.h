@@ -6,7 +6,7 @@
  * For bug report, please refer to github issue tracker https://github.com/LanderlYoung/Jenny/issues.
  */
 
-/* C++ header file for class io/eontimer/audio/DeleteFn$Native */
+/* C++ header file for class io/eontimer/audio/Deleter$Native */
 #pragma once
 
 #include <jni.h>
@@ -15,11 +15,11 @@ namespace DeleteFn {
 namespace Native {
 
 // DO NOT modify
-static constexpr auto FULL_CLASS_NAME = u8"io/eontimer/audio/DeleteFn$Native";
+static constexpr auto FULL_CLASS_NAME = u8"io/eontimer/audio/Deleter$Native";
 
 
 /*
- * Class:     io.eontimer.audio.DeleteFn$Native
+ * Class:     io.eontimer.audio.Deleter$Native
  * Method:    public static final void delete$eon_timer_audio(long rawAddress, long pointer)
  * Signature: (JJ)V
  */

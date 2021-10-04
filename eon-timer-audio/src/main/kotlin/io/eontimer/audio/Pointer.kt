@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 internal class Pointer private constructor(
     internal val rawAddress: Long,
-    private val deleteFn: DeleteFn
+    private val deleteFn: Deleter
 ) : Closeable {
     private val active = AtomicBoolean(true)
 
@@ -13,7 +13,7 @@ internal class Pointer private constructor(
         allocBuffer: AllocBuffer
     ) : this(
         allocBuffer.pointer,
-        DeleteFn(allocBuffer.deleteFn)
+        Deleter(allocBuffer.deleter)
     )
 
     init {
