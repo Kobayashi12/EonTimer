@@ -5,22 +5,18 @@
 #ifndef EONTIMER_CONSOLE_H
 #define EONTIMER_CONSOLE_H
 
+#include <util/Types.h>
 #include <vector>
+#include <string>
 
-namespace model {
-    enum Console { GBA, NDS, NDS_GBA, DSI, _3DS };
+namespace EonTimer {
+    enum Console { GBA, NDS, NDS_GBA, DSI, _3DS, COUNT };
 
-    double getFps(Console console);
+    const std::vector<Console> &getConsoles();
 
-    double getFramerate(Console console);
+    const std::string &getName(Console console);
 
-    const char *getName(Console console);
-
-    Console console(int index);
-
-    const std::vector<Console> &consoles();
-
-    int indexOf(Console console);
-}  // namespace model
+    double getFrameRate(Console console);
+}  // namespace EonTimer
 
 #endif  // EONTIMER_CONSOLE_H

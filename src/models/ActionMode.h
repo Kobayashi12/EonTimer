@@ -5,18 +5,15 @@
 #ifndef EONTIMER_ACTIONMODE_H
 #define EONTIMER_ACTIONMODE_H
 
+#include <string>
 #include <vector>
 
-namespace model {
-    enum ActionMode { AUDIO, VISUAL, AV };
+namespace EonTimer {
+    enum ActionMode { AUDIO, VISUAL, AV, COUNT };
 
-    const char *getName(ActionMode mode);
+    const std::vector<ActionMode> &getActionModes();
 
-    ActionMode actionMode(unsigned int index);
-
-    const std::vector<ActionMode> &actionModes();
-
-    int indexOf(const ActionMode &mode);
-}  // namespace model
+    const std::string &getName(ActionMode mode);
+}  // namespace EonTimer
 
 #endif  // EONTIMER_ACTIONMODE_H

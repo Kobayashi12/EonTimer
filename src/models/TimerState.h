@@ -7,13 +7,13 @@
 
 #include <chrono>
 
-namespace model {
+namespace EonTimer {
     struct TimerState {
         TimerState(const std::chrono::milliseconds &duration, const std::chrono::milliseconds &remaining);
 
         const std::chrono::milliseconds &duration;
         const std::chrono::milliseconds &remaining;
     };
-}  // namespace model
+}  // namespace EonTimer
 
 #endif  // EONTIMER_TIMERSTATE_H

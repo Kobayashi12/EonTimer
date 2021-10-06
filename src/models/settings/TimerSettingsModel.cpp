@@ -4,7 +4,7 @@
 
 #include "TimerSettingsModel.h"
 
-namespace model::settings {
+namespace EonTimer::settings {
     namespace TimerSettingsFields {
         const char *GROUP = "timer";
         const char *CONSOLE = "console";
@@ -19,9 +19,9 @@ namespace model::settings {
     }      // namespace TimerSettingsFields
 
     TimerSettingsModel::TimerSettingsModel(QSettings *settings) {
+        const auto &consoles = EonTimer::getConsoles();
         settings->beginGroup(TimerSettingsFields::GROUP);
-        console = model::console(
-            settings->value(TimerSettingsFields::CONSOLE, TimerSettingsFields::Defaults::CONSOLE).toInt());
+        console = consoles[settings->value(TimerSettingsFields::CONSOLE, TimerSettingsFields::Defaults::CONSOLE).toInt()];
         refreshInterval = std::chrono::milliseconds(
             settings->value(TimerSettingsFields::REFRESH_INTERVAL, TimerSettingsFields::Defaults::REFRESH_INTERVAL)
                 .toULongLong());
@@ -34,15 +34,15 @@ namespace model::settings {
 
     void TimerSettingsModel::sync(QSettings *settings) const {
         settings->beginGroup(TimerSettingsFields::GROUP);
-        settings->setValue(TimerSettingsFields::CONSOLE, model::indexOf(console));
+        settings->setValue(TimerSettingsFields::CONSOLE, console);
         settings->setValue(TimerSettingsFields::REFRESH_INTERVAL, static_cast<int>(refreshInterval.count()));
         settings->setValue(TimerSettingsFields::PRECISION_CALIBRATION_ENABLED, precisionCalibrationEnabled);
         settings->endGroup();
     }
 
-    model::Console TimerSettingsModel::getConsole() const { return console; }
+    EonTimer::Console TimerSettingsModel::getConsole() const { return console; }
 
-    void TimerSettingsModel::setConsole(const model::Console console) { this->console = console; }
+    void TimerSettingsModel::setConsole(EonTimer::Console mConsole) { this->console = mConsole; }
 
     std::chrono::milliseconds TimerSettingsModel::getRefreshInterval() const { return refreshInterval; }
 
@@ -55,4 +55,4 @@ namespace model::settings {
     void TimerSettingsModel::setPrecisionCalibrationEnabled(const bool precisionCalibrationEnabled) {
         this->precisionCalibrationEnabled = precisionCalibrationEnabled;
     }
-}  // namespace model::settings
+}  // namespace EonTimer::settings

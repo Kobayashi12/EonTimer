@@ -4,7 +4,7 @@
 
 #include "ActionSettingsModel.h"
 
-namespace model::settings {
+namespace EonTimer::settings {
     namespace ActionSettingsFields {
         const char *GROUP = "action";
 
@@ -25,10 +25,9 @@ namespace model::settings {
 
     ActionSettingsModel::ActionSettingsModel(QSettings *settings) : QObject(nullptr) {
         settings->beginGroup(ActionSettingsFields::GROUP);
-        mode = model::actionMode(
+        mode = EonTimer::actionMode(
             settings->value(ActionSettingsFields::MODE, ActionSettingsFields::Defaults::MODE).toUInt());
-        sound =
-            model::sound(settings->value(ActionSettingsFields::SOUND, ActionSettingsFields::Defaults::SOUND).toUInt());
+        sound = EonTimer::sound(settings->value(ActionSettingsFields::SOUND, ActionSettingsFields::Defaults::SOUND).toUInt());
         color = settings->value(ActionSettingsFields::COLOR, ActionSettingsFields::Defaults::COLOR).value<QColor>();
         interval = settings->value(ActionSettingsFields::INTERVAL, ActionSettingsFields::Defaults::INTERVAL).toUInt();
         count = settings->value(ActionSettingsFields::COUNT, ActionSettingsFields::Defaults::COUNT).toUInt();
@@ -37,21 +36,21 @@ namespace model::settings {
 
     void ActionSettingsModel::sync(QSettings *settings) const {
         settings->beginGroup(ActionSettingsFields::GROUP);
-        settings->setValue(ActionSettingsFields::MODE, model::indexOf(mode));
-        settings->setValue(ActionSettingsFields::SOUND, model::indexOf(sound));
+        settings->setValue(ActionSettingsFields::MODE, EonTimer::indexOf(mode));
+        settings->setValue(ActionSettingsFields::SOUND, EonTimer::indexOf(sound));
         settings->setValue(ActionSettingsFields::INTERVAL, interval);
         settings->setValue(ActionSettingsFields::COUNT, count);
         settings->setValue(ActionSettingsFields::COLOR, color);
         settings->endGroup();
     }
 
-    model::ActionMode ActionSettingsModel::getMode() const { return mode; }
+    EonTimer::ActionMode ActionSettingsModel::getMode() const { return mode; }
 
-    void ActionSettingsModel::setMode(model::ActionMode mode) { this->mode = mode; }
+    void ActionSettingsModel::setMode(EonTimer::ActionMode mode) { this->mode = mode; }
 
-    model::Sound ActionSettingsModel::getSound() const { return sound; }
+    EonTimer::Sound ActionSettingsModel::getSound() const { return sound; }
 
-    void ActionSettingsModel::setSound(const model::Sound sound) { this->sound = sound; }
+    void ActionSettingsModel::setSound(const EonTimer::Sound sound) { this->sound = sound; }
 
     const QColor &ActionSettingsModel::getColor() const { return color; }
 
@@ -69,4 +68,4 @@ namespace model::settings {
     unsigned int ActionSettingsModel::getCount() const { return count; }
 
     void ActionSettingsModel::setCount(const unsigned int count) { this->count = count; }
-}  // namespace model::settings
+}  // namespace EonTimer::settings

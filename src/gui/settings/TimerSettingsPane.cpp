@@ -8,7 +8,7 @@
 #include <QLabel>
 
 namespace gui::settings {
-    TimerSettingsPane::TimerSettingsPane(model::settings::TimerSettingsModel *model, QWidget *parent)
+    TimerSettingsPane::TimerSettingsPane(EonTimer::settings::TimerSettingsModel *model, QWidget *parent)
         : QWidget(parent), model(model) {
         initComponents();
     }
@@ -20,10 +20,10 @@ namespace gui::settings {
         {
             console = new QComboBox();
             layout->addRow("Console", console);
-            for (auto &mConsole : model::consoles()) {
-                console->addItem(model::getName(mConsole), mConsole);
+            for (auto &mConsole : EonTimer::getConsoles()) {
+                console->addItem(EonTimer::getName(mConsole), mConsole);
             }
-            console->setCurrentText(model::getName(model->getConsole()));
+            console->setCurrentText(EonTimer::getName(model->getConsole()));
             console->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         }
         // ----- refreshInterval -----
@@ -44,7 +44,7 @@ namespace gui::settings {
     }
 
     void TimerSettingsPane::updateSettings() {
-        model->setConsole(model::consoles()[console->currentIndex()]);
+        model->setConsole(EonTimer::getConsoles()[console->currentIndex()]);
         model->setRefreshInterval(std::chrono::milliseconds(refreshInterval->value()));
         model->setPrecisionCalibrationEnabled(precisionCalibrationEnabled->isChecked());
     }

@@ -21,12 +21,12 @@ namespace service {
         bool running;
         QThread *timerThread;
         std::shared_ptr<std::vector<int>> stages;
-        model::settings::TimerSettingsModel *timerSettings;
-        model::settings::ActionSettingsModel *actionSettings;
+        EonTimer::settings::TimerSettingsModel *timerSettings;
+        EonTimer::settings::ActionSettingsModel *actionSettings;
 
     public:
-        explicit TimerService(model::settings::TimerSettingsModel *timerSettings,
-                              model::settings::ActionSettingsModel *actionSettings,
+        explicit TimerService(EonTimer::settings::TimerSettingsModel *timerSettings,
+                              EonTimer::settings::ActionSettingsModel *actionSettings,
                               QObject *parent = nullptr);
 
         ~TimerService() override;
@@ -50,7 +50,7 @@ namespace service {
     signals:
         void activated(bool);
         void actionTriggered();
-        void stateChanged(const model::TimerState &state);
+        void stateChanged(const EonTimer::TimerState &state);
         void minutesBeforeTargetChanged(const std::chrono::minutes &minutesBeforeTarget);
         void nextStageChanged(const std::chrono::milliseconds &nextStage);
         // @formatter:on

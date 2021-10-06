@@ -17,12 +17,12 @@ namespace gui::timer {
     class Gen3TimerPane : public QWidget {
         Q_OBJECT
     private:
-        model::timer::Gen3TimerModel *model;
+        EonTimer::timer::Gen3TimerModel *model;
         const service::timer::FrameTimer *frameTimer;
         const service::CalibrationService *calibrationService;
 
     public:
-        Gen3TimerPane(model::timer::Gen3TimerModel *model,
+        Gen3TimerPane(EonTimer::timer::Gen3TimerModel *model,
                       const service::timer::FrameTimer *frameTimer,
                       const service::CalibrationService *calibrationService,
                       QWidget *parent = nullptr);

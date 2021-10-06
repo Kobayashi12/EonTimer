@@ -15,13 +15,13 @@
 namespace gui::settings {
     class TimerSettingsPane : public QWidget {
     private:
-        model::settings::TimerSettingsModel *model;
+        EonTimer::settings::TimerSettingsModel *model;
         QComboBox *console;
         QCheckBox *precisionCalibrationEnabled;
         QSpinBox *refreshInterval;
 
     public:
-        TimerSettingsPane(model::settings::TimerSettingsModel *model, QWidget *parent = nullptr);
+        TimerSettingsPane(EonTimer::settings::TimerSettingsModel *model, QWidget *parent = nullptr);
 
         void updateSettings();
 

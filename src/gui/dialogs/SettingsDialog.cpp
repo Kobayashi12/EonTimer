@@ -9,8 +9,8 @@
 #include <QVBoxLayout>
 
 namespace gui::dialog {
-    SettingsDialog::SettingsDialog(model::settings::TimerSettingsModel *timerSettings,
-                                   model::settings::ActionSettingsModel *actionSettings,
+    SettingsDialog::SettingsDialog(EonTimer::settings::TimerSettingsModel *timerSettings,
+                                   EonTimer::settings::ActionSettingsModel *actionSettings,
                                    QWidget *parent)
         : QDialog(parent), timerSettings(timerSettings), actionSettings(actionSettings) {
         initComponents();

@@ -5,85 +5,86 @@
 #ifndef EONTIMER_GEN5TIMERMODEL_H
 #define EONTIMER_GEN5TIMERMODEL_H
 
+#include <util/Types.h>
 #include <models/Gen5TimerMode.h>
 
 #include <QObject>
 #include <QSettings>
 
-namespace model::timer {
+namespace EonTimer {
     class Gen5TimerModel : public QObject {
         Q_OBJECT
     private:
-        model::Gen5TimerMode mode;
-        int calibration;
-        int frameCalibration;
-        int entralinkCalibration;
-        int targetDelay;
-        int targetSecond;
-        int targetAdvances;
-        int delayHit;
-        int secondHit;
-        int advancesHit;
+        EonTimer::Gen5TimerMode mode;
+        i32 calibration;
+        i32 frameCalibration;
+        i32 entralinkCalibration;
+        i32 targetDelay;
+        i32 targetSecond;
+        i32 targetAdvances;
+        i32 delayHit;
+        i32 secondHit;
+        i32 advancesHit;
 
     public:
         explicit Gen5TimerModel(QSettings *settings, QObject *parent = nullptr);
 
         void sync(QSettings *settings) const;
 
-        model::Gen5TimerMode getMode() const;
+        [[nodiscard]] EonTimer::Gen5TimerMode getMode() const;
 
-        void setMode(model::Gen5TimerMode mode);
+        void setMode(EonTimer::Gen5TimerMode newValue);
 
-        int getCalibration() const;
+        [[nodiscard]] i32 getCalibration() const;
 
-        void setCalibration(int calibration);
+        void setCalibration(i32 newValue);
 
-        int getFrameCalibration() const;
+        [[nodiscard]] i32 getFrameCalibration() const;
 
-        void setFrameCalibration(int frameCalibration);
+        void setFrameCalibration(i32 newValue);
 
-        int getEntralinkCalibration() const;
+        [[nodiscard]] i32 getEntralinkCalibration() const;
 
-        void setEntralinkCalibration(int entralinkCalibration);
+        void setEntralinkCalibration(i32 newValue);
 
-        int getTargetDelay() const;
+        [[nodiscard]] i32 getTargetDelay() const;
 
-        void setTargetDelay(int targetDelay);
+        void setTargetDelay(i32 newValue);
 
-        int getTargetSecond() const;
+        [[nodiscard]] i32 getTargetSecond() const;
 
-        void setTargetSecond(int targetSecond);
+        void setTargetSecond(i32 newValue);
 
-        int getTargetAdvances() const;
+        [[nodiscard]] i32 getTargetAdvances() const;
 
-        void setTargetAdvances(int targetAdvances);
+        void setTargetAdvances(i32 newValue);
 
-        int getDelayHit() const;
+        [[nodiscard]] i32 getDelayHit() const;
 
-        void setDelayHit(int delayHit);
+        void setDelayHit(i32 newValue);
 
-        int getSecondHit() const;
+        [[nodiscard]] i32 getSecondHit() const;
 
-        void setSecondHit(int secondHit);
+        void setSecondHit(i32 newValue);
 
-        int getAdvancesHit() const;
+        [[nodiscard]] i32 getAdvancesHit() const;
 
-        void setAdvancesHit(int advancesHit);
+        void setAdvancesHit(i32 newValue);
 
         // @formatter:off
     signals:
-        void modeChanged(model::Gen5TimerMode value);
-        void calibrationChanged(int value);
-        void frameCalibrationChanged(int value);
-        void entralinkCalibrationChanged(int value);
-        void targetDelayChanged(int value);
-        void targetSecondChanged(int value);
-        void targetAdvancesChanged(int value);
-        void delayHitChanged(int value);
-        void secondHitChanged(int value);
-        void advancesHitChanged(int value);
+        void modeChanged(EonTimer::Gen5TimerMode value);
+        void calibrationChanged(i32 value);
+        void frameCalibrationChanged(i32 value);
+        void entralinkCalibrationChanged(i32 value);
+        void targetDelayChanged(i32 value);
+        void targetSecondChanged(i32 value);
+        void targetAdvancesChanged(i32 value);
+        void delayHitChanged(i32 value);
+        void secondHitChanged(i32 value);
+        void advancesHitChanged(i32 value);
         // @formatter:on
     };
-}  // namespace model::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_GEN5TIMERMODEL_H

@@ -11,14 +11,14 @@
 
 namespace gui {
     TimerDisplayPane::TimerDisplayPane(service::TimerService *timerService,
-                                       const model::settings::ActionSettingsModel *actionSettings)
+                                       const EonTimer::settings::ActionSettingsModel *actionSettings)
         : QGroupBox(nullptr), actionSettings(actionSettings) {
         currentStage = new QLabel("0:000");
         setVisualCue(actionSettings->getColor());
-        connect(timerService, &service::TimerService::stateChanged, [this](const model::TimerState &state) {
+        connect(timerService, &service::TimerService::stateChanged, [this](const EonTimer::TimerState &state) {
             currentStage->setText(formatTime(state.remaining));
         });
-        connect(actionSettings, &model::settings::ActionSettingsModel::colorChanged, [this](const QColor &color) {
+        connect(actionSettings, &EonTimer::settings::ActionSettingsModel::colorChanged, [this](const QColor &color) {
             setVisualCue(color);
         });
         minutesBeforeTarget = new QLabel("0");
@@ -98,7 +98,7 @@ namespace gui {
 
     bool TimerDisplayPane::isVisualCueEnabled() const {
         const auto mode = actionSettings->getMode();
-        return mode == model::ActionMode::VISUAL || mode == model::ActionMode::AV;
+        return mode == EonTimer::ActionMode::VISUAL || mode == EonTimer::ActionMode::AV;
     }
 
     void TimerDisplayPane::activate() {

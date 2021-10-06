@@ -6,18 +6,15 @@
 #define EONTIMER_SOUND_H
 
 #include <QtGlobal>
+#include <string>
 #include <vector>
 
-namespace model {
-    enum Sound { BEEP, DING, POP, TICK };
+namespace EonTimer {
+    enum Sound { BEEP, DING, POP, TICK, COUNT };
 
-    const char *getName(Sound sound);
+    const std::string &getName(Sound sound);
 
-    Sound sound(uint index);
-
-    const std::vector<Sound> &sounds();
-
-    int indexOf(Sound sound);
-}  // namespace model
+    const std::vector<Sound> &getSounds();
+}  // namespace EonTimer
 
 #endif  // EONTIMER_SOUND_H

@@ -4,7 +4,7 @@
 
 #include "TimerState.h"
 
-namespace model {
+namespace EonTimer {
     TimerState::TimerState(const std::chrono::milliseconds &duration, const std::chrono::milliseconds &remaining)
         : duration(duration), remaining(remaining) {}
-}  // namespace model
+}  // namespace EonTimer

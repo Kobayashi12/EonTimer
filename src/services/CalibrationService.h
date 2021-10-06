@@ -10,10 +10,10 @@
 namespace service {
     class CalibrationService {
     private:
-        const model::settings::TimerSettingsModel *timerSettings;
+        const EonTimer::settings::TimerSettingsModel *timerSettings;
 
     public:
-        explicit CalibrationService(const model::settings::TimerSettingsModel *timerSettings);
+        explicit CalibrationService(const EonTimer::settings::TimerSettingsModel *timerSettings);
 
         int toDelays(int milliseconds) const;
 

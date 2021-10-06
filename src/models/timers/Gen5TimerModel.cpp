@@ -4,7 +4,8 @@
 
 #include "Gen5TimerModel.h"
 
-namespace model::timer {
+namespace EonTimer {
+
     namespace Gen5Fields {
         const char *GROUP = "gen5";
         const char *MODE = "mode";
@@ -16,19 +17,20 @@ namespace model::timer {
         const char *TARGET_ADVANCES = "targetAdvances";
 
         namespace Defaults {
-            const int MODE = 0;
-            const int CALIBRATION = -95;
-            const int FRAME_CALIBRATION = 0;
-            const int ENTRALINK_CALIBRATION = 256;
-            const int TARGET_DELAY = 1200;
-            const int TARGET_SECOND = 50;
-            const int TARGET_ADVANCES = 100;
+            const i32 MODE = 0;
+            const i32 CALIBRATION = -95;
+            const i32 FRAME_CALIBRATION = 0;
+            const i32 ENTRALINK_CALIBRATION = 256;
+            const i32 TARGET_DELAY = 1200;
+            const i32 TARGET_SECOND = 50;
+            const i32 TARGET_ADVANCES = 100;
         }  // namespace Defaults
     }      // namespace Gen5Fields
 
     Gen5TimerModel::Gen5TimerModel(QSettings *settings, QObject *parent) : QObject(parent) {
         settings->beginGroup(Gen5Fields::GROUP);
-        mode = model::gen5TimerMode(settings->value(Gen5Fields::MODE, Gen5Fields::Defaults::MODE).toInt());
+        const auto &modes = EonTimer::getGen5TimerModes();
+        mode = modes[settings->value(Gen5Fields::MODE, Gen5Fields::Defaults::MODE).toInt()];
         calibration = settings->value(Gen5Fields::CALIBRATION, Gen5Fields::Defaults::CALIBRATION).toInt();
         frameCalibration =
             settings->value(Gen5Fields::FRAME_CALIBRATION, Gen5Fields::Defaults::FRAME_CALIBRATION).toInt();
@@ -42,7 +44,7 @@ namespace model::timer {
 
     void Gen5TimerModel::sync(QSettings *settings) const {
         settings->beginGroup(Gen5Fields::GROUP);
-        settings->setValue(Gen5Fields::MODE, model::indexOf(mode));
+        settings->setValue(Gen5Fields::MODE, mode);
         settings->setValue(Gen5Fields::CALIBRATION, calibration);
         settings->setValue(Gen5Fields::FRAME_CALIBRATION, frameCalibration);
         settings->setValue(Gen5Fields::ENTRALINK_CALIBRATION, entralinkCalibration);
@@ -52,93 +54,93 @@ namespace model::timer {
         settings->endGroup();
     }
 
-    model::Gen5TimerMode Gen5TimerModel::getMode() const { return mode; }
+    EonTimer::Gen5TimerMode Gen5TimerModel::getMode() const { return mode; }
 
-    void Gen5TimerModel::setMode(model::Gen5TimerMode mode) {
-        if (this->mode != mode) {
-            this->mode = mode;
-            emit modeChanged(mode);
+    void Gen5TimerModel::setMode(const EonTimer::Gen5TimerMode newValue) {
+        if (mode != newValue) {
+            mode = newValue;
+            emit modeChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getCalibration() const { return calibration; }
+    i32 Gen5TimerModel::getCalibration() const { return calibration; }
 
-    void Gen5TimerModel::setCalibration(int calibration) {
-        if (this->calibration != calibration) {
-            this->calibration = calibration;
-            emit calibrationChanged(calibration);
+    void Gen5TimerModel::setCalibration(const i32 newValue) {
+        if (calibration != newValue) {
+            calibration = newValue;
+            emit calibrationChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getFrameCalibration() const { return frameCalibration; }
+    i32 Gen5TimerModel::getFrameCalibration() const { return frameCalibration; }
 
-    void Gen5TimerModel::setFrameCalibration(int frameCalibration) {
-        if (this->frameCalibration != frameCalibration) {
-            this->frameCalibration = frameCalibration;
-            emit frameCalibrationChanged(frameCalibration);
+    void Gen5TimerModel::setFrameCalibration(const i32 newValue) {
+        if (frameCalibration != newValue) {
+            frameCalibration = newValue;
+            emit frameCalibrationChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getEntralinkCalibration() const { return entralinkCalibration; }
+    i32 Gen5TimerModel::getEntralinkCalibration() const { return entralinkCalibration; }
 
-    void Gen5TimerModel::setEntralinkCalibration(int entralinkCalibration) {
-        if (this->entralinkCalibration != entralinkCalibration) {
-            this->entralinkCalibration = entralinkCalibration;
-            emit entralinkCalibrationChanged(entralinkCalibration);
+    void Gen5TimerModel::setEntralinkCalibration(const i32 newValue) {
+        if (entralinkCalibration != newValue) {
+            entralinkCalibration = newValue;
+            emit entralinkCalibrationChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getTargetDelay() const { return targetDelay; }
+    i32 Gen5TimerModel::getTargetDelay() const { return targetDelay; }
 
-    void Gen5TimerModel::setTargetDelay(int targetDelay) {
-        if (this->targetDelay != targetDelay) {
-            this->targetDelay = targetDelay;
-            emit targetDelayChanged(targetDelay);
+    void Gen5TimerModel::setTargetDelay(const i32 newValue) {
+        if (targetDelay != newValue) {
+            targetDelay = newValue;
+            emit targetDelayChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getTargetSecond() const { return targetSecond; }
+    i32 Gen5TimerModel::getTargetSecond() const { return targetSecond; }
 
-    void Gen5TimerModel::setTargetSecond(int targetSecond) {
-        if (this->targetSecond != targetSecond) {
-            this->targetSecond = targetSecond;
-            emit targetSecondChanged(targetSecond);
+    void Gen5TimerModel::setTargetSecond(const i32 newValue) {
+        if (targetSecond != newValue) {
+            targetSecond = newValue;
+            emit targetSecondChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getTargetAdvances() const { return targetAdvances; }
+    i32 Gen5TimerModel::getTargetAdvances() const { return targetAdvances; }
 
-    void Gen5TimerModel::setTargetAdvances(int targetAdvances) {
-        if (this->targetAdvances != targetAdvances) {
-            this->targetAdvances = targetAdvances;
-            emit targetAdvancesChanged(targetAdvances);
+    void Gen5TimerModel::setTargetAdvances(const i32 newValue) {
+        if (targetAdvances != newValue) {
+            targetAdvances = newValue;
+            emit targetAdvancesChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getDelayHit() const { return delayHit; }
+    i32 Gen5TimerModel::getDelayHit() const { return delayHit; }
 
-    void Gen5TimerModel::setDelayHit(const int delayHit) {
-        if (this->delayHit != delayHit) {
-            this->delayHit = delayHit;
-            emit delayHitChanged(delayHit);
+    void Gen5TimerModel::setDelayHit(const i32 newValue) {
+        if (delayHit != newValue) {
+            delayHit = newValue;
+            emit delayHitChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getSecondHit() const { return secondHit; }
+    i32 Gen5TimerModel::getSecondHit() const { return secondHit; }
 
-    void Gen5TimerModel::setSecondHit(const int secondHit) {
-        if (this->secondHit != secondHit) {
-            this->secondHit = secondHit;
-            emit secondHitChanged(secondHit);
+    void Gen5TimerModel::setSecondHit(const i32 newValue) {
+        if (secondHit != newValue) {
+            secondHit = newValue;
+            emit secondHitChanged(newValue);
         }
     }
 
-    int Gen5TimerModel::getAdvancesHit() const { return advancesHit; }
+    i32 Gen5TimerModel::getAdvancesHit() const { return advancesHit; }
 
-    void Gen5TimerModel::setAdvancesHit(const int advancesHit) {
-        if (this->advancesHit != advancesHit) {
-            this->advancesHit = advancesHit;
-            emit advancesHitChanged(advancesHit);
+    void Gen5TimerModel::setAdvancesHit(const i32 newValue) {
+        if (advancesHit != newValue) {
+            advancesHit = newValue;
+            emit advancesHitChanged(newValue);
         }
     }
-}  // namespace model::timer
+}  // namespace EonTimer::timer

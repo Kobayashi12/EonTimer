@@ -15,7 +15,7 @@ namespace gui {
     class TimerDisplayPane : public QGroupBox {
     public:
         TimerDisplayPane(service::TimerService *timerService,
-                         const model::settings::ActionSettingsModel *actionSettings);
+                         const EonTimer::settings::ActionSettingsModel *actionSettings);
 
     private:
         void initComponents();
@@ -32,7 +32,7 @@ namespace gui {
         QLabel *currentStage;
         QLabel *minutesBeforeTarget;
         QLabel *nextStage;
-        const model::settings::ActionSettingsModel *actionSettings;
+        const EonTimer::settings::ActionSettingsModel *actionSettings;
         bool isActive;
         QTimer timer;
 

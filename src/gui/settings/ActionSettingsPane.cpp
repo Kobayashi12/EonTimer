@@ -13,7 +13,7 @@
 #include <QPushButton>
 
 namespace gui::settings {
-    ActionSettingsPane::ActionSettingsPane(model::settings::ActionSettingsModel *settings, QWidget *parent)
+    ActionSettingsPane::ActionSettingsPane(EonTimer::settings::ActionSettingsModel *settings, QWidget *parent)
         : QWidget(parent), settings(settings) {
         mode = settings->getMode();
         sound = settings->getSound();
@@ -29,10 +29,11 @@ namespace gui::settings {
         {
             auto *field = new QComboBox;
             auto *fieldSet = new util::FieldSet<QComboBox>(0, new QLabel("Mode"), field);
-            gui::util::widget::addItems<model::ActionMode>(field, model::actionModes(), [](model::ActionMode mode) {
-                return model::getName(mode);
+            gui::util::widget::addItems<EonTimer::ActionMode>(field,
+                EonTimer::actionModes(), [](EonTimer::ActionMode mode) {
+                return EonTimer::getName(mode);
             });
-            field->setCurrentText(model::getName(settings->getMode()));
+            field->setCurrentText(EonTimer::getName(settings->getMode()));
             util::addFieldSet(form, *fieldSet);
 
             connect(field, SIGNAL(currentIndexChanged(int)), this, SLOT(setMode(int)));
@@ -41,15 +42,15 @@ namespace gui::settings {
         {
             auto *field = new QComboBox;
             auto *fieldSet = new util::FieldSet<QComboBox>(1, new QLabel("Sound"), field);
-            gui::util::widget::addItems<model::Sound>(field, model::sounds(), [](model::Sound sound) {
-                return model::getName(sound);
+            gui::util::widget::addItems<EonTimer::Sound>(field, EonTimer::getSounds(), [](EonTimer::Sound sound) {
+                return EonTimer::getName(sound);
             });
-            field->setCurrentText(model::getName(settings->getSound()));
+            field->setCurrentText(EonTimer::getName(settings->getSound()));
             util::addFieldSet(form, *fieldSet);
 
             connect(field, SIGNAL(currentIndexChanged(int)), this, SLOT(setSound(int)));
             connect(this, &ActionSettingsPane::modeChanged, [form, fieldSet](const int mode) {
-                const bool visible = mode == model::ActionMode::AUDIO || mode == model::ActionMode::AV;
+                const bool visible = mode == EonTimer::ActionMode::AUDIO || mode == EonTimer::ActionMode::AV;
                 util::setVisible(form, *fieldSet, visible);
             });
         }
@@ -66,7 +67,7 @@ namespace gui::settings {
                 }
             });
             connect(this, &ActionSettingsPane::modeChanged, [form, fieldSet](const int mode) {
-                const bool visible = mode == model::ActionMode::VISUAL || mode == model::ActionMode::AV;
+                const bool visible = mode == EonTimer::ActionMode::VISUAL || mode == EonTimer::ActionMode::AV;
                 util::setVisible(form, *fieldSet, visible);
             });
             util::addFieldSet(form, *fieldSet);
@@ -94,8 +95,8 @@ namespace gui::settings {
     }
 
     void ActionSettingsPane::updateSettings() {
-        settings->setMode(model::actionMode(static_cast<unsigned int>(mode)));
-        settings->setSound(model::sound(static_cast<unsigned int>(sound)));
+        settings->setMode(EonTimer::actionMode(static_cast<unsigned int>(mode)));
+        settings->setSound(EonTimer::sound(static_cast<unsigned int>(sound)));
         settings->setInterval(static_cast<unsigned int>(interval));
         settings->setCount(static_cast<unsigned int>(count));
         settings->setColor(color);

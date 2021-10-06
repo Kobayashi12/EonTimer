@@ -15,14 +15,14 @@
 namespace gui::dialog {
     class SettingsDialog : public QDialog {
     private:
-        model::settings::TimerSettingsModel *timerSettings;
-        model::settings::ActionSettingsModel *actionSettings;
+        EonTimer::settings::TimerSettingsModel *timerSettings;
+        EonTimer::settings::ActionSettingsModel *actionSettings;
         settings::TimerSettingsPane *timerSettingsPane;
         settings::ActionSettingsPane *actionSettingsPane;
 
     public:
-        explicit SettingsDialog(model::settings::TimerSettingsModel *timerSettings,
-                                model::settings::ActionSettingsModel *actionSettings,
+        explicit SettingsDialog(EonTimer::settings::TimerSettingsModel *timerSettings,
+                                EonTimer::settings::ActionSettingsModel *actionSettings,
                                 QWidget *parent = nullptr);
 
     private:

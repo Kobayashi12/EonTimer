@@ -6,15 +6,14 @@
 
 #include <iostream>
 
-namespace util {
-    Clock::Clock() { lastTick = std::chrono::high_resolution_clock::now(); }
+namespace EonTimer {
+    using namespace std::chrono;
 
-    std::chrono::microseconds Clock::tick() {
-        const auto now = std::chrono::high_resolution_clock::now();
-        const auto lastTick =
-            std::chrono::time_point_cast<std::chrono::microseconds>(this->lastTick).time_since_epoch();
-        const auto currentTick = std::chrono::time_point_cast<std::chrono::microseconds>(now).time_since_epoch();
-        this->lastTick = now;
-        return std::chrono::duration_cast<std::chrono::microseconds>(currentTick - lastTick);
+    Clock::Clock() { lastTick = high_resolution_clock::now(); }
+
+    microseconds Clock::tick() {
+        auto previousTick = lastTick;
+        lastTick = std::chrono::high_resolution_clock::now();
+        return std::chrono::duration_cast<std::chrono::microseconds>(lastTick - previousTick);
     }
 }  // namespace util

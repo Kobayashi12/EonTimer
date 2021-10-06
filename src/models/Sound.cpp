@@ -6,38 +6,14 @@
 
 #include <string>
 
-namespace model {
-    const std::vector<Sound> VALUES{Sound::BEEP, Sound::DING, Sound::TICK, Sound::POP};
-    namespace names {
-        const char *BEEP = "Beep";
-        const char *DING = "Ding";
-        const char *TICK = "Tick";
-        const char *POP = "Pop";
-    }  // namespace names
-
-    const char *getName(const Sound sound) {
-        switch (sound) {
-            case BEEP:
-                return names::BEEP;
-            case DING:
-                return names::DING;
-            case TICK:
-                return names::TICK;
-            case POP:
-                return names::POP;
-            default:
-                return "";
-        }
+namespace EonTimer {
+    const std::string &getName(Sound sound) {
+        static const std::string names[COUNT] = {"Beep", "Ding", "Tick", "Pop"};
+        return names[sound];
     }
 
-    Sound sound(const uint index) { return VALUES[index]; }
-
-    const std::vector<Sound> &sounds() { return VALUES; }
-
-    int indexOf(const Sound sound) {
-        for (uint i = 0; i < VALUES.size(); i++) {
-            if (sound == VALUES[i]) return i;
-        }
-        return -1;
+    const std::vector<Sound> &getSounds() {
+        static const std::vector<Sound> values{BEEP, DING, TICK, POP};
+        return values;
     }
-}  // namespace model
+}  // namespace EonTimer

@@ -19,11 +19,11 @@ namespace gui {
     }
 
     ApplicationPane::ApplicationPane(QSettings *settings,
-                                     model::settings::ActionSettingsModel *actionSettings,
-                                     model::settings::TimerSettingsModel *timerSettings,
-                                     model::timer::Gen5TimerModel *gen5Timer,
-                                     model::timer::Gen4TimerModel *gen4Timer,
-                                     model::timer::Gen3TimerModel *gen3Timer,
+                                     EonTimer::settings::ActionSettingsModel *actionSettings,
+                                     EonTimer::settings::TimerSettingsModel *timerSettings,
+                                     EonTimer::timer::Gen5TimerModel *gen5Timer,
+                                     EonTimer::timer::Gen4TimerModel *gen4Timer,
+                                     EonTimer::timer::Gen3TimerModel *gen3Timer,
                                      service::TimerService *timerService,
                                      QWidget *parent)
         : QWidget(parent),

@@ -8,7 +8,7 @@
 #include <QScrollArea>
 
 namespace gui::timer {
-    Gen5TimerPane::Gen5TimerPane(model::timer::Gen5TimerModel *model,
+    Gen5TimerPane::Gen5TimerPane(EonTimer::timer::Gen5TimerModel *model,
                                  const service::timer::DelayTimer *delayTimer,
                                  const service::timer::SecondTimer *secondTimer,
                                  const service::timer::EntralinkTimer *entralinkTimer,
@@ -38,12 +38,12 @@ namespace gui::timer {
             rootLayout->addLayout(form);
 
             util::FieldSet<QComboBox> mode(0, new QLabel("Mode"), new QComboBox);
-            for (const auto currentMode : model::gen5TimerModes()) {
-                mode.field->addItem(model::getName(currentMode), currentMode);
+            for (const auto currentMode : EonTimer::getGen5TimerModes()) {
+                mode.field->addItem(EonTimer::getName(currentMode), currentMode);
             }
-            mode.field->setCurrentText(model::getName(model->getMode()));
+            mode.field->setCurrentText(EonTimer::getName(model->getMode()));
             connect(mode.field, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](const int currentIndex) {
-                model->setMode(model::gen5TimerModes()[currentIndex]);
+                model->setMode(EonTimer::getGen5TimerModes()[currentIndex]);
                 emit timerChanged(createStages());
             });
             util::addFieldSet(form, mode);
@@ -95,9 +95,9 @@ namespace gui::timer {
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &model::timer::Gen5TimerModel::modeChanged,
-                        [setVisible, form, fieldSet](const model::Gen5TimerMode value) {
-                            setVisible(form, *fieldSet, value != model::Gen5TimerMode::STANDARD);
+                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
+                            setVisible(form, *fieldSet, value != EonTimer::Gen5TimerMode::STANDARD);
                         });
                 util::addFieldSet(form, *fieldSet);
             }
@@ -126,12 +126,12 @@ namespace gui::timer {
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &model::timer::Gen5TimerModel::modeChanged,
-                        [setVisible, form, fieldSet](const model::Gen5TimerMode value) {
+                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form,
                                        *fieldSet,
-                                       value == model::Gen5TimerMode::ENTRALINK ||
-                                           value == model::Gen5TimerMode::ENTRALINK_PLUS);
+                                       value == EonTimer::Gen5TimerMode::ENTRALINK ||
+                                           value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
                 util::addFieldSet(form, *fieldSet);
             }
@@ -147,9 +147,9 @@ namespace gui::timer {
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &model::timer::Gen5TimerModel::modeChanged,
-                        [setVisible, form, fieldSet](const model::Gen5TimerMode value) {
-                            setVisible(form, *fieldSet, value == model::Gen5TimerMode::ENTRALINK_PLUS);
+                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
+                            setVisible(form, *fieldSet, value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
                 util::addFieldSet(form, *fieldSet);
             }
@@ -165,9 +165,9 @@ namespace gui::timer {
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &model::timer::Gen5TimerModel::modeChanged,
-                        [setVisible, form, fieldSet](const model::Gen5TimerMode value) {
-                            setVisible(form, *fieldSet, value == model::Gen5TimerMode::ENTRALINK_PLUS);
+                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
+                            setVisible(form, *fieldSet, value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
                 util::addFieldSet(form, *fieldSet);
             }
@@ -186,9 +186,9 @@ namespace gui::timer {
                 connect(model, SIGNAL(delayHitChanged(int)), field, SLOT(setValue(int)));
                 connect(field, valueChanged, [this](const int value) { model->setDelayHit(value); });
                 connect(model,
-                        &model::timer::Gen5TimerModel::modeChanged,
-                        [setVisible, form, fieldSet](const model::Gen5TimerMode value) {
-                            setVisible(form, *fieldSet, value != model::Gen5TimerMode::STANDARD);
+                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
+                            setVisible(form, *fieldSet, value != EonTimer::Gen5TimerMode::STANDARD);
                         });
                 util::addFieldSet(form, *fieldSet);
             }
@@ -200,9 +200,9 @@ namespace gui::timer {
                 connect(model, SIGNAL(secondHitChanged(int)), field, SLOT(setValue(int)));
                 connect(field, valueChanged, [this](const int value) { model->setSecondHit(value); });
                 connect(model,
-                        &model::timer::Gen5TimerModel::modeChanged,
-                        [setVisible, form, fieldSet](const model::Gen5TimerMode value) {
-                            setVisible(form, *fieldSet, value != model::Gen5TimerMode::C_GEAR);
+                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
+                            setVisible(form, *fieldSet, value != EonTimer::Gen5TimerMode::C_GEAR);
                         });
                 util::addFieldSet(form, *fieldSet);
             }
@@ -214,9 +214,9 @@ namespace gui::timer {
                 connect(model, SIGNAL(advancesHitChanged(int)), field, SLOT(setValue(int)));
                 connect(field, valueChanged, [this](const int value) { model->setAdvancesHit(value); });
                 connect(model,
-                        &model::timer::Gen5TimerModel::modeChanged,
-                        [setVisible, form, fieldSet](const model::Gen5TimerMode value) {
-                            setVisible(form, *fieldSet, value == model::Gen5TimerMode::ENTRALINK_PLUS);
+                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
+                            setVisible(form, *fieldSet, value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
                 util::addFieldSet(form, *fieldSet);
             }
@@ -228,24 +228,24 @@ namespace gui::timer {
     std::shared_ptr<std::vector<int>> Gen5TimerPane::createStages() {
         std::shared_ptr<std::vector<int>> stages;
         switch (model->getMode()) {
-            case model::Gen5TimerMode::STANDARD:
+            case EonTimer::Gen5TimerMode::STANDARD:
                 stages =
                     secondTimer->createStages(model->getTargetSecond(),
                                               calibrationService->calibrateToMilliseconds(model->getCalibration()));
                 break;
-            case model::Gen5TimerMode::C_GEAR:
+            case EonTimer::Gen5TimerMode::C_GEAR:
                 stages = delayTimer->createStages(model->getTargetDelay(),
                                                   model->getTargetSecond(),
                                                   calibrationService->calibrateToMilliseconds(model->getCalibration()));
                 break;
-            case model::Gen5TimerMode::ENTRALINK:
+            case EonTimer::Gen5TimerMode::ENTRALINK:
                 stages = entralinkTimer->createStages(
                     model->getTargetDelay(),
                     model->getTargetSecond(),
                     calibrationService->calibrateToMilliseconds(model->getCalibration()),
                     calibrationService->calibrateToMilliseconds(model->getEntralinkCalibration()));
                 break;
-            case model::Gen5TimerMode::ENTRALINK_PLUS:
+            case EonTimer::Gen5TimerMode::ENTRALINK_PLUS:
                 stages = enhancedEntralinkTimer->createStages(
                     model->getTargetDelay(),
                     model->getTargetSecond(),
@@ -260,21 +260,21 @@ namespace gui::timer {
 
     void Gen5TimerPane::calibrate() {
         switch (model->getMode()) {
-            case model::Gen5TimerMode::STANDARD:
+            case EonTimer::Gen5TimerMode::STANDARD:
                 model->setCalibration(model->getCalibration() +
                                       calibrationService->calibrateToDelays(getSecondCalibration()));
                 break;
-            case model::Gen5TimerMode::C_GEAR:
+            case EonTimer::Gen5TimerMode::C_GEAR:
                 model->setCalibration(model->getCalibration() +
                                       calibrationService->calibrateToDelays(getDelayCalibration()));
                 break;
-            case model::Gen5TimerMode::ENTRALINK:
+            case EonTimer::Gen5TimerMode::ENTRALINK:
                 model->setCalibration(model->getCalibration() +
                                       calibrationService->calibrateToDelays(getSecondCalibration()));
                 model->setEntralinkCalibration(model->getEntralinkCalibration() +
                                                calibrationService->calibrateToDelays(getEntralinkCalibration()));
                 break;
-            case model::Gen5TimerMode::ENTRALINK_PLUS:
+            case EonTimer::Gen5TimerMode::ENTRALINK_PLUS:
                 model->setCalibration(model->getCalibration() +
                                       calibrationService->calibrateToDelays(getSecondCalibration()));
                 model->setEntralinkCalibration(model->getEntralinkCalibration() +

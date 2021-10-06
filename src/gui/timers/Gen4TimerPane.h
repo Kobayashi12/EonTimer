@@ -16,12 +16,12 @@ namespace gui::timer {
     class Gen4TimerPane : public QWidget {
         Q_OBJECT
     private:
-        model::timer::Gen4TimerModel *model;
+        EonTimer::timer::Gen4TimerModel *model;
         const service::timer::DelayTimer *delayTimer;
         const service::CalibrationService *calibrationService;
 
     public:
-        Gen4TimerPane(model::timer::Gen4TimerModel *model,
+        Gen4TimerPane(EonTimer::timer::Gen4TimerModel *model,
                       const service::timer::DelayTimer *delayTimer,
                       const service::CalibrationService *calibrationService,
                       QWidget *parent = nullptr);

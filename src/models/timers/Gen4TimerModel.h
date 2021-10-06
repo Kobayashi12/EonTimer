@@ -8,7 +8,7 @@
 #include <QObject>
 #include <QSettings>
 
-namespace model::timer {
+namespace EonTimer {
     class Gen4TimerModel : public QObject {
         Q_OBJECT
     private:
@@ -52,6 +52,6 @@ namespace model::timer {
         void delayHitChanged(int delayHit);
         // @formatter:on
     };
-}  // namespace model::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_GEN4TIMERMODEL_H

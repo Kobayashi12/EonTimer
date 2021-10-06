@@ -12,12 +12,12 @@
 #include <QtGui/QColor>
 #include <chrono>
 
-namespace model::settings {
+namespace EonTimer::settings {
     class ActionSettingsModel : public QObject {
         Q_OBJECT
     private:
-        model::ActionMode mode;
-        model::Sound sound;
+        EonTimer::ActionMode mode;
+        EonTimer::Sound sound;
         QColor color;
         unsigned int interval;
         unsigned int count;
@@ -27,13 +27,13 @@ namespace model::settings {
 
         void sync(QSettings *settings) const;
 
-        model::ActionMode getMode() const;
+        EonTimer::ActionMode getMode() const;
 
-        void setMode(model::ActionMode mode);
+        void setMode(EonTimer::ActionMode mode);
 
-        model::Sound getSound() const;
+        EonTimer::Sound getSound() const;
 
-        void setSound(model::Sound sound);
+        void setSound(EonTimer::Sound sound);
 
         const QColor &getColor() const;
 
@@ -50,6 +50,6 @@ namespace model::settings {
     signals:
         void colorChanged(const QColor &color);
     };
-}  // namespace model::settings
+}  // namespace EonTimer::settings
 
 #endif  // EONTIMER_ACTIONSETTINGSMODEL_H

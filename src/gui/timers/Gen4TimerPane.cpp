@@ -12,7 +12,7 @@
 #include <QVBoxLayout>
 
 namespace gui::timer {
-    Gen4TimerPane::Gen4TimerPane(model::timer::Gen4TimerModel *model,
+    Gen4TimerPane::Gen4TimerPane(EonTimer::timer::Gen4TimerModel *model,
                                  const service::timer::DelayTimer *delayTimer,
                                  const service::CalibrationService *calibrationService,
                                  QWidget *parent)

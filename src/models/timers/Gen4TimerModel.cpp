@@ -6,7 +6,7 @@
 
 #include <QtCore>
 
-namespace model::timer {
+namespace EonTimer {
     namespace Gen4Fields {
         const char *CALIBRATED_DELAY = "gen4/calibratedDelay";
         const char *CALIBRATED_SECOND = "gen4/calibratedSecond";
@@ -80,4 +80,4 @@ namespace model::timer {
             emit delayHitChanged(delayHit);
         }
     }
-}  // namespace model::timer
+}  // namespace EonTimer::timer

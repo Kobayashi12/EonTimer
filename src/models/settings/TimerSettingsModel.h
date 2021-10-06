@@ -10,10 +10,10 @@
 #include <QSettings>
 #include <chrono>
 
-namespace model::settings {
+namespace EonTimer::settings {
     class TimerSettingsModel {
     private:
-        model::Console console;
+        EonTimer::Console console;
         std::chrono::milliseconds refreshInterval;
         bool precisionCalibrationEnabled;
 
@@ -22,9 +22,9 @@ namespace model::settings {
 
         void sync(QSettings *settings) const;
 
-        model::Console getConsole() const;
+        EonTimer::Console getConsole() const;
 
-        void setConsole(model::Console console);
+        void setConsole(EonTimer::Console console);
 
         std::chrono::milliseconds getRefreshInterval() const;
 
@@ -34,6 +34,6 @@ namespace model::settings {
 
         void setPrecisionCalibrationEnabled(bool precisionCalibrationEnabled);
     };
-}  // namespace model::settings
+}  // namespace EonTimer::settings
 
 #endif  // EONTIMER_TIMERSETTINGSMODEL_H

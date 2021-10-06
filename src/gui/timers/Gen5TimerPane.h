@@ -23,7 +23,7 @@ namespace gui::timer {
     class Gen5TimerPane : public QWidget {
         Q_OBJECT
     private:
-        model::timer::Gen5TimerModel *model;
+        EonTimer::timer::Gen5TimerModel *model;
         const service::timer::DelayTimer *delayTimer;
         const service::timer::SecondTimer *secondTimer;
         const service::timer::EntralinkTimer *entralinkTimer;
@@ -31,7 +31,7 @@ namespace gui::timer {
         const service::CalibrationService *calibrationService;
 
     public:
-        explicit Gen5TimerPane(model::timer::Gen5TimerModel *model,
+        explicit Gen5TimerPane(EonTimer::timer::Gen5TimerModel *model,
                                const service::timer::DelayTimer *delayTimer,
                                const service::timer::SecondTimer *secondTimer,
                                const service::timer::EntralinkTimer *entralinkTimer,

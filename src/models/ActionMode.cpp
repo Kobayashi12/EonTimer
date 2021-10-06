@@ -4,36 +4,16 @@
 
 #include "ActionMode.h"
 
-namespace model {
-    const std::vector<ActionMode> VALUES{ActionMode::AUDIO, ActionMode::VISUAL, ActionMode::AV};
+#include <string>
 
-    namespace names {
-        const char* AUDIO = "Audio";
-        const char* VISUAL = "Visual";
-        const char* AV = "A/V";
-    }  // namespace names
-
-    const char* getName(const ActionMode mode) {
-        switch (mode) {
-            case AUDIO:
-                return names::AUDIO;
-            case VISUAL:
-                return names::VISUAL;
-            case AV:
-                return names::AV;
-            default:
-                return "";
-        }
+namespace EonTimer {
+    const std::vector<ActionMode> &getActionModes() {
+        static const std::vector<ActionMode> values{AUDIO, VISUAL, AV};
+        return values;
     }
 
-    ActionMode actionMode(const unsigned int index) { return VALUES[index]; }
-
-    const std::vector<ActionMode>& actionModes() { return VALUES; }
-
-    int indexOf(const ActionMode& mode) {
-        for (unsigned int i = 0; i < VALUES.size(); i++) {
-            if (mode == VALUES[i]) return i;
-        }
-        return -1;
+    const std::string &getName(ActionMode mode) {
+        static const std::string names[ActionMode::COUNT] = {"Audio", "Visual", "A/V"};
+        return names[mode];
     }
-}  // namespace model
+}  // namespace EonTimer

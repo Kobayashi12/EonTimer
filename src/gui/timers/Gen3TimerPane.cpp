@@ -11,7 +11,7 @@
 #include <QVBoxLayout>
 
 namespace gui::timer {
-    Gen3TimerPane::Gen3TimerPane(model::timer::Gen3TimerModel *model,
+    Gen3TimerPane::Gen3TimerPane(EonTimer::timer::Gen3TimerModel *model,
                                  const service::timer::FrameTimer *frameTimer,
                                  const service::CalibrationService *calibrationService,
                                  QWidget *parent)

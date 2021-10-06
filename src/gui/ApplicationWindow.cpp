@@ -30,11 +30,11 @@ namespace gui {
 
     ApplicationWindow::ApplicationWindow(QWidget *parent) : QMainWindow(parent) {
         settings = new QSettings(this);
-        actionSettings = new model::settings::ActionSettingsModel(settings);
-        timerSettings = new model::settings::TimerSettingsModel(settings);
-        gen5Timer = new model::timer::Gen5TimerModel(settings);
-        gen4Timer = new model::timer::Gen4TimerModel(settings);
-        gen3Timer = new model::timer::Gen3TimerModel(settings);
+        actionSettings = new EonTimer::settings::ActionSettingsModel(settings);
+        timerSettings = new EonTimer::settings::TimerSettingsModel(settings);
+        gen5Timer = new EonTimer::timer::Gen5TimerModel(settings);
+        gen4Timer = new EonTimer::timer::Gen4TimerModel(settings);
+        gen3Timer = new EonTimer::timer::Gen3TimerModel(settings);
         timerService = new service::TimerService(timerSettings, actionSettings, this);
         applicationPane = new ApplicationPane(settings,
                                               actionSettings,

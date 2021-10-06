@@ -7,7 +7,7 @@
 
 #include <chrono>
 
-namespace util::instrumentation {
+namespace EonTimer::Instrumentation {
     class Timer {
     public:
         explicit Timer(const char *operation);

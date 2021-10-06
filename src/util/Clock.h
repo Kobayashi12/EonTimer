@@ -7,7 +7,7 @@
 
 #include <chrono>
 
-namespace util {
+namespace EonTimer {
     class Clock {
     public:
         Clock();

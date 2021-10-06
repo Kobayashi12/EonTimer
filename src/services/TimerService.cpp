@@ -16,8 +16,8 @@
 using namespace std::literals::chrono_literals;
 
 namespace service {
-    TimerService::TimerService(model::settings::TimerSettingsModel *timerSettings,
-                               model::settings::ActionSettingsModel *actionSettings,
+    TimerService::TimerService(EonTimer::settings::TimerSettingsModel *timerSettings,
+                               EonTimer::settings::ActionSettingsModel *actionSettings,
                                QObject *parent)
         : QObject(parent), running(false), timerSettings(timerSettings), actionSettings(actionSettings) {
         auto *sounds = new SoundService(actionSettings, this);
@@ -64,7 +64,7 @@ namespace service {
             totalTime += std::chrono::milliseconds(stage);
         }
         const auto currentStage = std::chrono::milliseconds((*stages)[0]);
-        emit stateChanged(model::TimerState(currentStage, currentStage));
+        emit stateChanged(EonTimer::TimerState(currentStage, currentStage));
         emit minutesBeforeTargetChanged(std::chrono::duration_cast<std::chrono::minutes>(totalTime));
         emit nextStageChanged(stages->size() >= 2 ? std::chrono::milliseconds((*stages)[1]) : 0ms);
     }
@@ -114,7 +114,8 @@ namespace service {
                 }
             }
             if (ticks % 4 == 0)
-                emit stateChanged(model::TimerState(std::chrono::duration_cast<std::chrono::milliseconds>(stage),
+                emit stateChanged(
+                    EonTimer::TimerState(std::chrono::duration_cast<std::chrono::milliseconds>(stage),
                                                     std::chrono::duration_cast<std::chrono::milliseconds>(remaining)));
             adjustedPeriod -= delta - period;
             elapsed += delta;

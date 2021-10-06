@@ -11,28 +11,28 @@ namespace service {
 
     static sf::Sound *loadSound(const char *filename);
 
-    SoundService::SoundService(const model::settings::ActionSettingsModel *actionSettings, QObject *parent)
+    SoundService::SoundService(const EonTimer::settings::ActionSettingsModel *actionSettings, QObject *parent)
         : QObject(parent), actionSettings(actionSettings) {
-        mBeep = loadSound(":/sounds/beep.wav");
-        mDing = loadSound(":/sounds/ding.wav");
-        mTick = loadSound(":/sounds/tick.wav");
-        mPop = loadSound(":/sounds/pop.wav");
+        mBeep = loadSound(":/getSounds/beep.wav");
+        mDing = loadSound(":/getSounds/ding.wav");
+        mTick = loadSound(":/getSounds/tick.wav");
+        mPop = loadSound(":/getSounds/pop.wav");
     }
 
     void SoundService::play() {
         const auto mode = actionSettings->getMode();
-        if (mode == model::ActionMode::AUDIO || mode == model::ActionMode::AV) {
+        if (mode == EonTimer::ActionMode::AUDIO || mode == EonTimer::ActionMode::AV) {
             switch (actionSettings->getSound()) {
-                case model::Sound::BEEP:
+                case EonTimer::Sound::BEEP:
                     mBeep->play();
                     break;
-                case model::Sound::DING:
+                case EonTimer::Sound::DING:
                     mDing->play();
                     break;
-                case model::Sound::TICK:
+                case EonTimer::Sound::TICK:
                     mTick->play();
                     break;
-                case model::Sound::POP:
+                case EonTimer::Sound::POP:
                     mPop->play();
                     break;
             }

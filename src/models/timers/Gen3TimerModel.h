@@ -5,47 +5,48 @@
 #ifndef EONTIMER_GEN3TIMERMODEL_H
 #define EONTIMER_GEN3TIMERMODEL_H
 
+#include <util/Types.h>
 #include <QObject>
 #include <QSettings>
 
-namespace model::timer {
-    class Gen3TimerModel : public QObject {
+namespace EonTimer::Gen3 {
+    class Timer : public QObject {
         Q_OBJECT
     private:
-        int preTimer;
-        int targetFrame;
-        int calibration;
-        int frameHit;
+        i32 preTimer;
+        i32 targetFrame;
+        i32 calibration;
+        i32 frameHit;
 
     public:
-        explicit Gen3TimerModel(QSettings *settings, QObject *parent = nullptr);
+        explicit Timer(QSettings *settings, QObject *parent = nullptr);
 
         void sync(QSettings *settings) const;
 
-        int getPreTimer() const;
+        [[nodiscard]] i32 getPreTimer() const;
 
-        void setPreTimer(int preTimer);
+        void setPreTimer(i32 newValue);
 
-        int getTargetFrame() const;
+        [[nodiscard]] i32 getTargetFrame() const;
 
-        void setTargetFrame(int targetFrame);
+        void setTargetFrame(i32 newValue);
 
-        int getCalibration() const;
+        [[nodiscard]] i32 getCalibration() const;
 
-        void setCalibration(int calibration);
+        void setCalibration(i32 newValue);
 
-        int getFrameHit() const;
+        [[nodiscard]] i32 getFrameHit() const;
 
-        void setFrameHit(int frameHit);
+        void setFrameHit(i32 newValue);
 
         // @formatter:off
     signals:
-        void preTimerChanged(int value);
-        void targetFrameChanged(int value);
-        void calibrationChanged(int value);
-        void frameHitChanged(int value);
+        void preTimerChanged(i32 value);
+        void targetFrameChanged(i32 value);
+        void calibrationChanged(i32 value);
+        void frameHitChanged(i32 value);
         // @formatter:on
     };
-}  // namespace model::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_GEN3TIMERMODEL_H

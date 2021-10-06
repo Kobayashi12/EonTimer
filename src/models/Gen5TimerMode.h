@@ -6,17 +6,14 @@
 #define EONTIMER_GEN5TIMERMODE_H
 
 #include <vector>
+#include <string>
 
-namespace model {
-    enum Gen5TimerMode { STANDARD, C_GEAR, ENTRALINK, ENTRALINK_PLUS };
+namespace EonTimer {
+    enum Gen5TimerMode { STANDARD, C_GEAR, ENTRALINK, ENTRALINK_PLUS, COUNT };
 
-    const char *getName(Gen5TimerMode mode);
+    const std::vector<Gen5TimerMode> &getGen5TimerModes();
 
-    Gen5TimerMode gen5TimerMode(int index);
-
-    const std::vector<Gen5TimerMode> &gen5TimerModes();
-
-    int indexOf(Gen5TimerMode mode);
-}  // namespace model
+    const std::string &getName(Gen5TimerMode mode);
+}  // namespace EonTimer
 
 #endif  // EONTIMER_GEN5TIMERMODE_H

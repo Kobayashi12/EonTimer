@@ -17,7 +17,7 @@ namespace gui::settings {
     class ActionSettingsPane : public QWidget {
         Q_OBJECT
     private:
-        model::settings::ActionSettingsModel *settings;
+        EonTimer::settings::ActionSettingsModel *settings;
         int mode;
         int sound;
         QColor color;
@@ -25,7 +25,7 @@ namespace gui::settings {
         int count;
 
     public:
-        explicit ActionSettingsPane(model::settings::ActionSettingsModel *settings, QWidget *parent = nullptr);
+        explicit ActionSettingsPane(EonTimer::settings::ActionSettingsModel *settings, QWidget *parent = nullptr);
 
         void updateSettings();
 
