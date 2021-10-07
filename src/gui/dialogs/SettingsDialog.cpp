@@ -27,7 +27,7 @@ namespace gui::dialog {
             actionSettingsPane = new settings::ActionSettingsPane(actionSettings);
             timerSettingsPane = new settings::TimerSettingsPane(timerSettings);
             tabPane->addTab(actionSettingsPane, "Action");
-            tabPane->addTab(timerSettingsPane, "Timer");
+            tabPane->addTab(timerSettingsPane, "Gen3TimerModel");
             layout->addWidget(tabPane, 0, 0, 1, 2);
         }
         // ----- cancelButton -----

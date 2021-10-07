@@ -10,7 +10,7 @@
 #include <QSettings>
 
 namespace EonTimer::Gen3 {
-    class Timer : public QObject {
+    class Gen3TimerModel : public QObject {
         Q_OBJECT
     private:
         i32 preTimer;
@@ -19,7 +19,7 @@ namespace EonTimer::Gen3 {
         i32 frameHit;
 
     public:
-        explicit Timer(QSettings *settings, QObject *parent = nullptr);
+        explicit Gen3TimerModel(QSettings *settings, QObject *parent = nullptr);
 
         void sync(QSettings *settings) const;
 

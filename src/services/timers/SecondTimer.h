@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-namespace service::timer {
+namespace EonTimer::timer {
     class SecondTimer {
     public:
         const std::shared_ptr<std::vector<int>> createStages(int targetSecond, int calibration) const;
@@ -17,6 +17,6 @@ namespace service::timer {
 
         int calibrate(int targetSecond, int secondHit) const;
     };
-}  // namespace service::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_SECONDTIMER_H

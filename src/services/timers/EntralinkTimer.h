@@ -10,7 +10,7 @@
 
 #include "DelayTimer.h"
 
-namespace service::timer {
+namespace EonTimer::timer {
     class EntralinkTimer {
     private:
         const DelayTimer *delayTimer;
@@ -29,6 +29,6 @@ namespace service::timer {
 
         int calibrate(int targetDelay, int delayHit) const;
     };
-}  // namespace service::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_ENTRALINKTIMER_H

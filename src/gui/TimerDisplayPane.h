@@ -14,7 +14,7 @@
 namespace gui {
     class TimerDisplayPane : public QGroupBox {
     public:
-        TimerDisplayPane(service::TimerService *timerService,
+        TimerDisplayPane(EonTimer::TimerService *timerService,
                          const EonTimer::settings::ActionSettingsModel *actionSettings);
 
     private:

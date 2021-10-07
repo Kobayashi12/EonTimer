@@ -7,13 +7,13 @@
 #include <QLabel>
 #include <QScrollArea>
 
-namespace gui::timer {
-    Gen5TimerPane::Gen5TimerPane(EonTimer::timer::Gen5TimerModel *model,
-                                 const service::timer::DelayTimer *delayTimer,
-                                 const service::timer::SecondTimer *secondTimer,
-                                 const service::timer::EntralinkTimer *entralinkTimer,
-                                 const service::timer::EnhancedEntralinkTimer *enhancedEntralinkTimer,
-                                 const service::CalibrationService *calibrationService,
+namespace EonTimer::Gen5 {
+    Gen5TimerPane::Gen5TimerPane(EonTimer::Gen5::Gen5TimerModel *model,
+                                 const EonTimer::timer::DelayTimer *delayTimer,
+                                 const EonTimer::timer::SecondTimer *secondTimer,
+                                 const EonTimer::timer::EntralinkTimer *entralinkTimer,
+                                 const EonTimer::timer::EnhancedEntralinkTimer *enhancedEntralinkTimer,
+                                 const EonTimer::CalibrationService *calibrationService,
                                  QWidget *parent)
         : QWidget(parent),
           model(model),
@@ -30,23 +30,23 @@ namespace gui::timer {
         rootLayout->setContentsMargins(10, 0, 10, 10);
         rootLayout->setSpacing(10);
 
-        void (QSpinBox::*valueChanged)(int) = &QSpinBox::valueChanged;
-        void (*setVisible)(QGridLayout *, util::FieldSet<QSpinBox> &, const bool) = util::setVisible;
+        void (QSpinBox::*valueChanged)(i32) = &QSpinBox::valueChanged;
+        void (*setVisible)(QGridLayout *, gui::util::FieldSet<QSpinBox> &, const bool) = gui::util::setVisible;
         // ----- mode -----
         {
             auto *form = new QGridLayout();
             rootLayout->addLayout(form);
 
-            util::FieldSet<QComboBox> mode(0, new QLabel("Mode"), new QComboBox);
-            for (const auto currentMode : EonTimer::getGen5TimerModes()) {
-                mode.field->addItem(EonTimer::getName(currentMode), currentMode);
+            gui::util::FieldSet<QComboBox> mode(0, new QLabel("Mode"), new QComboBox());
+            for (const auto currentMode : EonTimer::Gen5::getGen5TimerModes()) {
+                mode.field->addItem(EonTimer::Gen5::getName(currentMode), currentMode);
             }
             mode.field->setCurrentText(EonTimer::getName(model->getMode()));
-            connect(mode.field, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](const int currentIndex) {
-                model->setMode(EonTimer::getGen5TimerModes()[currentIndex]);
+            connect(mode.field, QOverload<i32>::of(&QComboBox::currentIndexChanged), [this](const i32 currentIndex) {
+                model->setMode(EonTimer::Gen5::getGen5TimerModes()[currentIndex]);
                 emit timerChanged(createStages());
             });
-            util::addFieldSet(form, mode);
+            gui::util::addFieldSet(form, mode);
         }
         // ----- timer fields -----
         {
@@ -72,104 +72,104 @@ namespace gui::timer {
             form->setSpacing(10);
             // ----- calibration -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(0, new QLabel("Calibration"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(0, new QLabel("Calibration"), field);
                 field->setRange(INT_MIN, INT_MAX);
                 field->setValue(model->getCalibration());
-                connect(model, SIGNAL(calibrationChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const int value) {
+                connect(model, SIGNAL(calibrationChanged(i32)), field, SLOT(setValue(i32)));
+                connect(field, valueChanged, [this](const i32 value) {
                     model->setCalibration(value);
                     emit timerChanged(createStages());
                 });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
             // ----- targetDelay -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(1, new QLabel("Target Delay"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(1, new QLabel("Target Delay"), field);
                 field->setRange(0, INT_MAX);
                 field->setValue(model->getTargetDelay());
-                connect(model, SIGNAL(targetDelayChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const int value) {
+                connect(model, SIGNAL(targetDelayChanged(i32)), field, SLOT(setValue(i32)));
+                connect(field, valueChanged, [this](const i32 value) {
                     model->setTargetDelay(value);
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        &EonTimer::Gen5::Gen5TimerModel::modeChanged,
                         [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form, *fieldSet, value != EonTimer::Gen5TimerMode::STANDARD);
                         });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
             // ----- targetSecond -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(2, new QLabel("Target Second"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(2, new QLabel("Target Second"), field);
                 field->setRange(0, 59);
                 field->setValue(model->getTargetSecond());
-                connect(model, SIGNAL(targetSecondChanged(int)), field, SLOT(setValue(int)));
-                connect(fieldSet->field, valueChanged, [this](const int value) {
+                connect(model, SIGNAL(targetSecondChanged(i32)), field, SLOT(setValue(i32)));
+                connect(fieldSet->field, valueChanged, [this](const i32 value) {
                     model->setTargetSecond(value);
                     emit timerChanged(createStages());
                 });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
             // ----- entralinkCalibration -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(3, new QLabel("Entralink Calibration"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(3, new QLabel("Entralink Calibration"), field);
                 field->setRange(INT_MIN, INT_MAX);
                 field->setValue(model->getEntralinkCalibration());
-                connect(model, SIGNAL(entralinkCalibrationChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const int value) {
+                connect(model, SIGNAL(entralinkCalibrationChanged(i32)), field, SLOT(setValue(i32)));
+                connect(field, valueChanged, [this](const i32 value) {
                     model->setEntralinkCalibration(value);
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        &EonTimer::Gen5::Gen5TimerModel::modeChanged,
                         [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form,
                                        *fieldSet,
                                        value == EonTimer::Gen5TimerMode::ENTRALINK ||
                                            value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
             // ----- frameCalibration -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(4, new QLabel("Frame Calibration"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(4, new QLabel("Frame Calibration"), field);
                 field->setRange(INT_MIN, INT_MAX);
                 field->setValue(model->getFrameCalibration());
-                connect(model, SIGNAL(frameCalibrationChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const int frameCalibration) {
+                connect(model, SIGNAL(frameCalibrationChanged(i32)), field, SLOT(setValue(i32)));
+                connect(field, valueChanged, [this](const i32 frameCalibration) {
                     model->setFrameCalibration(frameCalibration);
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        &EonTimer::Gen5::Gen5TimerModel::modeChanged,
                         [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form, *fieldSet, value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
             // ----- targetAdvances -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(5, new QLabel("Target Advances"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(5, new QLabel("Target Advances"), field);
                 field->setRange(0, INT_MAX);
                 field->setValue(model->getTargetAdvances());
-                connect(model, SIGNAL(targetAdvancesChanged(int)), field, SLOT(setValue(int)));
-                connect(fieldSet->field, valueChanged, [this](const int value) {
+                connect(model, SIGNAL(targetAdvancesChanged(i32)), field, SLOT(setValue(i32)));
+                connect(fieldSet->field, valueChanged, [this](const i32 value) {
                     model->setTargetAdvances(value);
                     emit timerChanged(createStages());
                 });
                 connect(model,
-                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        &EonTimer::Gen5::Gen5TimerModel::modeChanged,
                         [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form, *fieldSet, value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
         }
         // ----- calibration fields -----
@@ -179,58 +179,57 @@ namespace gui::timer {
             form->setSpacing(10);
             // ----- delayHit -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(0, new QLabel("Delay Hit"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(0, new QLabel("Delay Hit"), field);
                 field->setRange(0, INT_MAX);
                 field->setSpecialValueText("");
-                connect(model, SIGNAL(delayHitChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const int value) { model->setDelayHit(value); });
+                connect(model, SIGNAL(delayHitChanged(i32)), field, SLOT(setValue(i32)));
+                connect(field, valueChanged, [this](const i32 value) { model->setDelayHit(value); });
                 connect(model,
-                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        &EonTimer::Gen5::Gen5TimerModel::modeChanged,
                         [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form, *fieldSet, value != EonTimer::Gen5TimerMode::STANDARD);
                         });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
             // ----- secondHit -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(1, new QLabel("Second Hit"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(1, new QLabel("Second Hit"), field);
                 field->setRange(0, 59);
-                connect(model, SIGNAL(secondHitChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const int value) { model->setSecondHit(value); });
+                connect(model, SIGNAL(secondHitChanged(i32)), field, SLOT(setValue(i32)));
+                connect(field, valueChanged, [this](const i32 value) { model->setSecondHit(value); });
                 connect(model,
-                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        &EonTimer::Gen5::Gen5TimerModel::modeChanged,
                         [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form, *fieldSet, value != EonTimer::Gen5TimerMode::C_GEAR);
                         });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
             // ----- advancesHit -----
             {
-                auto *field = new QSpinBox;
-                auto *fieldSet = new util::FieldSet<QSpinBox>(2, new QLabel("Advances Hit"), field);
+                auto *field = new QSpinBox();
+                auto *fieldSet = new gui::util::FieldSet<QSpinBox>(2, new QLabel("Advances Hit"), field);
                 field->setRange(0, INT_MAX);
-                connect(model, SIGNAL(advancesHitChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const int value) { model->setAdvancesHit(value); });
+                connect(model, SIGNAL(advancesHitChanged(i32)), field, SLOT(setValue(i32)));
+                connect(field, valueChanged, [this](const i32 value) { model->setAdvancesHit(value); });
                 connect(model,
-                        &EonTimer::timer::Gen5TimerModel::modeChanged,
+                        &EonTimer::Gen5::Gen5TimerModel::modeChanged,
                         [setVisible, form, fieldSet](const EonTimer::Gen5TimerMode value) {
                             setVisible(form, *fieldSet, value == EonTimer::Gen5TimerMode::ENTRALINK_PLUS);
                         });
-                util::addFieldSet(form, *fieldSet);
+                gui::util::addFieldSet(form, *fieldSet);
             }
         }
         // force all fieldsets to update visibility
         emit model->modeChanged(model->getMode());
     }
 
-    std::shared_ptr<std::vector<int>> Gen5TimerPane::createStages() {
-        std::shared_ptr<std::vector<int>> stages;
+    std::shared_ptr<std::vector<i32>> Gen5TimerPane::createStages() {
+        std::shared_ptr<std::vector<i32>> stages;
         switch (model->getMode()) {
             case EonTimer::Gen5TimerMode::STANDARD:
-                stages =
-                    secondTimer->createStages(model->getTargetSecond(),
+                stages = secondTimer->createStages(model->getTargetSecond(),
                                               calibrationService->calibrateToMilliseconds(model->getCalibration()));
                 break;
             case EonTimer::Gen5TimerMode::C_GEAR:
@@ -287,19 +286,19 @@ namespace gui::timer {
         model->setAdvancesHit(0);
     }
 
-    int Gen5TimerPane::getDelayCalibration() const {
+    i32 Gen5TimerPane::getDelayCalibration() const {
         return delayTimer->calibrate(model->getTargetDelay(), model->getDelayHit());
     }
 
-    int Gen5TimerPane::getSecondCalibration() const {
+    i32 Gen5TimerPane::getSecondCalibration() const {
         return secondTimer->calibrate(model->getTargetSecond(), model->getSecondHit());
     }
 
-    int Gen5TimerPane::getEntralinkCalibration() const {
+    i32 Gen5TimerPane::getEntralinkCalibration() const {
         return entralinkTimer->calibrate(model->getTargetDelay(), model->getDelayHit() - getSecondCalibration());
     }
 
-    int Gen5TimerPane::getAdvancesCalibration() const {
+    i32 Gen5TimerPane::getAdvancesCalibration() const {
         return enhancedEntralinkTimer->calibrate(model->getTargetAdvances(), model->getAdvancesHit());
     }
 }  // namespace gui::timer

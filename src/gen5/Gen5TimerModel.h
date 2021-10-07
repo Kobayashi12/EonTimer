@@ -5,17 +5,17 @@
 #ifndef EONTIMER_GEN5TIMERMODEL_H
 #define EONTIMER_GEN5TIMERMODEL_H
 
+#include <gen5/Gen5TimerMode.h>
 #include <util/Types.h>
-#include <models/Gen5TimerMode.h>
 
 #include <QObject>
 #include <QSettings>
 
-namespace EonTimer {
+namespace EonTimer::Gen5 {
     class Gen5TimerModel : public QObject {
         Q_OBJECT
     private:
-        EonTimer::Gen5TimerMode mode;
+        EonTimer::Gen5::Gen5TimerMode mode;
         i32 calibration;
         i32 frameCalibration;
         i32 entralinkCalibration;
@@ -31,9 +31,9 @@ namespace EonTimer {
 
         void sync(QSettings *settings) const;
 
-        [[nodiscard]] EonTimer::Gen5TimerMode getMode() const;
+        [[nodiscard]] EonTimer::Gen5::Gen5TimerMode getMode() const;
 
-        void setMode(EonTimer::Gen5TimerMode newValue);
+        void setMode(EonTimer::Gen5::Gen5TimerMode newValue);
 
         [[nodiscard]] i32 getCalibration() const;
 
@@ -73,7 +73,7 @@ namespace EonTimer {
 
         // @formatter:off
     signals:
-        void modeChanged(EonTimer::Gen5TimerMode value);
+        void modeChanged(EonTimer::Gen5::Gen5TimerMode value);
         void calibrationChanged(i32 value);
         void frameCalibrationChanged(i32 value);
         void entralinkCalibrationChanged(i32 value);

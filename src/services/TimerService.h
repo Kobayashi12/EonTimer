@@ -14,7 +14,7 @@
 #include <memory>
 #include <vector>
 
-namespace service {
+namespace EonTimer {
     class TimerService : public QObject {
         Q_OBJECT
     private:
@@ -55,6 +55,6 @@ namespace service {
         void nextStageChanged(const std::chrono::milliseconds &nextStage);
         // @formatter:on
     };
-}  // namespace service
+}  // namespace EonTimer
 
 #endif  // EONTIMER_TIMERSERVICE_H

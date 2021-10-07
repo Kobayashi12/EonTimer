@@ -10,7 +10,7 @@
 #include <memory>
 #include <vector>
 
-namespace service::timer {
+namespace EonTimer::timer {
     class FrameTimer {
     private:
         const CalibrationService *calibrationService;
@@ -26,6 +26,6 @@ namespace service::timer {
 
         int calibrate(int targetFrame, int frameHit) const;
     };
-}  // namespace service::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_FRAMETIMER_H

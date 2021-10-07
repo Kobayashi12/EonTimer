@@ -10,7 +10,7 @@
 
 #include "EntralinkTimer.h"
 
-namespace service::timer {
+namespace EonTimer::timer {
     class EnhancedEntralinkTimer {
     private:
         const EntralinkTimer *entralinkTimer;
@@ -33,6 +33,6 @@ namespace service::timer {
 
         int calibrate(int targetAdvances, int actualAdvances) const;
     };
-}  // namespace service::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_ENHANCEDENTRALINKTIMER_H

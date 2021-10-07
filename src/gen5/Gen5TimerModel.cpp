@@ -4,59 +4,56 @@
 
 #include "Gen5TimerModel.h"
 
-namespace EonTimer {
+#include <models/Property.h>
 
-    namespace Gen5Fields {
-        const char *GROUP = "gen5";
-        const char *MODE = "mode";
-        const char *CALIBRATION = "calibration";
-        const char *FRAME_CALIBRATION = "frameCalibration";
-        const char *ENTRALINK_CALIBRATION = "entralinkCalibration";
-        const char *TARGET_DELAY = "targetDelay";
-        const char *TARGET_SECOND = "targetSecond";
-        const char *TARGET_ADVANCES = "targetAdvances";
+namespace EonTimer::Gen5 {
+    static const QString &getGroup() {
+        static const QString group = "gen5";
+        return group;
+    }
 
-        namespace Defaults {
-            const i32 MODE = 0;
-            const i32 CALIBRATION = -95;
-            const i32 FRAME_CALIBRATION = 0;
-            const i32 ENTRALINK_CALIBRATION = 256;
-            const i32 TARGET_DELAY = 1200;
-            const i32 TARGET_SECOND = 50;
-            const i32 TARGET_ADVANCES = 100;
-        }  // namespace Defaults
-    }      // namespace Gen5Fields
+    static std::vector<Property> &getProperties() {
+        static std::vector<Property> properties{Property("mode", 0),
+                                                Property("calibration", -95),
+                                                Property("frameCalibration", 0),
+                                                Property("entralinkCalibration", 256),
+                                                Property("targetDelay", 1200),
+                                                Property("targetSecond", 50),
+                                                Property("targetAdvances", 100)};
+        return properties;
+    }
+
+    enum Gen5Property { MODE, CALIBRATION, FRAME_CALIBRATION, ENTRALINK_CALIBRATION, TARGET_DELAY, TARGET_SECOND, TARGET_ADVANCES };
 
     Gen5TimerModel::Gen5TimerModel(QSettings *settings, QObject *parent) : QObject(parent) {
-        settings->beginGroup(Gen5Fields::GROUP);
-        const auto &modes = EonTimer::getGen5TimerModes();
-        mode = modes[settings->value(Gen5Fields::MODE, Gen5Fields::Defaults::MODE).toInt()];
-        calibration = settings->value(Gen5Fields::CALIBRATION, Gen5Fields::Defaults::CALIBRATION).toInt();
-        frameCalibration =
-            settings->value(Gen5Fields::FRAME_CALIBRATION, Gen5Fields::Defaults::FRAME_CALIBRATION).toInt();
-        entralinkCalibration =
-            settings->value(Gen5Fields::ENTRALINK_CALIBRATION, Gen5Fields::Defaults::ENTRALINK_CALIBRATION).toInt();
-        targetDelay = settings->value(Gen5Fields::TARGET_DELAY, Gen5Fields::Defaults::TARGET_DELAY).toInt();
-        targetSecond = settings->value(Gen5Fields::TARGET_SECOND, Gen5Fields::Defaults::TARGET_SECOND).toInt();
-        targetAdvances = settings->value(Gen5Fields::TARGET_ADVANCES, Gen5Fields::Defaults::TARGET_ADVANCES).toInt();
+        settings->beginGroup(getGroup());
+        auto &properties = getProperties();
+        const auto &modes = EonTimer::Gen5::getGen5TimerModes();
+        mode = modes[properties[MODE].getValue(*settings).toInt()];
+        calibration = properties[CALIBRATION].getValue(*settings).toInt();
+        frameCalibration = properties[FRAME_CALIBRATION].getValue(*settings).toInt();
+        entralinkCalibration = properties[ENTRALINK_CALIBRATION].getValue(*settings).toInt();
+        targetDelay = properties[TARGET_DELAY].getValue(*settings).toInt();
+        targetSecond = properties[TARGET_SECOND].getValue(*settings).toInt();
+        targetAdvances = properties[TARGET_ADVANCES].getValue(*settings).toInt();
         settings->endGroup();
     }
 
     void Gen5TimerModel::sync(QSettings *settings) const {
-        settings->beginGroup(Gen5Fields::GROUP);
-        settings->setValue(Gen5Fields::MODE, mode);
-        settings->setValue(Gen5Fields::CALIBRATION, calibration);
-        settings->setValue(Gen5Fields::FRAME_CALIBRATION, frameCalibration);
-        settings->setValue(Gen5Fields::ENTRALINK_CALIBRATION, entralinkCalibration);
-        settings->setValue(Gen5Fields::TARGET_DELAY, targetDelay);
-        settings->setValue(Gen5Fields::TARGET_SECOND, targetSecond);
-        settings->setValue(Gen5Fields::TARGET_ADVANCES, targetAdvances);
+        settings->beginGroup(getGroup());
+        auto &properties = getProperties();
+        properties[MODE].setValue(*settings, mode);
+        properties[CALIBRATION].setValue(*settings, calibration);
+        properties[FRAME_CALIBRATION].setValue(*settings, frameCalibration);
+        properties[TARGET_DELAY].setValue(*settings, targetDelay);
+        properties[TARGET_SECOND].setValue(*settings, targetSecond);
+        properties[TARGET_ADVANCES].setValue(*settings, targetAdvances);
         settings->endGroup();
     }
 
-    EonTimer::Gen5TimerMode Gen5TimerModel::getMode() const { return mode; }
+    EonTimer::Gen5::Gen5TimerMode Gen5TimerModel::getMode() const { return mode; }
 
-    void Gen5TimerModel::setMode(const EonTimer::Gen5TimerMode newValue) {
+    void Gen5TimerModel::setMode(const EonTimer::Gen5::Gen5TimerMode newValue) {
         if (mode != newValue) {
             mode = newValue;
             emit modeChanged(newValue);
@@ -143,4 +140,4 @@ namespace EonTimer {
             emit advancesHitChanged(newValue);
         }
     }
-}  // namespace EonTimer::timer
+}  // namespace EonTimer::Gen5

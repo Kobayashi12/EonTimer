@@ -12,7 +12,7 @@
 
 #include "SecondTimer.h"
 
-namespace service::timer {
+namespace EonTimer::timer {
     class DelayTimer {
     private:
         const SecondTimer *secondTimer;
@@ -29,6 +29,6 @@ namespace service::timer {
 
         int calibrate(int targetDelay, int delayHit) const;
     };
-}  // namespace service::timer
+}  // namespace EonTimer::timer
 
 #endif  // EONTIMER_DELAYTIMER_H

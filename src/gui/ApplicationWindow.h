@@ -5,11 +5,11 @@
 #ifndef EONTIMER_APPLICATIONWINDOW_H
 #define EONTIMER_APPLICATIONWINDOW_H
 
+#include <gen3/Gen3TimerModel.h>
+#include <gen4/Gen4TimerModel.h>
+#include <gen5/Gen5TimerModel.h>
 #include <models/settings/ActionSettingsModel.h>
 #include <models/settings/TimerSettingsModel.h>
-#include <models/timers/Gen3TimerModel.h>
-#include <models/timers/Gen4TimerModel.h>
-#include <models/timers/Gen5TimerModel.h>
 #include <services/TimerService.h>
 
 #include <QMainWindow>
@@ -27,7 +27,7 @@ namespace gui {
         EonTimer::timer::Gen5TimerModel *gen5Timer;
         EonTimer::timer::Gen4TimerModel *gen4Timer;
         EonTimer::timer::Gen3TimerModel *gen3Timer;
-        service::TimerService *timerService;
+        EonTimer::TimerService *timerService;
         ApplicationPane *applicationPane;
 
     public:

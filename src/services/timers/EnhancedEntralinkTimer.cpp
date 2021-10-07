@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-namespace service::timer {
+namespace EonTimer::timer {
     const double ENTRALINK_FRAME_RATE = 0.837148929;
 
     EnhancedEntralinkTimer::EnhancedEntralinkTimer(const EntralinkTimer *entralinkTimer)
@@ -44,4 +44,4 @@ namespace service::timer {
     int EnhancedEntralinkTimer::calibrate(int targetAdvances, int actualAdvances) const {
         return static_cast<int>((targetAdvances - actualAdvances) / ENTRALINK_FRAME_RATE) * 1000;
     }
-}  // namespace service::timer
+}  // namespace EonTimer::timer

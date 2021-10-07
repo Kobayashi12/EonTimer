@@ -6,7 +6,7 @@
 
 #include <util/Functions.h>
 
-namespace service::timer {
+namespace EonTimer::timer {
     const int CLOSE_THRESHOLD = 167;
     const double UPDATE_FACTOR = 1.0;
     const double CLOSE_UPDATE_FACTOR = 0.75;
@@ -41,4 +41,4 @@ namespace service::timer {
             return static_cast<int>(UPDATE_FACTOR * delta);
         }
     }
-}  // namespace service::timer
+}  // namespace EonTimer::timer

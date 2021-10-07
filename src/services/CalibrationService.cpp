@@ -6,29 +6,29 @@
 
 #include <cmath>
 
-namespace service {
+namespace EonTimer {
     CalibrationService::CalibrationService(const EonTimer::settings::TimerSettingsModel *timerSettings)
         : timerSettings(timerSettings) {}
 
-    int CalibrationService::toDelays(const int milliseconds) const {
-        double framerate = EonTimer::getFrameRate(timerSettings->getConsole());
-        return static_cast<int>(std::round(milliseconds / framerate));
+    i32 CalibrationService::toDelays(const i32 milliseconds) const {
+        const double framerate = EonTimer::getFrameRate(timerSettings->getConsole());
+        return static_cast<i32>(std::round(milliseconds / framerate));
     }
 
-    int CalibrationService::toMilliseconds(const int delays) const {
-        double framerate = EonTimer::getFrameRate(timerSettings->getConsole());
-        return static_cast<int>(std::round(delays * framerate));
+    i32 CalibrationService::toMilliseconds(const i32 delays) const {
+        const double framerate = EonTimer::getFrameRate(timerSettings->getConsole());
+        return static_cast<i32>(std::round(delays * framerate));
     }
 
-    int CalibrationService::calibrateToDelays(const int milliseconds) const {
+    i32 CalibrationService::calibrateToDelays(const i32 milliseconds) const {
         return timerSettings->isPrecisionCalibrationEnabled() ? milliseconds : toDelays(milliseconds);
     }
 
-    int CalibrationService::calibrateToMilliseconds(int delays) const {
+    i32 CalibrationService::calibrateToMilliseconds(i32 delays) const {
         return timerSettings->isPrecisionCalibrationEnabled() ? delays : toMilliseconds(delays);
     }
 
-    int CalibrationService::createCalibration(const int delays, const int seconds) const {
+    i32 CalibrationService::createCalibration(const i32 delays, const i32 seconds) const {
         return toMilliseconds(delays - toDelays(seconds * 1000));
     }
-}  // namespace service
+}  // namespace EonTimer

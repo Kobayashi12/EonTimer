@@ -5,9 +5,10 @@
 #ifndef EONTIMER_CALIBRATIONSERVICE_H
 #define EONTIMER_CALIBRATIONSERVICE_H
 
+#include <util/Types.h>
 #include <models/settings/TimerSettingsModel.h>
 
-namespace service {
+namespace EonTimer {
     class CalibrationService {
     private:
         const EonTimer::settings::TimerSettingsModel *timerSettings;
@@ -15,16 +16,16 @@ namespace service {
     public:
         explicit CalibrationService(const EonTimer::settings::TimerSettingsModel *timerSettings);
 
-        int toDelays(int milliseconds) const;
+        [[nodiscard]] i32 toDelays(i32 milliseconds) const;
 
-        int toMilliseconds(int delays) const;
+        [[nodiscard]] i32 toMilliseconds(i32 delays) const;
 
-        int calibrateToDelays(int milliseconds) const;
+        [[nodiscard]] i32 calibrateToDelays(i32 milliseconds) const;
 
-        int calibrateToMilliseconds(int delays) const;
+        [[nodiscard]] i32 calibrateToMilliseconds(i32 delays) const;
 
-        int createCalibration(int delays, int seconds) const;
+        [[nodiscard]] i32 createCalibration(i32 delays, i32 seconds) const;
     };
-}  // namespace service
+}  // namespace EonTimer
 
 #endif  // EONTIMER_CALIBRATIONSERVICE_H

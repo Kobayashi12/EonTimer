@@ -10,7 +10,7 @@
 #include <QObject>
 #include <SFML/Audio/Sound.hpp>
 
-namespace service {
+namespace EonTimer {
     class SoundService : public QObject {
         Q_OBJECT
     private:
@@ -23,11 +23,13 @@ namespace service {
     public:
         explicit SoundService(const EonTimer::settings::ActionSettingsModel *actionSettings, QObject *parent = nullptr);
 
+        ~SoundService();
+
         // @formatter:off
     public slots:
         void play();
         // @formatter:on
     };
-}  // namespace service
+}  // namespace EonTimer
 
 #endif  // EONTIMER_SOUNDSERVICE_H

@@ -13,9 +13,9 @@
 #include <QWidget>
 
 #include "TimerDisplayPane.h"
-#include "timers/Gen3TimerPane.h"
-#include "timers/Gen4TimerPane.h"
-#include "timers/Gen5TimerPane.h"
+#include "gen3/Gen3TimerPane.h"
+#include "gen4/Gen4TimerPane.h"
+#include "gen5/Gen5TimerPane.h"
 
 namespace gui {
     class ApplicationPane : public QWidget {
@@ -24,7 +24,7 @@ namespace gui {
         QSettings *settings;
         EonTimer::settings::ActionSettingsModel *actionSettings;
         EonTimer::settings::TimerSettingsModel *timerSettings;
-        service::TimerService *timerService;
+        EonTimer::TimerService *timerService;
         TimerDisplayPane *timerDisplayPane;
         timer::Gen5TimerPane *gen5TimerPane;
         timer::Gen4TimerPane *gen4TimerPane;
@@ -37,7 +37,7 @@ namespace gui {
                         EonTimer::timer::Gen5TimerModel *gen5Timer,
                         EonTimer::timer::Gen4TimerModel *gen4Timer,
                         EonTimer::timer::Gen3TimerModel *gen3Timer,
-                        service::TimerService *timerService,
+                        EonTimer::TimerService *timerService,
                         QWidget *parent = nullptr);
 
     private:

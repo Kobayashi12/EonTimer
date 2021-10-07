@@ -6,7 +6,7 @@
 
 #include <util/Functions.h>
 
-namespace service::timer {
+namespace EonTimer::timer {
     const std::shared_ptr<std::vector<int>> SecondTimer::createStages(const int targetSecond,
                                                                       const int calibration) const {
         std::shared_ptr<std::vector<int>> stages = std::make_shared<std::vector<int>>(1);
@@ -27,4 +27,4 @@ namespace service::timer {
             return 0;
         }
     }
-}  // namespace service::timer
+}  // namespace EonTimer::timer

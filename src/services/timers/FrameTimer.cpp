@@ -4,7 +4,7 @@
 
 #include "FrameTimer.h"
 
-namespace service::timer {
+namespace EonTimer::timer {
     FrameTimer::FrameTimer(const CalibrationService *calibrationService) : calibrationService(calibrationService) {}
 
     const std::shared_ptr<std::vector<int>> FrameTimer::createStages(const int preTimer,
@@ -25,4 +25,4 @@ namespace service::timer {
     int FrameTimer::calibrate(const int targetFrame, const int frameHit) const {
         return calibrationService->toMilliseconds(targetFrame - frameHit);
     }
-}  // namespace service::timer
+}  // namespace EonTimer::timer

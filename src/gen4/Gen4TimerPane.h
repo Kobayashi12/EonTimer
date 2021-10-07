@@ -5,25 +5,25 @@
 #ifndef EONTIMER_GEN4TIMERPANE_H
 #define EONTIMER_GEN4TIMERPANE_H
 
-#include <models/timers/Gen4TimerModel.h>
+#include <gen4/Gen4TimerModel.h>
 #include <services/CalibrationService.h>
 #include <services/timers/DelayTimer.h>
 
 #include <QSpinBox>
 #include <QWidget>
 
-namespace gui::timer {
+namespace EonTimer::Gen4 {
     class Gen4TimerPane : public QWidget {
         Q_OBJECT
     private:
-        EonTimer::timer::Gen4TimerModel *model;
-        const service::timer::DelayTimer *delayTimer;
-        const service::CalibrationService *calibrationService;
+        Gen4TimerModel *model;
+        const EonTimer::timer::DelayTimer *delayTimer;
+        const EonTimer::CalibrationService *calibrationService;
 
     public:
-        Gen4TimerPane(EonTimer::timer::Gen4TimerModel *model,
-                      const service::timer::DelayTimer *delayTimer,
-                      const service::CalibrationService *calibrationService,
+        Gen4TimerPane(Gen4TimerModel *model,
+                      const EonTimer::timer::DelayTimer *delayTimer,
+                      const EonTimer::CalibrationService *calibrationService,
                       QWidget *parent = nullptr);
 
         std::shared_ptr<std::vector<int>> createStages();

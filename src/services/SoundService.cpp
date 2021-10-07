@@ -7,7 +7,7 @@
 #include <QResource>
 #include <SFML/Audio/SoundBuffer.hpp>
 
-namespace service {
+namespace EonTimer {
 
     static sf::Sound *loadSound(const char *filename);
 
@@ -17,6 +17,10 @@ namespace service {
         mDing = loadSound(":/getSounds/ding.wav");
         mTick = loadSound(":/getSounds/tick.wav");
         mPop = loadSound(":/getSounds/pop.wav");
+    }
+
+    SoundService::~SoundService() {
+        delete mBeep;
     }
 
     void SoundService::play() {
@@ -47,4 +51,4 @@ namespace service {
         sound->setBuffer(*buffer);
         return sound;
     }
-}  // namespace service
+}  // namespace EonTimer

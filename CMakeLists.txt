@@ -44,8 +44,8 @@ set(SOURCES
         src/gui/settings/TimerSettingsPane.h
         src/gui/TimerDisplayPane.cpp
         src/gui/TimerDisplayPane.h
-        src/gui/timers/Gen4TimerPane.cpp
-        src/gui/timers/Gen4TimerPane.h
+        src/gen4/Gen4TimerPane.cpp
+        src/gen4/Gen4TimerPane.h
         src/gui/util/FontHelper.cpp
         src/gui/util/FontHelper.h
         src/gui/util/WidgetHelper.h
@@ -61,8 +61,8 @@ set(SOURCES
         src/services/CalibrationService.h
         src/models/settings/ActionSettingsModel.cpp
         src/models/settings/ActionSettingsModel.h
-        src/models/timers/Gen4TimerModel.cpp
-        src/models/timers/Gen4TimerModel.h
+        src/gen4/Gen4TimerModel.cpp
+        src/gen4/Gen4TimerModel.h
         src/models/settings/TimerSettingsModel.cpp
         src/models/settings/TimerSettingsModel.h
         src/services/SoundService.cpp
@@ -79,12 +79,12 @@ set(SOURCES
         src/util/Functions.h
         src/util/Clock.cpp
         src/util/Clock.h
-        src/gui/timers/Gen5TimerPane.cpp
-        src/gui/timers/Gen5TimerPane.h
-        src/models/timers/Gen5TimerModel.cpp
-        src/models/timers/Gen5TimerModel.h
-        src/models/Gen5TimerMode.cpp
-        src/models/Gen5TimerMode.h
+        src/gen5/Gen5TimerPane.cpp
+        src/gen5/Gen5TimerPane.h
+        src/gen5/Gen5TimerModel.cpp
+        src/gen5/Gen5TimerModel.h
+        src/gen5/Gen5TimerMode.cpp
+        src/gen5/Gen5TimerMode.h
         src/services/timers/EntralinkTimer.cpp
         src/services/timers/EntralinkTimer.h
         src/services/timers/FrameTimer.cpp
@@ -92,10 +92,10 @@ set(SOURCES
         src/services/timers/EnhancedEntralinkTimer.cpp
         src/services/timers/EnhancedEntralinkTimer.h
         src/gui/util/FieldSet.h
-        src/models/timers/Gen3TimerModel.cpp
-        src/models/timers/Gen3TimerModel.h
-        src/gui/timers/Gen3TimerPane.cpp
-        src/gui/timers/Gen3TimerPane.h
+        src/gen3/Gen3TimerModel.cpp
+        src/gen3/Gen3TimerModel.h
+        src/gen3/Gen3TimerPane.cpp
+        src/gen3/Gen3TimerPane.h
         src/models/Property.h
         src/app.h.in
         src/main.cpp

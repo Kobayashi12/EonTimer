@@ -15,7 +15,7 @@
 
 using namespace std::literals::chrono_literals;
 
-namespace service {
+namespace EonTimer {
     TimerService::TimerService(EonTimer::settings::TimerSettingsModel *timerSettings,
                                EonTimer::settings::ActionSettingsModel *actionSettings,
                                QObject *parent)
@@ -125,4 +125,4 @@ namespace service {
     }
 
     bool TimerService::isRunning() const { return running; }
-}  // namespace service
+}  // namespace EonTimer

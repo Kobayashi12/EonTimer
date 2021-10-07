@@ -24,19 +24,19 @@ namespace gui {
                                      EonTimer::timer::Gen5TimerModel *gen5Timer,
                                      EonTimer::timer::Gen4TimerModel *gen4Timer,
                                      EonTimer::timer::Gen3TimerModel *gen3Timer,
-                                     service::TimerService *timerService,
+                                     EonTimer::TimerService *timerService,
                                      QWidget *parent)
         : QWidget(parent),
           settings(settings),
           actionSettings(actionSettings),
           timerSettings(timerSettings),
           timerService(timerService) {
-        const auto *calibrationService = new service::CalibrationService(timerSettings);
-        const auto *secondTimer = new service::timer::SecondTimer();
-        const auto *frameTimer = new service::timer::FrameTimer(calibrationService);
-        const auto *delayTimer = new service::timer::DelayTimer(secondTimer, calibrationService);
-        const auto *entralinkTimer = new service::timer::EntralinkTimer(delayTimer);
-        const auto *enhancedEntralinkTimer = new service::timer::EnhancedEntralinkTimer(entralinkTimer);
+        const auto *calibrationService = new EonTimer::CalibrationService(timerSettings);
+        const auto *secondTimer = new EonTimer::timer::SecondTimer();
+        const auto *frameTimer = new EonTimer::timer::FrameTimer(calibrationService);
+        const auto *delayTimer = new EonTimer::timer::DelayTimer(secondTimer, calibrationService);
+        const auto *entralinkTimer = new EonTimer::timer::EntralinkTimer(delayTimer);
+        const auto *enhancedEntralinkTimer = new EonTimer::timer::EnhancedEntralinkTimer(entralinkTimer);
 
         timerDisplayPane = new TimerDisplayPane(timerService, actionSettings);
         gen5TimerPane = new timer::Gen5TimerPane(gen5Timer,
@@ -73,7 +73,7 @@ namespace gui {
         {
             auto *tabPane = new QTabWidget();
             tabPane->setProperty("class", "themeable-panel themeable-border");
-            connect(timerService, &service::TimerService::activated, [tabPane](const bool activated) {
+            connect(timerService, &EonTimer::TimerService::activated, [tabPane](const bool activated) {
                 tabPane->setEnabled(!activated);
             });
             connect(tabPane, &QTabWidget::currentChanged, [this](const int index) { setSelectedTab((uint) index); });
@@ -91,7 +91,7 @@ namespace gui {
             const auto family = QFontDatabase::applicationFontFamilies(id)[0];
             settingsBtn->setFont(QFont(family));
             settingsBtn->setText(QChar(0xf013));
-            connect(timerService, &service::TimerService::activated, [settingsBtn](const bool activated) {
+            connect(timerService, &EonTimer::TimerService::activated, [settingsBtn](const bool activated) {
                 settingsBtn->setEnabled(!activated);
             });
             connect(settingsBtn, &QPushButton::clicked, [this] {
@@ -109,7 +109,7 @@ namespace gui {
         {
             auto *updateBtn = new QPushButton("Update");
             connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(onUpdate()));
-            connect(timerService, &service::TimerService::activated, [updateBtn](const bool activated) {
+            connect(timerService, &EonTimer::TimerService::activated, [updateBtn](const bool activated) {
                 updateBtn->setEnabled(!activated);
             });
             layout->addWidget(updateBtn, 2, 1);
@@ -118,7 +118,7 @@ namespace gui {
         // ----- startStopBtn -----
         {
             auto *startStopBtn = new QPushButton("Start");
-            connect(timerService, &service::TimerService::activated, [startStopBtn](const bool activated) {
+            connect(timerService, &EonTimer::TimerService::activated, [startStopBtn](const bool activated) {
                 startStopBtn->setText(activated ? "Stop" : "Start");
             });
             connect(startStopBtn, &QPushButton::clicked, [this] {
