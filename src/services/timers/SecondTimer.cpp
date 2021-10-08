@@ -4,7 +4,7 @@
 
 #include "SecondTimer.h"
 
-#include <util/Functions.h>
+#include <Util/Functions.h>
 
 namespace EonTimer::timer {
     const std::shared_ptr<std::vector<int>> SecondTimer::createStages(const int targetSecond,

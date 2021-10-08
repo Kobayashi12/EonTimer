@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(EonTimer VERSION 3.0.0)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
@@ -32,71 +32,72 @@ find_package(SFML 2.4 COMPONENTS audio REQUIRED)
 
 set(SOURCES
         resources/resources.qrc
-        src/gui/ApplicationPane.cpp
-        src/gui/ApplicationPane.h
-        src/gui/ApplicationWindow.cpp
-        src/gui/ApplicationWindow.h
-        src/gui/dialogs/SettingsDialog.cpp
-        src/gui/dialogs/SettingsDialog.h
-        src/gui/settings/ActionSettingsPane.cpp
-        src/gui/settings/ActionSettingsPane.h
-        src/gui/settings/TimerSettingsPane.cpp
-        src/gui/settings/TimerSettingsPane.h
-        src/gui/TimerDisplayPane.cpp
-        src/gui/TimerDisplayPane.h
-        src/gen4/Gen4TimerPane.cpp
-        src/gen4/Gen4TimerPane.h
-        src/gui/util/FontHelper.cpp
-        src/gui/util/FontHelper.h
-        src/gui/util/WidgetHelper.h
-        src/models/ActionMode.cpp
-        src/models/ActionMode.h
-        src/models/Console.cpp
-        src/models/Console.h
-        src/models/Sound.cpp
-        src/models/Sound.h
-        src/models/TimerState.cpp
-        src/models/TimerState.h
+        src/ApplicationPane.cpp
+        src/ApplicationPane.h
+        src/ApplicationWindow.cpp
+        src/ApplicationWindow.h
+        src/SettingsDialog.cpp
+        src/SettingsDialog.h
+        src/Action/ActionSettingsPane.cpp
+        src/Action/ActionSettingsPane.h
+        src/Timer/TimerSettingsPane.cpp
+        src/Timer/TimerSettingsPane.h
+        src/Timer/TimerDisplayPane.cpp
+        src/Timer/TimerDisplayPane.h
+        src/Gen4/Gen4TimerPane.cpp
+        src/Gen4/Gen4TimerPane.h
+        src/Util/FontHelper.cpp
+        src/Util/FontHelper.h
+        src/Util/WidgetHelper.h
+        src/Action/ActionMode.cpp
+        src/Action/ActionMode.h
+        src/Timer/Console.cpp
+        src/Timer/Console.h
+        src/Action/Sound.cpp
+        src/Action/Sound.h
+        src/Timer/TimerState.cpp
+        src/Timer/TimerState.h
         src/services/CalibrationService.cpp
         src/services/CalibrationService.h
-        src/models/settings/ActionSettingsModel.cpp
-        src/models/settings/ActionSettingsModel.h
-        src/gen4/Gen4TimerModel.cpp
-        src/gen4/Gen4TimerModel.h
-        src/models/settings/TimerSettingsModel.cpp
-        src/models/settings/TimerSettingsModel.h
-        src/services/SoundService.cpp
-        src/services/SoundService.h
+        src/Action/ActionSettingsModel.cpp
+        src/Action/ActionSettingsModel.h
+        src/Gen4/Gen4TimerModel.cpp
+        src/Gen4/Gen4TimerModel.h
+        src/Timer/TimerSettingsModel.cpp
+        src/Timer/TimerSettingsModel.h
+        src/Action/SoundService.cpp
+        src/Action/SoundService.h
         src/services/timers/DelayTimer.cpp
         src/services/timers/DelayTimer.h
         src/services/timers/SecondTimer.cpp
         src/services/timers/SecondTimer.h
-        src/services/TimerService.cpp
-        src/services/TimerService.h
-        src/util/instrumentation/Timer.cpp
-        src/util/instrumentation/Timer.h
-        src/util/Functions.cpp
-        src/util/Functions.h
-        src/util/Clock.cpp
-        src/util/Clock.h
-        src/gen5/Gen5TimerPane.cpp
-        src/gen5/Gen5TimerPane.h
-        src/gen5/Gen5TimerModel.cpp
-        src/gen5/Gen5TimerModel.h
-        src/gen5/Gen5TimerMode.cpp
-        src/gen5/Gen5TimerMode.h
+        src/Timer/TimerService.cpp
+        src/Timer/TimerService.h
+        src/Util/instrumentation/Timer.cpp
+        src/Util/instrumentation/Timer.h
+        src/Util/Functions.cpp
+        src/Util/Functions.h
+        src/Timer/Clock.cpp
+        src/Timer/Clock.h
+        src/Gen5/Gen5TimerPane.cpp
+        src/Gen5/Gen5TimerPane.h
+        src/Gen5/Gen5TimerModel.cpp
+        src/Gen5/Gen5TimerModel.h
+        src/Gen5/Gen5TimerMode.cpp
+        src/Gen5/Gen5TimerMode.h
         src/services/timers/EntralinkTimer.cpp
         src/services/timers/EntralinkTimer.h
         src/services/timers/FrameTimer.cpp
         src/services/timers/FrameTimer.h
         src/services/timers/EnhancedEntralinkTimer.cpp
         src/services/timers/EnhancedEntralinkTimer.h
-        src/gui/util/FieldSet.h
-        src/gen3/Gen3TimerModel.cpp
-        src/gen3/Gen3TimerModel.h
-        src/gen3/Gen3TimerPane.cpp
-        src/gen3/Gen3TimerPane.h
-        src/models/Property.h
+        src/Util/FieldSet.h
+        src/Gen3/Gen3TimerModel.cpp
+        src/Gen3/Gen3TimerModel.h
+        src/Gen3/Gen3TimerPane.cpp
+        src/Gen3/Gen3TimerPane.h
+        src/Util/QSettingsProperty.cpp
+        src/Util/QSettingsProperty.h
         src/app.h.in
         src/main.cpp
         )

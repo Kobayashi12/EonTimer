@@ -2,8 +2,7 @@
 // Created by Dylan Meadows on 2020-03-22.
 //
 
-#ifndef EONTIMER_ENHANCEDENTRALINKTIMER_H
-#define EONTIMER_ENHANCEDENTRALINKTIMER_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -34,5 +33,3 @@ namespace EonTimer::timer {
         int calibrate(int targetAdvances, int actualAdvances) const;
     };
 }  // namespace EonTimer::timer
-
-#endif  // EONTIMER_ENHANCEDENTRALINKTIMER_H

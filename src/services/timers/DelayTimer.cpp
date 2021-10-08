@@ -4,7 +4,7 @@
 
 #include "DelayTimer.h"
 
-#include <util/Functions.h>
+#include <Util/Functions.h>
 
 namespace EonTimer::timer {
     const int CLOSE_THRESHOLD = 167;

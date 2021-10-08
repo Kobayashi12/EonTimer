@@ -2,10 +2,7 @@
 // Created by Dylan Meadows on 2020-03-17.
 //
 
-#ifndef EONTIMER_APP_H
-#define EONTIMER_APP_H
+#pragma once
 
 #define APP_NAME "@CMAKE_PROJECT_NAME@"
 #define APP_VERSION "@EonTimer_VERSION@"
-
-#endif // EONTIMER_APP_H

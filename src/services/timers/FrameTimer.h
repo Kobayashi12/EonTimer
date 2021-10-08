@@ -2,8 +2,7 @@
 // Created by Dylan Meadows on 2020-03-20.
 //
 
-#ifndef EONTIMER_FRAMETIMER_H
-#define EONTIMER_FRAMETIMER_H
+#pragma once
 
 #include <services/CalibrationService.h>
 
@@ -27,5 +26,3 @@ namespace EonTimer::timer {
         int calibrate(int targetFrame, int frameHit) const;
     };
 }  // namespace EonTimer::timer
-
-#endif  // EONTIMER_FRAMETIMER_H

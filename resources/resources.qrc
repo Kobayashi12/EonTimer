@@ -10,16 +10,16 @@
         <file>images/default_background_image.png</file>
     </qresource>
     <qresource>
-        <file>getSounds/beep.wav</file>
+        <file>sounds/beep.wav</file>
     </qresource>
     <qresource>
-        <file>getSounds/ding.wav</file>
+        <file>sounds/ding.wav</file>
     </qresource>
     <qresource>
-        <file>getSounds/pop.wav</file>
+        <file>sounds/pop.wav</file>
     </qresource>
     <qresource>
-        <file>getSounds/tick.wav</file>
+        <file>sounds/tick.wav</file>
     </qresource>
     <qresource>
         <file>styles/main.css</file>

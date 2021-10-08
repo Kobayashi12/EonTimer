@@ -2,8 +2,7 @@
 // Created by Dylan Meadows on 2020-03-20.
 //
 
-#ifndef EONTIMER_ENTRALINKTIMER_H
-#define EONTIMER_ENTRALINKTIMER_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -30,5 +29,3 @@ namespace EonTimer::timer {
         int calibrate(int targetDelay, int delayHit) const;
     };
 }  // namespace EonTimer::timer
-
-#endif  // EONTIMER_ENTRALINKTIMER_H

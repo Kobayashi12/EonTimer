@@ -7,16 +7,16 @@
 #include <cmath>
 
 namespace EonTimer {
-    CalibrationService::CalibrationService(const EonTimer::settings::TimerSettingsModel *timerSettings)
+    CalibrationService::CalibrationService(const Timer::TimerSettingsModel *timerSettings)
         : timerSettings(timerSettings) {}
 
     i32 CalibrationService::toDelays(const i32 milliseconds) const {
-        const double framerate = EonTimer::getFrameRate(timerSettings->getConsole());
+        const double framerate = Timer::getFrameRate(timerSettings->getConsole());
         return static_cast<i32>(std::round(milliseconds / framerate));
     }
 
     i32 CalibrationService::toMilliseconds(const i32 delays) const {
-        const double framerate = EonTimer::getFrameRate(timerSettings->getConsole());
+        const double framerate = Timer::getFrameRate(timerSettings->getConsole());
         return static_cast<i32>(std::round(delays * framerate));
     }
 

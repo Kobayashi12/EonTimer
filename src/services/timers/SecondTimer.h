@@ -2,8 +2,7 @@
 // Created by Dylan Meadows on 2020-03-12.
 //
 
-#ifndef EONTIMER_SECONDTIMER_H
-#define EONTIMER_SECONDTIMER_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -18,5 +17,3 @@ namespace EonTimer::timer {
         int calibrate(int targetSecond, int secondHit) const;
     };
 }  // namespace EonTimer::timer
-
-#endif  // EONTIMER_SECONDTIMER_H

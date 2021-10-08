@@ -2,8 +2,7 @@
 // Created by Dylan Meadows on 2020-03-12.
 //
 
-#ifndef EONTIMER_DELAYTIMER_H
-#define EONTIMER_DELAYTIMER_H
+#pragma once
 
 #include <services/CalibrationService.h>
 
@@ -30,5 +29,3 @@ namespace EonTimer::timer {
         int calibrate(int targetDelay, int delayHit) const;
     };
 }  // namespace EonTimer::timer
-
-#endif  // EONTIMER_DELAYTIMER_H

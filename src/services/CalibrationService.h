@@ -2,19 +2,18 @@
 // Created by Dylan Meadows on 2020-03-10.
 //
 
-#ifndef EONTIMER_CALIBRATIONSERVICE_H
-#define EONTIMER_CALIBRATIONSERVICE_H
+#pragma once
 
-#include <util/Types.h>
-#include <models/settings/TimerSettingsModel.h>
+#include <Timer/TimerSettingsModel.h>
+#include <Util/Types.h>
 
 namespace EonTimer {
     class CalibrationService {
     private:
-        const EonTimer::settings::TimerSettingsModel *timerSettings;
+        const Timer::TimerSettingsModel *timerSettings;
 
     public:
-        explicit CalibrationService(const EonTimer::settings::TimerSettingsModel *timerSettings);
+        explicit CalibrationService(const Timer::TimerSettingsModel *timerSettings);
 
         [[nodiscard]] i32 toDelays(i32 milliseconds) const;
 
@@ -27,5 +26,3 @@ namespace EonTimer {
         [[nodiscard]] i32 createCalibration(i32 delays, i32 seconds) const;
     };
 }  // namespace EonTimer
-
-#endif  // EONTIMER_CALIBRATIONSERVICE_H
