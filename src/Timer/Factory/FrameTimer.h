@@ -12,12 +12,11 @@ namespace EonTimer::Timer::Factory {
     class FrameTimer {
     public:
         explicit FrameTimer(const Util::CalibrationService *calibrationService);
-        [[nodiscard]] std::chrono::milliseconds createStage1(i32 preTimer) const;
-        [[nodiscard]] std::chrono::milliseconds createStage2(i32 targetFrame, i32 calibration) const;
-        [[nodiscard]] std::vector<std::chrono::milliseconds> createStages(i32 preTimer,
-                                                                          i32 targetFrame,
+        [[nodiscard]] std::chrono::milliseconds createStage2(u32 targetFrame, i32 calibration) const;
+        [[nodiscard]] std::vector<std::chrono::milliseconds> createStages(std::chrono::milliseconds preTimer,
+                                                                          u32 targetFrame,
                                                                           i32 calibration) const;
-        [[nodiscard]] i32 calibrate(i32 targetFrame, i32 frameHit) const;
+        [[nodiscard]] i32 calibrate(u32 targetFrame, u32 frameHit) const;
 
     private:
         const Util::CalibrationService *calibrationService;

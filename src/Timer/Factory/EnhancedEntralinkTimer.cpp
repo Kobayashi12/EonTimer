@@ -11,9 +11,9 @@ namespace EonTimer::Timer::Factory {
     EnhancedEntralinkTimer::EnhancedEntralinkTimer(const EntralinkTimer *entralinkTimer)
         : entralinkTimer(entralinkTimer) {}
 
-    std::vector<std::chrono::milliseconds> EnhancedEntralinkTimer::createStages(const i32 targetDelay,
-                                                                                const i32 targetSecond,
-                                                                                const i32 targetAdvances,
+    std::vector<std::chrono::milliseconds> EnhancedEntralinkTimer::createStages(const u32 targetDelay,
+                                                                                const u32 targetSecond,
+                                                                                const u32 targetAdvances,
                                                                                 const i32 calibration,
                                                                                 const i32 entralinkCalibration,
                                                                                 const i32 frameCalibration) const {
@@ -22,25 +22,25 @@ namespace EonTimer::Timer::Factory {
                                                       createStage3(targetAdvances, frameCalibration)};
     }
 
-    std::chrono::milliseconds EnhancedEntralinkTimer::createStage1(const i32 targetDelay,
-                                                                   const i32 targetSecond,
+    std::chrono::milliseconds EnhancedEntralinkTimer::createStage1(const u32 targetDelay,
+                                                                   const u32 targetSecond,
                                                                    const i32 calibration) const {
         return entralinkTimer->createStage1(targetDelay, targetSecond, calibration);
     }
 
-    std::chrono::milliseconds EnhancedEntralinkTimer::createStage2(const i32 targetDelay,
+    std::chrono::milliseconds EnhancedEntralinkTimer::createStage2(const u32 targetDelay,
                                                                    const i32 calibration,
                                                                    const i32 entralinkCalibration) const {
         return entralinkTimer->createStage2(targetDelay, calibration, entralinkCalibration);
     }
 
-    std::chrono::milliseconds EnhancedEntralinkTimer::createStage3(const i32 targetAdvances,
+    std::chrono::milliseconds EnhancedEntralinkTimer::createStage3(const u32 targetAdvances,
                                                                    const i32 frameCalibration) const {
         return std::chrono::milliseconds(
             static_cast<i32>(std::round(targetAdvances / ENTRALINK_FRAME_RATE) * 1000 + frameCalibration));
     }
 
-    i32 EnhancedEntralinkTimer::calibrate(i32 targetAdvances, i32 actualAdvances) const {
+    i32 EnhancedEntralinkTimer::calibrate(u32 targetAdvances, u32 actualAdvances) const {
         return static_cast<i32>((targetAdvances - actualAdvances) / ENTRALINK_FRAME_RATE) * 1000;
     }
 }  // namespace EonTimer::Timer::Factory

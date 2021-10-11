@@ -14,32 +14,28 @@ namespace EonTimer::Gen4 {
         Q_OBJECT
     public:
         explicit TimerModel(QSettings *settings);
-        void sync(QSettings *settings) const;
         [[nodiscard]] i32 getCalibratedDelay() const;
         [[nodiscard]] i32 getCalibratedSecond() const;
-        [[nodiscard]] i32 getTargetDelay() const;
-        [[nodiscard]] i32 getTargetSecond() const;
-        [[nodiscard]] i32 getDelayHit() const;
+        [[nodiscard]] u32 getTargetDelay() const;
+        [[nodiscard]] u32 getTargetSecond() const;
+        [[nodiscard]] u32 getDelayHit() const;
 
     signals:
-        void calibratedDelayChanged(int calibratedDelay);
-        void calibratedSecondChanged(int calibratedSecond);
-        void targetDelayChanged(int targetDelay);
-        void targetSecondChanged(int targetSecond);
-        void delayHitChanged(int delayHit);
+        void calibratedDelayChanged(i32 calibratedDelay);
+        void calibratedSecondChanged(i32 calibratedSecond);
+        void targetDelayChanged(u32 targetDelay);
+        void targetSecondChanged(u32 targetSecond);
+        void delayHitChanged(u32 delayHit);
 
     public slots:
-        void setCalibratedDelay(int newValue);
-        void setCalibratedSecond(int newValue);
-        void setTargetDelay(int newValue);
-        void setTargetSecond(int newValue);
-        void setDelayHit(int newValue);
+        void setCalibratedDelay(i32 newValue);
+        void setCalibratedSecond(i32 newValue);
+        void setTargetDelay(u32 newValue);
+        void setTargetSecond(u32 newValue);
+        void setDelayHit(u32 newValue);
 
     private:
-        i32 calibratedDelay;
-        i32 calibratedSecond;
-        i32 targetDelay;
-        i32 targetSecond;
-        i32 delayHit = 0;
+        QSettings *settings;
+        u32 delayHit = 0;
     };
 }  // namespace EonTimer::Gen4

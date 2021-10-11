@@ -13,12 +13,12 @@ namespace EonTimer::Timer::Factory {
     class DelayTimer {
     public:
         explicit DelayTimer(const SecondTimer *secondTimer, const Util::CalibrationService *calibrationService);
-        [[nodiscard]] std::chrono::milliseconds createStage1(i32 targetDelay, i32 targetSecond, i32 calibration) const;
-        [[nodiscard]] std::chrono::milliseconds createStage2(i32 targetDelay, i32 calibration) const;
-        [[nodiscard]] std::vector<std::chrono::milliseconds> createStages(i32 targetDelay,
-                                                                          i32 targetSecond,
+        [[nodiscard]] std::chrono::milliseconds createStage1(u32 targetDelay, u32 targetSecond, i32 calibration) const;
+        [[nodiscard]] std::chrono::milliseconds createStage2(u32 targetDelay, i32 calibration) const;
+        [[nodiscard]] std::vector<std::chrono::milliseconds> createStages(u32 targetDelay,
+                                                                          u32 targetSecond,
                                                                           i32 calibration) const;
-        [[nodiscard]] i32 calibrate(i32 targetDelay, i32 delayHit) const;
+        [[nodiscard]] i32 calibrate(u32 targetDelay, u32 delayHit) const;
 
     private:
         const SecondTimer *secondTimer;

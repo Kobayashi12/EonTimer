@@ -14,28 +14,25 @@ namespace EonTimer::Gen3 {
         Q_OBJECT
     public:
         explicit TimerModel(QSettings *settings);
-        void sync(QSettings *settings) const;
-        [[nodiscard]] i32 getPreTimer() const;
-        [[nodiscard]] i32 getTargetFrame() const;
+        [[nodiscard]] std::chrono::milliseconds getPreTimer() const;
+        [[nodiscard]] u32 getTargetFrame() const;
         [[nodiscard]] i32 getCalibration() const;
-        [[nodiscard]] i32 getFrameHit() const;
+        [[nodiscard]] u32 getFrameHit() const;
 
     signals:
-        void preTimerChanged(int newValue);
-        void targetFrameChanged(int newValue);
+        void preTimerChanged(std::chrono::milliseconds newValue);
+        void targetFrameChanged(u32 newValue);
         void calibrationChanged(int newValue);
-        void frameHitChanged(int newValue);
+        void frameHitChanged(u32 newValue);
 
     public slots:
-        void setPreTimer(int newValue);
-        void setTargetFrame(int newValue);
-        void setCalibration(int newValue);
-        void setFrameHit(int newValue);
+        void setPreTimer(i32 newValue);
+        void setTargetFrame(u32 newValue);
+        void setCalibration(i32 newValue);
+        void setFrameHit(u32 newValue);
 
     private:
-        i32 preTimer;
-        i32 targetFrame;
-        i32 calibration;
-        i32 frameHit = 0;
+        QSettings *settings;
+        u32 frameHit = 0;
     };
 }  // namespace EonTimer::Gen3

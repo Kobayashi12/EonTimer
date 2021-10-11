@@ -8,6 +8,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <Util/Functions.h>
 
 namespace EonTimer::Gen3 {
     TimerPane::TimerPane(TimerModel *model,
@@ -49,7 +50,7 @@ namespace EonTimer::Gen3 {
                 field->setRange(INT_MIN, INT_MAX);
                 field->setValue(model->getCalibration());
                 field->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-                connect(model, SIGNAL(calibrationChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::calibrationChanged, field, &QSpinBox::setValue);
                 connect(field, valueChanged, [this](const i32 newValue) {
                     model->setCalibration(newValue);
                     emit timerChanged(createStages());
@@ -60,8 +61,11 @@ namespace EonTimer::Gen3 {
             {
                 auto *field = new QSpinBox();
                 Util::FieldSet<QSpinBox> fieldSet(1, new QLabel("Pre-Timer"), field);
-                Util::setModel(field, 0, INT_MAX, model->getPreTimer());
-                connect(model, SIGNAL(preTimerChanged(int)), field, SLOT(setValue(int)));
+                Util::setModel(field, 0, INT_MAX, model->getPreTimer().count());
+
+                connect(model, &TimerModel::preTimerChanged, [field](const std::chrono::milliseconds ms) {
+                    field->setValue(ms.count());
+                });
                 connect(field, valueChanged, [this](const i32 newValue) {
                     model->setPreTimer(newValue);
                     emit timerChanged(createStages());
@@ -73,7 +77,7 @@ namespace EonTimer::Gen3 {
                 auto *field = new QSpinBox();
                 Util::FieldSet<QSpinBox> fieldSet(2, new QLabel("Target Frame"), field);
                 Util::setModel(field, 0, INT_MAX, model->getTargetFrame());
-                connect(model, SIGNAL(targetFrameChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::targetFrameChanged, field, &QSpinBox::setValue);
                 connect(field, valueChanged, [this](const i32 newValue) {
                     model->setTargetFrame(newValue);
                     emit timerChanged(createStages());
@@ -91,8 +95,8 @@ namespace EonTimer::Gen3 {
                 auto *field = new QSpinBox();
                 Util::FieldSet<QSpinBox> fieldSet(0, new QLabel("Frame Hit"), field);
                 field->setRange(0, INT_MAX);
-                connect(model, SIGNAL(frameHitChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const i32 value) { model->setFrameHit(value); });
+                connect(model, &TimerModel::frameHitChanged, field, &QSpinBox::setValue);
+                connect(field, valueChanged, model, &TimerModel::setFrameHit);
                 Util::addFieldSet(form, fieldSet);
             }
         }

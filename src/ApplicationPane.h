@@ -21,11 +21,8 @@ namespace EonTimer {
         Q_OBJECT
     public:
         ApplicationPane(QSettings *settings,
-                        Action::Settings *actionSettings,
                         Timer::Settings *timerSettings,
-                        Gen5::TimerModel *gen5Timer,
-                        Gen4::TimerModel *gen4Timer,
-                        Gen3::TimerModel *gen3Timer,
+                        Action::Settings *actionSettings,
                         Timer::TimerService *timerService,
                         QWidget *parent = nullptr);
 

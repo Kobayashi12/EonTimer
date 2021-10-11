@@ -73,7 +73,7 @@ namespace EonTimer::Gen5 {
                 auto *field = new QSpinBox();
                 Util::FieldSet<QSpinBox> fieldSet(0, new QLabel("Calibration"), field);
                 Util::setModel(field, INT_MIN, INT_MAX, model->getCalibration());
-                connect(model, SIGNAL(calibrationChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::calibrationChanged, field, &QSpinBox::setValue);
                 connect(field, valueChanged, [this](const i32 value) {
                     model->setCalibration(value);
                     emit timerChanged(createStages());
@@ -85,7 +85,7 @@ namespace EonTimer::Gen5 {
                 auto *field = new QSpinBox();
                 auto *fieldSet = new Util::FieldSet<QSpinBox>(1, new QLabel("Target Delay"), field);
                 Util::setModel(field, 0, INT_MAX, model->getTargetDelay());
-                connect(model, SIGNAL(targetDelayChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::targetDelayChanged, field, &QSpinBox::setValue);
                 connect(field, valueChanged, [this](const i32 value) {
                     model->setTargetDelay(value);
                     emit timerChanged(createStages());
@@ -100,7 +100,7 @@ namespace EonTimer::Gen5 {
                 auto *field = new QSpinBox();
                 Util::FieldSet<QSpinBox> fieldSet(2, new QLabel("Target Second"), field);
                 Util::setModel(field, 0, 59, model->getTargetSecond());
-                connect(model, SIGNAL(targetSecondChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::targetSecondChanged, field, &QSpinBox::setValue);
                 connect(field, valueChanged, [this](const i32 value) {
                     model->setTargetSecond(value);
                     emit timerChanged(createStages());
@@ -112,7 +112,7 @@ namespace EonTimer::Gen5 {
                 auto *field = new QSpinBox();
                 auto *fieldSet = new Util::FieldSet<QSpinBox>(3, new QLabel("Entralink Calibration"), field);
                 Util::setModel(field, INT_MIN, INT_MAX, model->getEntralinkCalibration());
-                connect(model, SIGNAL(entralinkCalibrationChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::entralinkCalibrationChanged, field, &QSpinBox::setValue);
                 connect(field, valueChanged, [this](const i32 newValue) {
                     model->setEntralinkCalibration(newValue);
                     emit timerChanged(createStages());
@@ -128,7 +128,7 @@ namespace EonTimer::Gen5 {
                 auto *fieldSet = new Util::FieldSet<QSpinBox>(4, new QLabel("Frame Calibration"), field);
                 field->setRange(INT_MIN, INT_MAX);
                 field->setValue(model->getFrameCalibration());
-                connect(model, SIGNAL(frameCalibrationChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::frameCalibrationChanged, field, &QSpinBox::setValue);
                 connect(field, valueChanged, [this](const i32 frameCalibration) {
                     model->setFrameCalibration(frameCalibration);
                     emit timerChanged(createStages());
@@ -144,7 +144,7 @@ namespace EonTimer::Gen5 {
                 auto *fieldSet = new Util::FieldSet<QSpinBox>(5, new QLabel("Target Advances"), field);
                 field->setRange(0, INT_MAX);
                 field->setValue(model->getTargetAdvances());
-                connect(model, SIGNAL(targetAdvancesChanged(int)), field, SLOT(setValue(int)));
+                connect(model, &TimerModel::targetAdvancesChanged, field, &QSpinBox::setValue);
                 connect(fieldSet->field, valueChanged, [this](const i32 value) {
                     model->setTargetAdvances(value);
                     emit timerChanged(createStages());
@@ -166,8 +166,8 @@ namespace EonTimer::Gen5 {
                 auto *fieldSet = new Util::FieldSet<QSpinBox>(0, new QLabel("Delay Hit"), field);
                 field->setRange(0, INT_MAX);
                 field->setSpecialValueText("");
-                connect(model, SIGNAL(delayHitChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const i32 value) { model->setDelayHit(value); });
+                connect(model, &TimerModel::delayHitChanged, field, &QSpinBox::setValue);
+                connect(field, valueChanged, model, &TimerModel::setDelayHit);
                 connect(model, &TimerModel::modeChanged, [form, fieldSet](const TimerMode value) {
                     Util::setVisible(form, *fieldSet, value != STANDARD);
                 });
@@ -178,8 +178,8 @@ namespace EonTimer::Gen5 {
                 auto *field = new QSpinBox();
                 auto *fieldSet = new Util::FieldSet<QSpinBox>(1, new QLabel("Second Hit"), field);
                 field->setRange(0, 59);
-                connect(model, SIGNAL(secondHitChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const i32 value) { model->setSecondHit(value); });
+                connect(model, &TimerModel::secondHitChanged, field, &QSpinBox::setValue);
+                connect(field, valueChanged, model, &TimerModel::setSecondHit);
                 connect(model, &TimerModel::modeChanged, [form, fieldSet](const TimerMode value) {
                     Util::setVisible(form, *fieldSet, value != C_GEAR);
                 });
@@ -190,8 +190,8 @@ namespace EonTimer::Gen5 {
                 auto *field = new QSpinBox();
                 auto *fieldSet = new Util::FieldSet<QSpinBox>(2, new QLabel("Advances Hit"), field);
                 field->setRange(0, INT_MAX);
-                connect(model, SIGNAL(advancesHitChanged(int)), field, SLOT(setValue(int)));
-                connect(field, valueChanged, [this](const i32 value) { model->setAdvancesHit(value); });
+                connect(model, &TimerModel::advancesHitChanged, field, &QSpinBox::setValue);
+                connect(field, valueChanged, model, &TimerModel::setAdvancesHit);
                 connect(model, &TimerModel::modeChanged, [form, fieldSet](const TimerMode value) {
                     Util::setVisible(form, *fieldSet, value == ENTRALINK_PLUS);
                 });
@@ -206,14 +206,15 @@ namespace EonTimer::Gen5 {
         std::vector<std::chrono::milliseconds> stages;
         switch (model->getMode()) {
             case STANDARD:
-                stages =
-                    secondTimer->createStages(model->getTargetSecond(),
-                                              calibrationService->calibrateToMilliseconds(model->getCalibration()).count());
+                stages = secondTimer->createStages(
+                    model->getTargetSecond(),
+                    calibrationService->calibrateToMilliseconds(model->getCalibration()).count());
                 break;
             case C_GEAR:
-                stages = delayTimer->createStages(model->getTargetDelay(),
-                                                  model->getTargetSecond(),
-                                                  calibrationService->calibrateToMilliseconds(model->getCalibration()).count());
+                stages = delayTimer->createStages(
+                    model->getTargetDelay(),
+                    model->getTargetSecond(),
+                    calibrationService->calibrateToMilliseconds(model->getCalibration()).count());
                 break;
             case ENTRALINK:
                 stages = entralinkTimer->createStages(
@@ -238,24 +239,26 @@ namespace EonTimer::Gen5 {
     void TimerPane::calibrate() {
         switch (model->getMode()) {
             case STANDARD:
-                model->setCalibration(model->getCalibration() +
-                                      calibrationService->calibrateToDelays(std::chrono::milliseconds(getSecondCalibration())));
+                model->setCalibration(model->getCalibration() + calibrationService->calibrateToDelays(
+                                                                    std::chrono::milliseconds(getSecondCalibration())));
                 break;
             case C_GEAR:
-                model->setCalibration(model->getCalibration() +
-                                      calibrationService->calibrateToDelays(std::chrono::milliseconds(getDelayCalibration())));
+                model->setCalibration(model->getCalibration() + calibrationService->calibrateToDelays(
+                                                                    std::chrono::milliseconds(getDelayCalibration())));
                 break;
             case ENTRALINK:
-                model->setCalibration(model->getCalibration() +
-                                      calibrationService->calibrateToDelays(std::chrono::milliseconds(getSecondCalibration())));
-                model->setEntralinkCalibration(model->getEntralinkCalibration() +
-                                               calibrationService->calibrateToDelays(std::chrono::milliseconds(getEntralinkCalibration())));
+                model->setCalibration(model->getCalibration() + calibrationService->calibrateToDelays(
+                                                                    std::chrono::milliseconds(getSecondCalibration())));
+                model->setEntralinkCalibration(
+                    model->getEntralinkCalibration() +
+                    calibrationService->calibrateToDelays(std::chrono::milliseconds(getEntralinkCalibration())));
                 break;
             case ENTRALINK_PLUS:
-                model->setCalibration(model->getCalibration() +
-                                      calibrationService->calibrateToDelays(std::chrono::milliseconds(getSecondCalibration())));
-                model->setEntralinkCalibration(model->getEntralinkCalibration() +
-                                               calibrationService->calibrateToDelays(std::chrono::milliseconds(getEntralinkCalibration())));
+                model->setCalibration(model->getCalibration() + calibrationService->calibrateToDelays(
+                                                                    std::chrono::milliseconds(getSecondCalibration())));
+                model->setEntralinkCalibration(
+                    model->getEntralinkCalibration() +
+                    calibrationService->calibrateToDelays(std::chrono::milliseconds(getEntralinkCalibration())));
                 model->setFrameCalibration(model->getFrameCalibration() + getAdvancesCalibration());
                 break;
         }

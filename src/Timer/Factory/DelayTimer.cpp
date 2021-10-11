@@ -13,25 +13,25 @@ namespace EonTimer::Timer::Factory {
     DelayTimer::DelayTimer(const SecondTimer *secondTimer, const Util::CalibrationService *calibrationService)
         : secondTimer(secondTimer), calibrationService(calibrationService) {}
 
-    std::chrono::milliseconds DelayTimer::createStage1(const i32 targetDelay,
-                                                       const i32 targetSecond,
+    std::chrono::milliseconds DelayTimer::createStage1(const u32 targetDelay,
+                                                       const u32 targetSecond,
                                                        const i32 calibration) const {
         return Util::toMinimumLength(secondTimer->createStage1(targetSecond, calibration) -
                                      calibrationService->toMilliseconds(targetDelay));
     }
 
-    std::chrono::milliseconds DelayTimer::createStage2(const i32 targetDelay, const i32 calibration) const {
+    std::chrono::milliseconds DelayTimer::createStage2(const u32 targetDelay, const i32 calibration) const {
         return calibrationService->toMilliseconds(targetDelay) - std::chrono::milliseconds(calibration);
     }
 
-    std::vector<std::chrono::milliseconds> DelayTimer::createStages(const i32 targetDelay,
-                                                                    const i32 targetSecond,
+    std::vector<std::chrono::milliseconds> DelayTimer::createStages(const u32 targetDelay,
+                                                                    const u32 targetSecond,
                                                                     const i32 calibration) const {
         return std::vector<std::chrono::milliseconds>{createStage1(targetDelay, targetSecond, calibration),
                                                       createStage2(targetDelay, calibration)};
     }
 
-    i32 DelayTimer::calibrate(const i32 targetDelay, const i32 delayHit) const {
+    i32 DelayTimer::calibrate(const u32 targetDelay, const u32 delayHit) const {
         const auto delta =
             calibrationService->toMilliseconds(delayHit) - calibrationService->toMilliseconds(targetDelay);
         if (std::abs(delta.count()) <= CLOSE_THRESHOLD) {

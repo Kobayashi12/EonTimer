@@ -7,23 +7,13 @@
 #include <Util/QSettingsProperty.h>
 
 namespace EonTimer::Action {
-    static const QString &getGroup() {
-        static const QString group = "action";
-        return group;
-    }
-
-    static QString withGroup(const QString &name) {
-        static const QString groupTemplate = "%1/%2";
-        return groupTemplate.arg(getGroup(), name);
-    }
-
     static std::vector<Util::QSettingsProperty> &getProperties() {
         static std::vector<Util::QSettingsProperty> properties{
-            Util::QSettingsProperty(withGroup("mode"), static_cast<i32>(Mode::AV)),
-            Util::QSettingsProperty(withGroup("sound"), static_cast<i32>(Sound::BEEP)),
-            Util::QSettingsProperty(withGroup("color"), QColor(Qt::blue)),
-            Util::QSettingsProperty(withGroup("interval"), 500),
-            Util::QSettingsProperty(withGroup("count"), 6)};
+            Util::QSettingsProperty("action/mode", static_cast<i32>(Mode::AV)),
+            Util::QSettingsProperty("action/sound", static_cast<i32>(Sound::BEEP)),
+            Util::QSettingsProperty("action/color", QColor(Qt::blue)),
+            Util::QSettingsProperty("action/interval", 500),
+            Util::QSettingsProperty("action/count", 6)};
         return properties;
     }
 

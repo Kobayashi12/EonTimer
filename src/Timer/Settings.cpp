@@ -7,21 +7,11 @@
 #include <Util/QSettingsProperty.h>
 
 namespace EonTimer::Timer {
-    static const QString &getGroup() {
-        static const QString group = "timer";
-        return group;
-    }
-
-    static QString withGroup(const QString &name) {
-        static const QString groupTemplate = "%1/%2";
-        return groupTemplate.arg(getGroup(), name);
-    }
-
     static std::vector<Util::QSettingsProperty> &getProperties() {
         static std::vector<Util::QSettingsProperty> properties{
-            Util::QSettingsProperty(withGroup("console"), static_cast<i32>(Console::NDS)),
-            Util::QSettingsProperty(withGroup("refreshInterval"), 8),
-            Util::QSettingsProperty(withGroup("precisionCalibrationEnabled"), false)};
+            Util::QSettingsProperty("timer/console", static_cast<i32>(Console::NDS)),
+            Util::QSettingsProperty("timer/refreshInterval", 8),
+            Util::QSettingsProperty("timer/precisionCalibrationEnabled", false)};
         return properties;
     }
 

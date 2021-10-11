@@ -55,7 +55,7 @@ namespace EonTimer::Timer {
             // ----- currentStage ----
             {
                 rootLayout->addWidget(currentStage);
-                rootLayout->setAlignment(currentStage, Qt::AlignLeft);
+                rootLayout->setAlignment(currentStage, Qt::AlignCenter);
                 const int font = QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Regular.ttf");
                 const QString family = QFontDatabase::applicationFontFamilies(font)[0];
                 currentStage->setObjectName("currentStageLbl");
@@ -66,7 +66,7 @@ namespace EonTimer::Timer {
                 auto *layout = new QHBoxLayout();
                 layout->setSpacing(5);
                 rootLayout->addLayout(layout);
-                rootLayout->setAlignment(layout, Qt::AlignLeft);
+                rootLayout->setAlignment(layout, Qt::AlignCenter);
                 layout->addWidget(new QLabel("Minutes Before Target:"));
                 layout->addWidget(minutesBeforeTarget);
             }
@@ -75,7 +75,7 @@ namespace EonTimer::Timer {
                 auto *layout = new QHBoxLayout();
                 layout->setSpacing(5);
                 rootLayout->addLayout(layout);
-                rootLayout->setAlignment(layout, Qt::AlignLeft);
+                rootLayout->setAlignment(layout, Qt::AlignCenter);
                 layout->addWidget(new QLabel("Next Stage:"));
                 layout->addWidget(nextStage);
             }

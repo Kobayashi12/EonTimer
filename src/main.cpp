@@ -1,7 +1,6 @@
-#include <ApplicationWindow.h>
-#include <qapplication.h>
-
+#include "ApplicationWindow.h"
 #include "app.h"
+#include <qapplication.h>
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);

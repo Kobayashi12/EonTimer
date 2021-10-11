@@ -28,7 +28,7 @@ endif ()
 
 set(CMAKE_PREFIX_PATH "/usr/local/opt/qt/lib/cmake")
 find_package(Qt5Widgets REQUIRED)
-find_package(SFML 2.4 COMPONENTS audio REQUIRED)
+find_package(SFML 2.5 COMPONENTS audio REQUIRED)
 
 set(SOURCES
         resources/resources.qrc
@@ -46,8 +46,6 @@ set(SOURCES
         src/Timer/TimerDisplayPane.h
         src/Gen4/TimerPane.cpp
         src/Gen4/TimerPane.h
-        src/Util/FontHelper.cpp
-        src/Util/FontHelper.h
         src/Util/WidgetHelper.h
         src/Action/Mode.cpp
         src/Action/Mode.h
@@ -73,8 +71,6 @@ set(SOURCES
         src/Timer/Factory/SecondTimer.h
         src/Timer/TimerService.cpp
         src/Timer/TimerService.h
-        src/Util/instrumentation/Timer.cpp
-        src/Util/instrumentation/Timer.h
         src/Util/Functions.cpp
         src/Util/Functions.h
         src/Timer/Clock.cpp

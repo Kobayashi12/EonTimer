@@ -3,86 +3,63 @@
 //
 
 #include "TimerModel.h"
-
+#include <QtCore>
 #include <Util/QSettingsProperty.h>
 
-#include <QtCore>
-
 namespace EonTimer::Gen4 {
-    static const QString &getGroup() {
-        static const QString group = "gen4";
-        return group;
-    }
-
     static std::vector<Util::QSettingsProperty> &getProperties() {
-        static std::vector<Util::QSettingsProperty> properties{Util::QSettingsProperty("calibratedDelay", 500),
-                                                               Util::QSettingsProperty("calibratedSecond", 14),
-                                                               Util::QSettingsProperty("targetDelay", 600),
-                                                               Util::QSettingsProperty("targetSecond", 50)};
+        static std::vector<Util::QSettingsProperty> properties{Util::QSettingsProperty("gen4/calibratedDelay", 500),
+                                                               Util::QSettingsProperty("gen4/calibratedSecond", 14),
+                                                               Util::QSettingsProperty("gen4/targetDelay", 600),
+                                                               Util::QSettingsProperty("gen4/targetSecond", 50)};
         return properties;
     }
 
     enum { CALIBRATED_DELAY, CALIBRATED_SECOND, TARGET_DELAY, TARGET_SECOND };
 
-    TimerModel::TimerModel(QSettings *settings) : QObject(settings) {
-        settings->beginGroup(getGroup());
-        auto &properties = getProperties();
-        calibratedDelay = properties[CALIBRATED_DELAY].getValue(*settings).toInt();
-        calibratedSecond = properties[CALIBRATED_SECOND].getValue(*settings).toInt();
-        targetDelay = properties[TARGET_DELAY].getValue(*settings).toInt();
-        targetSecond = properties[TARGET_SECOND].getValue(*settings).toInt();
-        settings->endGroup();
+    TimerModel::TimerModel(QSettings *settings) : QObject(settings), settings(settings) {}
+
+    i32 TimerModel::getCalibratedDelay() const { return getProperties()[CALIBRATED_DELAY].getValue(*settings).toInt(); }
+
+    i32 TimerModel::getCalibratedSecond() const {
+        return getProperties()[CALIBRATED_SECOND].getValue(*settings).toInt();
     }
 
-    void TimerModel::sync(QSettings *settings) const {
-        settings->beginGroup(getGroup());
-        auto &properties = getProperties();
-        properties[CALIBRATED_DELAY].setValue(*settings, calibratedDelay);
-        properties[CALIBRATED_SECOND].setValue(*settings, calibratedSecond);
-        properties[TARGET_DELAY].setValue(*settings, targetDelay);
-        properties[TARGET_SECOND].setValue(*settings, targetSecond);
-        settings->endGroup();
-    }
+    u32 TimerModel::getTargetDelay() const { return getProperties()[TARGET_DELAY].getValue(*settings).toUInt(); }
 
-    i32 TimerModel::getCalibratedDelay() const { return calibratedDelay; }
+    u32 TimerModel::getTargetSecond() const { return getProperties()[TARGET_SECOND].getValue(*settings).toUInt(); }
 
-    i32 TimerModel::getCalibratedSecond() const { return calibratedSecond; }
-
-    i32 TimerModel::getTargetDelay() const { return targetDelay; }
-
-    i32 TimerModel::getTargetSecond() const { return targetSecond; }
-
-    i32 TimerModel::getDelayHit() const { return delayHit; }
+    u32 TimerModel::getDelayHit() const { return delayHit; }
 
     void TimerModel::setCalibratedDelay(const i32 newValue) {
-        if (this->calibratedDelay != newValue) {
-            this->calibratedDelay = newValue;
+        if (getCalibratedDelay() != newValue) {
+            getProperties()[CALIBRATED_DELAY].setValue(*settings, newValue);
             emit calibratedDelayChanged(newValue);
         }
     }
 
     void TimerModel::setCalibratedSecond(const i32 newValue) {
-        if (this->calibratedSecond != newValue) {
-            this->calibratedSecond = newValue;
+        if (getCalibratedSecond() != newValue) {
+            getProperties()[CALIBRATED_SECOND].setValue(*settings, newValue);
             emit calibratedSecondChanged(newValue);
         }
     }
 
-    void TimerModel::setTargetDelay(const i32 newValue) {
-        if (this->targetDelay != newValue) {
-            this->targetDelay = newValue;
+    void TimerModel::setTargetDelay(const u32 newValue) {
+        if (getTargetDelay() != newValue) {
+            getProperties()[TARGET_DELAY].setValue(*settings, newValue);
             emit targetDelayChanged(newValue);
         }
     }
 
-    void TimerModel::setTargetSecond(const i32 newValue) {
-        if (this->targetSecond != newValue) {
-            this->targetSecond = newValue;
+    void TimerModel::setTargetSecond(const u32 newValue) {
+        if (getTargetSecond() != newValue) {
+            getProperties()[TARGET_SECOND].setValue(*settings, newValue);
             emit targetSecondChanged(newValue);
         }
     }
 
-    void TimerModel::setDelayHit(const i32 newValue) {
+    void TimerModel::setDelayHit(const u32 newValue) {
         if (this->delayHit != newValue) {
             this->delayHit = newValue;
             emit delayHitChanged(newValue);
