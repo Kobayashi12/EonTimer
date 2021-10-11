@@ -15,7 +15,7 @@ namespace EonTimer::Timer {
         Q_OBJECT
     public:
         TimerDisplayPane(TimerService *newValue,
-                         const Action::ActionSettingsModel *actionSettings,
+                         const Action::Settings *actionSettings,
                          QWidget *parent = nullptr);
 
     private:
@@ -32,7 +32,7 @@ namespace EonTimer::Timer {
         QLabel *currentStage;
         QLabel *minutesBeforeTarget;
         QLabel *nextStage;
-        const Action::ActionSettingsModel *actionSettings;
+        const Action::Settings *actionSettings;
         bool isActive = false;
         QTimer timer;
     };

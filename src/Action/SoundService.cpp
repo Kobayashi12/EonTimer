@@ -17,7 +17,7 @@ namespace EonTimer::Action {
         return sound;
     }
 
-    SoundService::SoundService(const ActionSettingsModel *actionSettings, QObject *parent)
+    SoundService::SoundService(const Settings *actionSettings, QObject *parent)
         : QObject(parent), actionSettings(actionSettings) {
         mBeep = loadSound(":/sounds/beep.wav");
         mDing = loadSound(":/sounds/ding.wav");

@@ -10,7 +10,6 @@
 
 #include <QFile>
 #include <QMenuBar>
-#include <sstream>
 
 namespace EonTimer {
     static const QString &getTitle() {
@@ -24,31 +23,30 @@ namespace EonTimer {
         css.append(file.readAll());
     }
 
-    ApplicationWindow::ApplicationWindow(QWidget *parent) : QMainWindow(parent) {
-        settings = new QSettings(this);
-        actionSettings = new Action::ActionSettingsModel(settings, this);
-        timerSettings = new Timer::TimerSettingsModel(settings, this);
-        gen5Timer = new Gen5::Gen5TimerModel(settings, this);
-        gen4Timer = new Gen4::Gen4TimerModel(settings, this);
-        gen3Timer = new Gen3::Gen3TimerModel(settings, this);
-        timerService = new Timer::TimerService(timerSettings, actionSettings, this);
-        applicationPane = new ApplicationPane(settings,
-                                              actionSettings,
-                                              timerSettings,
-                                              gen5Timer,
-                                              gen4Timer,
-                                              gen3Timer,
-                                              timerService,
-                                              this);
-        initComponents();
-    }
+    ApplicationWindow::ApplicationWindow(QWidget *parent) : QMainWindow(parent) { initComponents(); }
 
     void ApplicationWindow::initComponents() {
+        auto *settings = new QSettings(this);
+        auto *gen3Timer = new Gen3::TimerModel(settings);
+        auto *gen4Timer = new Gen4::TimerModel(settings);
+        auto *gen5Timer = new Gen5::TimerModel(settings);
+        auto *timerSettings = new Timer::Settings(settings);
+        auto *actionSettings = new Action::Settings(settings);
+        auto *timerService = new Timer::TimerService(timerSettings, actionSettings, this);
+        auto *applicationPane = new ApplicationPane(settings,
+                                                    actionSettings,
+                                                    timerSettings,
+                                                    gen5Timer,
+                                                    gen4Timer,
+                                                    gen3Timer,
+                                                    timerService,
+                                                    this);
+
         setWindowTitle(getTitle());
         setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint |
                        Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
         setCentralWidget(applicationPane);
-//        setFixedSize(525, 395);
+        //        setFixedSize(525, 395);
 
         QString stylesheet;
         addStylesheet(stylesheet, ":/styles/main.css");
@@ -70,7 +68,7 @@ namespace EonTimer {
             {
                 auto *preferences = new QAction();
                 preferences->setMenuRole(QAction::PreferencesRole);
-                connect(preferences, &QAction::triggered, [this] {
+                connect(preferences, &QAction::triggered, [timerSettings, actionSettings, this] {
                     SettingsDialog(timerSettings, actionSettings, this).exec();
                 });
                 connect(timerService, &Timer::TimerService::activated, [preferences](const bool activated) {
@@ -79,15 +77,17 @@ namespace EonTimer {
                 menu->addAction(preferences);
             }
         }
+
+        connect(this,
+                &ApplicationWindow::onClose,
+                [gen3Timer, gen4Timer, gen5Timer, settings] {
+                    gen3Timer->sync(settings);
+                    gen4Timer->sync(settings);
+                    gen5Timer->sync(settings);
+                    settings->sync();
+                });
     }
 
-    void ApplicationWindow::closeEvent(QCloseEvent *) {
-        actionSettings->sync(settings);
-        timerSettings->sync(settings);
-        gen5Timer->sync(settings);
-        gen4Timer->sync(settings);
-        gen3Timer->sync(settings);
-        settings->sync();
-    }
+    void ApplicationWindow::closeEvent(QCloseEvent *) { emit onClose(); }
 
 }  // namespace EonTimer

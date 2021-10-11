@@ -3,22 +3,17 @@
 //
 
 #include "TimerService.h"
-
-#include <Timer/Clock.h>
-#include <Util/Functions.h>
-
+#include "Action/SoundService.h"
+#include "Timer/Clock.h"
+#include "Util/Functions.h"
 #include <QThreadPool>
+#include <iostream>
+#include <numeric>
 #include <stack>
 #include <utility>
 
-#include "Action/SoundService.h"
-
-using namespace std::literals::chrono_literals;
-
 namespace EonTimer::Timer {
-    TimerService::TimerService(TimerSettingsModel *timerSettings,
-                               Action::ActionSettingsModel *actionSettings,
-                               QObject *parent)
+    TimerService::TimerService(Settings *timerSettings, Action::Settings *actionSettings, QObject *parent)
         : QObject(parent), running(false), timerSettings(timerSettings), actionSettings(actionSettings) {
         auto *sounds = new Action::SoundService(actionSettings, this);
         connect(this, &TimerService::actionTriggered, [sounds] { sounds->play(); });
@@ -32,13 +27,10 @@ namespace EonTimer::Timer {
         }
     }
 
-    void TimerService::setStages(const std::shared_ptr<std::vector<i32>> &newValue) {
+    void TimerService::setStages(const std::vector<std::chrono::milliseconds> &newValue) {
         if (!running) {
-            stages.clear();
-            for (auto stage : *newValue) {
-                stages.push_back(
-                    std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(stage)));
-            }
+            stages = newValue;
+            totalDuration = std::accumulate(stages.begin(), stages.end(), 0ms);
             reset();
         }
     }
@@ -64,20 +56,16 @@ namespace EonTimer::Timer {
     }
 
     void TimerService::reset() {
-        auto totalTime = 0ms;
-        for (auto stage : stages) {
-            totalTime += std::chrono::duration_cast<std::chrono::milliseconds>(stage);
-        }
-        const auto currentStage = std::chrono::duration_cast<std::chrono::milliseconds>(stages[0]);
+        const auto currentStage = stages[0];
         emit stateChanged(TimerState(currentStage, currentStage));
-        emit minutesBeforeTargetChanged(std::chrono::duration_cast<std::chrono::minutes>(totalTime));
-        emit nextStageChanged(stages.size() >= 2 ? std::chrono::duration_cast<std::chrono::milliseconds>(stages[1])
-                                                 : 0ms);
+        emit minutesBeforeTargetChanged(std::chrono::duration_cast<std::chrono::minutes>(totalDuration));
+        emit nextStageChanged(stages.size() >= 2 ? stages[1] : 0ms);
     }
 
     void TimerService::run(Clock clock) {
-        const auto period = std::chrono::duration_cast<std::chrono::microseconds>(timerSettings->getRefreshInterval());
-        const auto actionInterval = std::chrono::duration_cast<std::chrono::microseconds>(actionSettings->getInterval());
+        Clock runClock;
+        const auto period = timerSettings->getRefreshInterval();
+        const auto actionInterval = actionSettings->getInterval();
 
         u8 stageIndex = 0;
         auto preElapsed = 0us;
@@ -87,30 +75,29 @@ namespace EonTimer::Timer {
             stageIndex++;
         }
 
+        const auto tick = runClock.tick();
+        std::cout << totalDuration.count() << std::endl;
+        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(tick).count() << std::endl;
         running = false;
         emit activated(false);
         reset();
     }
 
     std::chrono::microseconds TimerService::runStage(Clock clock,
-                                                     const std::chrono::microseconds period,
-                                                     const std::chrono::microseconds actionInterval,
+                                                     const std::chrono::milliseconds period,
+                                                     const std::chrono::milliseconds actionInterval,
                                                      const std::chrono::microseconds preElapsed,
-                                                     const std::chrono::microseconds stage) {
-        std::stack<std::chrono::microseconds> actionStack;
+                                                     const std::chrono::milliseconds stage) {
+        std::stack<std::chrono::milliseconds> actionStack;
         for (u32 i = 0; i < actionSettings->getCount(); i++) {
-            actionStack.push(actionInterval * i);
+            auto currentAction = actionInterval * i;
+            if (currentAction < stage) actionStack.push(currentAction);
         }
 
         auto ticks = 0;
         auto elapsed = preElapsed;
         auto nextAction = actionStack.top();
         while (running && elapsed < stage) {
-            auto adjustedPeriod = period;
-            const auto remainingUntilAction = stage - elapsed - nextAction;
-            if (remainingUntilAction < adjustedPeriod) adjustedPeriod = remainingUntilAction;
-            std::this_thread::sleep_for(adjustedPeriod);
-
             const auto delta = clock.tick();
             const auto remaining = stage - elapsed - delta;
             if (remaining <= nextAction) {
@@ -120,13 +107,20 @@ namespace EonTimer::Timer {
                     nextAction = actionStack.top();
                 }
             }
-            if (ticks % 4 == 0)
-                emit stateChanged(TimerState(std::chrono::duration_cast<std::chrono::milliseconds>(stage),
-                                             std::chrono::duration_cast<std::chrono::milliseconds>(remaining)));
+
+            if (ticks++ % 4 == 0)
+                emit stateChanged(TimerState(stage, std::chrono::duration_cast<std::chrono::milliseconds>(remaining)));
             elapsed += delta;
-            ticks++;
+
+            if (elapsed < stage) {
+                auto adjustedPeriod = period;
+                const auto remainingUntilAction = stage - elapsed - nextAction;
+                if (remainingUntilAction < adjustedPeriod)
+                    adjustedPeriod = std::chrono::duration_cast<std::chrono::milliseconds>(remainingUntilAction);
+                std::this_thread::sleep_for(adjustedPeriod);
+            }
         }
-        return elapsed;
+        return elapsed - stage;
     }
 
     bool TimerService::isRunning() const { return running; }

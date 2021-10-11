@@ -4,45 +4,36 @@
 
 #pragma once
 
-#include <Action/ActionSettingsModel.h>
-
+#include "Clock.h"
+#include "Settings.h"
+#include "TimerState.h"
+#include <Action/Settings.h>
 #include <QObject>
 #include <QThread>
 #include <memory>
 #include <vector>
 
-#include "Clock.h"
-#include "TimerSettingsModel.h"
-#include "TimerState.h"
+using namespace std::chrono_literals;
 
 namespace EonTimer::Timer {
     class TimerService : public QObject {
         Q_OBJECT
     public:
-        explicit TimerService(TimerSettingsModel *timerSettings,
-                              Action::ActionSettingsModel *actionSettings,
-                              QObject *parent = nullptr);
-
+        explicit TimerService(Settings *timerSettings, Action::Settings *actionSettings, QObject *parent = nullptr);
         ~TimerService() override;
-
-        void setStages(const std::shared_ptr<std::vector<i32>>& newValue);
-
         [[nodiscard]] bool isRunning() const;
-
+        void setStages(const std::vector<std::chrono::milliseconds> &newValue);
         void start();
-
         void stop();
 
     private:
         void reset();
-
         void run(Clock clock);
-
         [[nodiscard]] std::chrono::microseconds runStage(Clock clock,
-                                                         std::chrono::microseconds period,
-                                                         std::chrono::microseconds actionInterval,
+                                                         std::chrono::milliseconds period,
+                                                         std::chrono::milliseconds actionInterval,
                                                          std::chrono::microseconds preElapsed,
-                                                         std::chrono::microseconds stage);
+                                                         std::chrono::milliseconds stage);
 
     signals:
         void activated(bool);
@@ -52,10 +43,11 @@ namespace EonTimer::Timer {
         void nextStageChanged(const std::chrono::milliseconds &nextStage);
 
     private:
-        TimerSettingsModel *timerSettings;
-        Action::ActionSettingsModel *actionSettings;
-        std::vector<std::chrono::microseconds> stages;
+        Settings *timerSettings;
+        Action::Settings *actionSettings;
+        std::vector<std::chrono::milliseconds> stages;
+        std::chrono::milliseconds totalDuration = 0ms;
+        std::atomic<bool> running = false;
         QThread *timerThread = nullptr;
-        bool running = false;
     };
 }  // namespace EonTimer::Timer

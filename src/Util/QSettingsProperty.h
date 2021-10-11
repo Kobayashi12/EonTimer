@@ -9,11 +9,11 @@
 
 namespace EonTimer::Util {
     struct QSettingsProperty {
-        const QString name;
-        const QVariant defaultValue;
-
         QSettingsProperty(QString name, QVariant defaultValue);
         [[nodiscard]] QVariant getValue(const QSettings &settings) const;
         void setValue(QSettings &settings, const QVariant& newValue);
+
+        const QString name;
+        const QVariant defaultValue;
     };
 }  // namespace EonTimer

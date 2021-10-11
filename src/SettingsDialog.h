@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <Action/ActionSettingsModel.h>
-#include <Action/ActionSettingsPane.h>
-#include <Timer/TimerSettingsModel.h>
-#include <Timer/TimerSettingsPane.h>
+#include <Action/Settings.h>
+#include <Action/SettingsPane.h>
+#include <Timer/Settings.h>
+#include <Timer/SettingsPane.h>
 
 #include <QDialog>
 
@@ -15,17 +15,11 @@ namespace EonTimer {
     class SettingsDialog : public QDialog {
         Q_OBJECT
     public:
-        explicit SettingsDialog(Timer::TimerSettingsModel *timerSettings,
-                                Action::ActionSettingsModel *actionSettings,
+        explicit SettingsDialog(Timer::Settings *timerSettings,
+                                Action::Settings *actionSettings,
                                 QWidget *parent = nullptr);
 
     private:
-        void initComponents();
-
-    private:
-        Timer::TimerSettingsModel *timerSettings;
-        Action::ActionSettingsModel *actionSettings;
-        Timer::TimerSettingsPane *timerSettingsPane;
-        Action::ActionSettingsPane *actionSettingsPane;
+        void initComponents(Timer::Settings *timerSettings, Action::Settings *actionSettings);
     };
 }  // namespace EonTimer

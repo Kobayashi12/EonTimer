@@ -38,39 +38,39 @@ set(SOURCES
         src/ApplicationWindow.h
         src/SettingsDialog.cpp
         src/SettingsDialog.h
-        src/Action/ActionSettingsPane.cpp
-        src/Action/ActionSettingsPane.h
-        src/Timer/TimerSettingsPane.cpp
-        src/Timer/TimerSettingsPane.h
+        src/Action/SettingsPane.cpp
+        src/Action/SettingsPane.h
+        src/Timer/SettingsPane.cpp
+        src/Timer/SettingsPane.h
         src/Timer/TimerDisplayPane.cpp
         src/Timer/TimerDisplayPane.h
-        src/Gen4/Gen4TimerPane.cpp
-        src/Gen4/Gen4TimerPane.h
+        src/Gen4/TimerPane.cpp
+        src/Gen4/TimerPane.h
         src/Util/FontHelper.cpp
         src/Util/FontHelper.h
         src/Util/WidgetHelper.h
-        src/Action/ActionMode.cpp
-        src/Action/ActionMode.h
+        src/Action/Mode.cpp
+        src/Action/Mode.h
         src/Timer/Console.cpp
         src/Timer/Console.h
         src/Action/Sound.cpp
         src/Action/Sound.h
         src/Timer/TimerState.cpp
         src/Timer/TimerState.h
-        src/services/CalibrationService.cpp
-        src/services/CalibrationService.h
-        src/Action/ActionSettingsModel.cpp
-        src/Action/ActionSettingsModel.h
-        src/Gen4/Gen4TimerModel.cpp
-        src/Gen4/Gen4TimerModel.h
-        src/Timer/TimerSettingsModel.cpp
-        src/Timer/TimerSettingsModel.h
+        src/Util/CalibrationService.cpp
+        src/Util/CalibrationService.h
+        src/Action/Settings.cpp
+        src/Action/Settings.h
+        src/Gen4/TimerModel.cpp
+        src/Gen4/TimerModel.h
+        src/Timer/Settings.cpp
+        src/Timer/Settings.h
         src/Action/SoundService.cpp
         src/Action/SoundService.h
-        src/services/timers/DelayTimer.cpp
-        src/services/timers/DelayTimer.h
-        src/services/timers/SecondTimer.cpp
-        src/services/timers/SecondTimer.h
+        src/Timer/Factory/DelayTimer.cpp
+        src/Timer/Factory/DelayTimer.h
+        src/Timer/Factory/SecondTimer.cpp
+        src/Timer/Factory/SecondTimer.h
         src/Timer/TimerService.cpp
         src/Timer/TimerService.h
         src/Util/instrumentation/Timer.cpp
@@ -79,23 +79,23 @@ set(SOURCES
         src/Util/Functions.h
         src/Timer/Clock.cpp
         src/Timer/Clock.h
-        src/Gen5/Gen5TimerPane.cpp
-        src/Gen5/Gen5TimerPane.h
-        src/Gen5/Gen5TimerModel.cpp
-        src/Gen5/Gen5TimerModel.h
-        src/Gen5/Gen5TimerMode.cpp
-        src/Gen5/Gen5TimerMode.h
-        src/services/timers/EntralinkTimer.cpp
-        src/services/timers/EntralinkTimer.h
-        src/services/timers/FrameTimer.cpp
-        src/services/timers/FrameTimer.h
-        src/services/timers/EnhancedEntralinkTimer.cpp
-        src/services/timers/EnhancedEntralinkTimer.h
+        src/Gen5/TimerPane.cpp
+        src/Gen5/TimerPane.h
+        src/Gen5/TimerModel.cpp
+        src/Gen5/TimerModel.h
+        src/Gen5/TimerMode.cpp
+        src/Gen5/TimerMode.h
+        src/Timer/Factory/EntralinkTimer.cpp
+        src/Timer/Factory/EntralinkTimer.h
+        src/Timer/Factory/FrameTimer.cpp
+        src/Timer/Factory/FrameTimer.h
+        src/Timer/Factory/EnhancedEntralinkTimer.cpp
+        src/Timer/Factory/EnhancedEntralinkTimer.h
         src/Util/FieldSet.h
-        src/Gen3/Gen3TimerModel.cpp
-        src/Gen3/Gen3TimerModel.h
-        src/Gen3/Gen3TimerPane.cpp
-        src/Gen3/Gen3TimerPane.h
+        src/Gen3/TimerModel.cpp
+        src/Gen3/TimerModel.h
+        src/Gen3/TimerPane.cpp
+        src/Gen3/TimerPane.h
         src/Util/QSettingsProperty.cpp
         src/Util/QSettingsProperty.h
         src/app.h.in

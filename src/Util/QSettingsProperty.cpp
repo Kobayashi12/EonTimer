@@ -10,11 +10,9 @@ namespace EonTimer::Util {
     QSettingsProperty::QSettingsProperty(QString name, QVariant defaultValue)
         : name(std::move(name)), defaultValue(std::move(defaultValue)) {}
 
-    [[nodiscard]] QVariant QSettingsProperty::getValue(const QSettings &settings) const {
-        return settings.value(name, defaultValue);
-    }
+    QVariant QSettingsProperty::getValue(const QSettings &settings) const { return settings.value(name, defaultValue); }
 
-    void QSettingsProperty::setValue(QSettings &settings, const QVariant &newValue) {
+    void QSettingsProperty::setValue(QSettings &settings, const QVariant& newValue) {
         settings.setValue(name, newValue);
     }
 }  // namespace EonTimer::Util

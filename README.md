@@ -2,7 +2,7 @@
 <img src="./docs/icon.svg" width="128"/>
 
 ### EonTimer
-A port of the Pokémon RNG Gen3TimerModel originally written by
+A port of the Pokémon RNG TimerModel originally written by
 [ToastPlusOne](https://bitbucket.org/ToastPlusOne/eontimer/downloads/).
 
 ![version](https://img.shields.io/badge/EonTimer-v2.0.1-blue.svg)

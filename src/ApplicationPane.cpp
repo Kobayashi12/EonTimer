@@ -3,14 +3,13 @@
 //
 
 #include "ApplicationPane.h"
-
-#include <SettingsDialog.h>
-
+#include "SettingsDialog.h"
 #include <QFontDatabase>
 #include <QPushButton>
 #include <utility>
 
 namespace EonTimer {
+    // TODO
     const u32 GEN5 = 0;
     const u32 GEN4 = 1;
     const u32 GEN3 = 2;
@@ -20,11 +19,11 @@ namespace EonTimer {
     }
 
     ApplicationPane::ApplicationPane(QSettings *settings,
-                                     Action::ActionSettingsModel *actionSettings,
-                                     Timer::TimerSettingsModel *timerSettings,
-                                     Gen5::Gen5TimerModel *gen5Timer,
-                                     Gen4::Gen4TimerModel *gen4Timer,
-                                     Gen3::Gen3TimerModel *gen3Timer,
+                                     Action::Settings *actionSettings,
+                                     Timer::Settings *timerSettings,
+                                     Gen5::TimerModel *gen5Timer,
+                                     Gen4::TimerModel *gen4Timer,
+                                     Gen3::TimerModel *gen3Timer,
                                      Timer::TimerService *timerService,
                                      QWidget *parent)
         : QWidget(parent),
@@ -32,34 +31,36 @@ namespace EonTimer {
           actionSettings(actionSettings),
           timerSettings(timerSettings),
           timerService(timerService) {
-        const auto *calibrationService = new EonTimer::CalibrationService(timerSettings);
-        const auto *secondTimer = new EonTimer::timer::SecondTimer();
-        const auto *frameTimer = new EonTimer::timer::FrameTimer(calibrationService);
-        const auto *delayTimer = new EonTimer::timer::DelayTimer(secondTimer, calibrationService);
-        const auto *entralinkTimer = new EonTimer::timer::EntralinkTimer(delayTimer);
-        const auto *enhancedEntralinkTimer = new EonTimer::timer::EnhancedEntralinkTimer(entralinkTimer);
+        const auto *calibrationService = new Util::CalibrationService(timerSettings);
+        const auto *secondTimer = new Timer::Factory::SecondTimer();
+        const auto *frameTimer = new Timer::Factory::FrameTimer(calibrationService);
+        const auto *delayTimer = new Timer::Factory::DelayTimer(secondTimer, calibrationService);
+        const auto *entralinkTimer = new Timer::Factory::EntralinkTimer(delayTimer);
+        const auto *enhancedEntralinkTimer = new Timer::Factory::EnhancedEntralinkTimer(entralinkTimer);
 
         timerDisplayPane = new Timer::TimerDisplayPane(timerService, actionSettings);
-        gen5TimerPane = new Gen5::Gen5TimerPane(gen5Timer,
-                                                delayTimer,
-                                                secondTimer,
-                                                entralinkTimer,
-                                                enhancedEntralinkTimer,
-                                                calibrationService);
-        gen4TimerPane = new Gen4::Gen4TimerPane(gen4Timer, delayTimer, calibrationService);
-        gen3TimerPane = new Gen3::Gen3TimerPane(gen3Timer, frameTimer, calibrationService);
+        gen5TimerPane = new Gen5::TimerPane(gen5Timer,
+                                            delayTimer,
+                                            secondTimer,
+                                            entralinkTimer,
+                                            enhancedEntralinkTimer,
+                                            calibrationService);
+        gen4TimerPane = new Gen4::TimerPane(gen4Timer, delayTimer, calibrationService);
+        gen3TimerPane = new Gen3::TimerPane(gen3Timer, frameTimer, calibrationService);
         connect(
             gen5TimerPane,
-            &Gen5::Gen5TimerPane::timerChanged,
-            [timerService](std::shared_ptr<std::vector<i32>> stages) { timerService->setStages(std::move(stages)); });
-        connect(
-            gen4TimerPane,
-            &Gen4::Gen4TimerPane::timerChanged,
-            [timerService](std::shared_ptr<std::vector<i32>> stages) { timerService->setStages(std::move(stages)); });
-        connect(
-            gen3TimerPane,
-            &Gen3::Gen3TimerPane::timerChanged,
-            [timerService](std::shared_ptr<std::vector<i32>> stages) { timerService->setStages(std::move(stages)); });
+            &Gen5::TimerPane::timerChanged,
+            [timerService](const std::vector<std::chrono::milliseconds> &stages) { timerService->setStages(stages); });
+        connect(gen4TimerPane,
+                &Gen4::TimerPane::timerChanged,
+                [timerService](std::vector<std::chrono::milliseconds> stages) {
+                    timerService->setStages(std::move(stages));
+                });
+        connect(gen3TimerPane,
+                &Gen3::TimerPane::timerChanged,
+                [timerService](std::vector<std::chrono::milliseconds> stages) {
+                    timerService->setStages(std::move(stages));
+                });
         initComponents();
     }
 
@@ -99,13 +100,10 @@ namespace EonTimer {
                 settingsBtn->setEnabled(!activated);
             });
             connect(settingsBtn, &QPushButton::clicked, [this] {
-                auto *settingsDialog = new SettingsDialog(timerSettings, actionSettings, this);
-                if (settingsDialog->exec() == QDialog::Accepted) {
-                    timerSettings->sync(settings);
-                    actionSettings->sync(settings);
+                SettingsDialog settingsDialog(timerSettings, actionSettings, this);
+                if (settingsDialog.exec() == QDialog::Accepted) {
                     updateTimer();
                 }
-                delete settingsDialog;
             });
             layout->addWidget(settingsBtn, 2, 0);
         }
@@ -139,7 +137,7 @@ namespace EonTimer {
     }
 
     void ApplicationPane::updateTimer() {
-        std::shared_ptr<std::vector<i32>> stages;
+        std::vector<std::chrono::milliseconds> stages;
         switch (getSelectedTab()) {
             case GEN5:
                 stages = gen5TimerPane->createStages();
@@ -151,8 +149,8 @@ namespace EonTimer {
                 stages = gen3TimerPane->createStages();
                 break;
             case CUSTOM:
-                stages = std::make_shared<std::vector<i32>>(1);
-                (*stages)[0] = 10000;
+                stages = std::vector<std::chrono::milliseconds>();
+                stages.emplace_back(10s);
                 break;
         }
         timerService->setStages(stages);

@@ -23,7 +23,7 @@ namespace EonTimer::Timer {
     }
 
     TimerDisplayPane::TimerDisplayPane(TimerService *timerService,
-                                       const Action::ActionSettingsModel *actionSettings,
+                                       const Action::Settings *actionSettings,
                                        QWidget *parent)
         : QGroupBox(parent), actionSettings(actionSettings) {
         currentStage = new QLabel("0:000");
@@ -31,7 +31,7 @@ namespace EonTimer::Timer {
         nextStage = new QLabel("0:000");
 
         setVisualCue(actionSettings->getColor());
-        connect(actionSettings, &Action::ActionSettingsModel::colorChanged, this, &TimerDisplayPane::setVisualCue);
+        connect(actionSettings, &Action::Settings::colorChanged, this, &TimerDisplayPane::setVisualCue);
         connect(timerService, &TimerService::stateChanged, [this](const TimerState &state) {
             currentStage->setText(formatTime(state.remaining));
         });

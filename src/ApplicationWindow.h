@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include <Action/ActionSettingsModel.h>
-#include <Gen3/Gen3TimerModel.h>
-#include <Gen4/Gen4TimerModel.h>
-#include <Gen5/Gen5TimerModel.h>
+#include <Action/Settings.h>
+#include <Gen3/TimerModel.h>
+#include <Gen4/TimerModel.h>
+#include <Gen5/TimerModel.h>
+#include <Timer/Settings.h>
 #include <Timer/TimerService.h>
-#include <Timer/TimerSettingsModel.h>
 
 #include <QMainWindow>
 #include <QSettings>
@@ -22,22 +22,13 @@ namespace EonTimer {
     public:
         explicit ApplicationWindow(QWidget *parent = nullptr);
 
+    signals:
+        void onClose();
+
     private:
         void initComponents();
 
     protected:
         void closeEvent(QCloseEvent *event) override;
-
-    private:
-        QSettings *settings;
-        Action::ActionSettingsModel *actionSettings;
-        Timer::TimerSettingsModel *timerSettings;
-        Gen5::Gen5TimerModel *gen5Timer;
-        Gen4::Gen4TimerModel *gen4Timer;
-        Gen3::Gen3TimerModel *gen3Timer;
-        Timer::TimerService *timerService;
-        ApplicationPane *applicationPane;
     };
 }  // namespace EonTimer
-
-#pragma once

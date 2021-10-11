@@ -4,13 +4,21 @@
 
 #include "Functions.h"
 
-namespace util::functions {
-    const int MINIMUM_LENGTH = 14000;
+namespace EonTimer::Util {
+    static std::chrono::minutes oneMinute() {
+        static const std::chrono::minutes oneMinute(1);
+        return oneMinute;
+    }
 
-    int toMinimumLength(const int value) {
-        int normalized = value;
-        while (normalized < MINIMUM_LENGTH) {
-            normalized += 60000;
+    static std::chrono::milliseconds minimumLength() {
+        static const std::chrono::milliseconds minimumLength(14000);
+        return minimumLength;
+    }
+
+    std::chrono::milliseconds toMinimumLength(const std::chrono::milliseconds value) {
+        std::chrono::milliseconds normalized = value;
+        while (normalized < minimumLength()) {
+            normalized += oneMinute();
         }
         return normalized;
     }
@@ -22,4 +30,4 @@ namespace util::functions {
             return tolower(c1) == tolower(c2);
         });
     }
-}  // namespace Util::functions
+}  // namespace EonTimer::Util

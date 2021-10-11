@@ -13,9 +13,7 @@ namespace EonTimer::Util {
     inline void addItems(QComboBox* comboBox, const std::vector<T>& items, std::function<QString(T)> textMapper) {
         comboBox->clear();
         for (auto item : items) {
-            const QString text = textMapper(item);
-            std::cout << text.toStdString() << std::endl;
-            comboBox->addItem(text, item);
+            comboBox->addItem(textMapper(item), item);
         }
     }
 

@@ -9,19 +9,17 @@
 #include <QVBoxLayout>
 
 namespace EonTimer {
-    SettingsDialog::SettingsDialog(Timer::TimerSettingsModel *timerSettings,
-                                   Action::ActionSettingsModel *actionSettings,
-                                   QWidget *parent)
-        : QDialog(parent), timerSettings(timerSettings), actionSettings(actionSettings) {
-        timerSettingsPane = new Timer::TimerSettingsPane(timerSettings);
-        actionSettingsPane = new Action::ActionSettingsPane(actionSettings);
-        initComponents();
+    SettingsDialog::SettingsDialog(Timer::Settings *timerSettings, Action::Settings *actionSettings, QWidget *parent)
+        : QDialog(parent) {
+        initComponents(timerSettings, actionSettings);
     }
 
-    void SettingsDialog::initComponents() {
+    void SettingsDialog::initComponents(Timer::Settings *timerSettings, Action::Settings *actionSettings) {
         setWindowTitle("Preferences");
         setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
         auto *layout = new QGridLayout(this);
+        auto *timerSettingsPane = new Timer::SettingsPane(timerSettings);
+        auto *actionSettingsPane = new Action::SettingsPane(actionSettings);
         layout->setVerticalSpacing(10);
         // ----- tabPane -----
         {
@@ -39,9 +37,9 @@ namespace EonTimer {
         // ----- okButton -----
         {
             auto *okButton = new QPushButton("OK");
-            connect(okButton, &QPushButton::clicked, [this] {
-                actionSettingsPane->updateSettings();
+            connect(okButton, &QPushButton::clicked, [this, timerSettingsPane, actionSettingsPane] {
                 timerSettingsPane->updateSettings();
+                actionSettingsPane->updateSettings();
                 done(QDialog::Accepted);
             });
             layout->addWidget(okButton, 1, 1);
