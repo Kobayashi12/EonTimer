@@ -1,0 +1,4 @@
+[submodule "src/Vendor/SFML"]
+	path = src/Vendor/SFML
+	url = https://github.com/dylmeadows/SFML
+	branch = 2.5.x

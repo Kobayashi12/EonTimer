@@ -29,6 +29,7 @@ namespace EonTimer::Action {
 
     signals:
         void colorChanged(const QColor &newValue);
+        void soundChanged(const EonTimer::Action::Sound newValue);
     public slots:
         void setMode(int newValue);
         void setSound(int newValue);

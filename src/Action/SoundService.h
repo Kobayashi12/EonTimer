@@ -4,10 +4,9 @@
 
 #pragma once
 
-#include <QObject>
-#include <SFML/Audio/Sound.hpp>
-
+#include "SFML/Audio/Sound.hpp"
 #include "Settings.h"
+#include <QObject>
 
 namespace EonTimer::Action {
     class SoundService : public QObject {
@@ -20,9 +19,6 @@ namespace EonTimer::Action {
 
     private:
         const Settings *actionSettings;
-        sf::Sound *mBeep;
-        sf::Sound *mDing;
-        sf::Sound *mTick;
-        sf::Sound *mPop;
+        sf::Sound *currentSound;
     };
 }  // namespace EonTimer::Action

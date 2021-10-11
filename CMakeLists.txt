@@ -26,9 +26,10 @@ if (WIN32)
     set(SFML_DIR "./SFML-2.5.1/lib/cmake/SFML")
 endif ()
 
+add_subdirectory(src/Vendor/SFML)
 set(CMAKE_PREFIX_PATH "/usr/local/opt/qt/lib/cmake")
 find_package(Qt5Widgets REQUIRED)
-find_package(SFML 2.5 COMPONENTS audio REQUIRED)
+#find_package(SFML 2.5 COMPONENTS audio REQUIRED)
 
 set(SOURCES
         resources/resources.qrc

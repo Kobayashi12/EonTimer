@@ -3,13 +3,12 @@
 //
 
 #include "SoundService.h"
-
+#include "SFML/Audio/SoundBuffer.hpp"
 #include <QResource>
-#include <SFML/Audio/SoundBuffer.hpp>
 
 namespace EonTimer::Action {
-    sf::Sound *loadSound(const QString &filename) {
-        QResource resource(filename);
+    static sf::Sound *loadSound(const QString &name) {
+        QResource resource(name);
         auto *sound = new sf::Sound();
         auto *buffer = new sf::SoundBuffer();
         buffer->loadFromMemory(resource.data(), static_cast<size_t>(resource.size()));
@@ -17,31 +16,26 @@ namespace EonTimer::Action {
         return sound;
     }
 
+    static sf::Sound *getSound(const Sound sound) {
+        static const std::map<Sound, sf::Sound *> sounds{{BEEP, loadSound(":/sounds/beep.wav")},
+                                                         {DING, loadSound(":/sounds/ding.wav")},
+                                                         {TICK, loadSound(":/sounds/tick.wav")},
+                                                         {POP, loadSound(":/sounds/pop.wav")}};
+        return sounds.find(sound)->second;
+    }
+
     SoundService::SoundService(const Settings *actionSettings, QObject *parent)
         : QObject(parent), actionSettings(actionSettings) {
-        mBeep = loadSound(":/sounds/beep.wav");
-        mDing = loadSound(":/sounds/ding.wav");
-        mTick = loadSound(":/sounds/tick.wav");
-        mPop = loadSound(":/sounds/pop.wav");
+        currentSound = getSound(actionSettings->getSound());
+        connect(actionSettings, &Settings::soundChanged, [this](const Sound newValue) {
+            currentSound = getSound(newValue);
+        });
     }
 
     void SoundService::play() {
         const auto mode = actionSettings->getMode();
         if (mode == AUDIO || mode == AV) {
-            switch (actionSettings->getSound()) {
-                case BEEP:
-                    mBeep->play();
-                    break;
-                case DING:
-                    mDing->play();
-                    break;
-                case TICK:
-                    mTick->play();
-                    break;
-                case POP:
-                    mPop->play();
-                    break;
-            }
+            currentSound->play();
         }
     }
 }  // namespace EonTimer::Action
