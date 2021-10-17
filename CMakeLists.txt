@@ -17,19 +17,12 @@ include_directories(${CMAKE_BINARY_DIR}/generated)
 if (UNIX AND NOT APPLE)
     message("-- Linux build detected")
     set(Qt5Widgets_DIR "/opt/qt514/lib/cmake/Qt5Widgets")
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};/usr/share/SFML/cmake/Modules")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-endif ()
-
-if (WIN32)
-    message("-- Windows build detected")
-    set(SFML_DIR "./SFML-2.5.1/lib/cmake/SFML")
 endif ()
 
 add_subdirectory(src/Vendor/SFML)
 set(CMAKE_PREFIX_PATH "/usr/local/opt/qt/lib/cmake")
 find_package(Qt5Widgets REQUIRED)
-#find_package(SFML 2.5 COMPONENTS audio REQUIRED)
 
 set(SOURCES
         resources/resources.qrc
