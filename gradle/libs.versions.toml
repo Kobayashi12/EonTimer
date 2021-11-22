@@ -1,0 +1,22 @@
+[versions]
+kotlin = "1.6.0"
+kotlinCoroutines = "1.5.2"
+springBoot = "2.5.6"
+ktlint = "10.2.0"
+jenny = "1.2.0"
+
+[libraries]
+kotlinCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+kotlinCoroutinesJavaFx = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-javafx", version.ref = "kotlinCoroutines" }
+jennyAnnotations = { module = "io.github.landerlyoung:jenny-annotation", version.ref = "jenny" }
+jennyCompiler = { module = "io.github.landerlyoung:jenny-compiler", version.ref = "jenny" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlinSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
+springDependencyManagement = { id = "io.spring.dependency-management", version = "1.0.11.RELEASE" }
+openjfx = { id = "org.openjfx.javafxplugin", version = "0.0.10" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+ktlintIdea = { id = "org.jlleitschuh.gradle.ktlint-idea", version.ref = "ktlint" }

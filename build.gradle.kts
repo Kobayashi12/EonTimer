@@ -1,14 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("jvm") version "1.5.30"
-    kotlin("kapt") version "1.5.30"
-    kotlin("plugin.spring") version "1.5.30"
-    id("org.springframework.boot") version "2.5.4"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("org.openjfx.javafxplugin") version "0.0.10"
-    id("org.jlleitschuh.gradle.ktlint") version "8.2.0"
-    id("org.jlleitschuh.gradle.ktlint-idea") version "8.2.0"
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.kotlinSpring)
+    alias(libs.plugins.springBoot)
+    alias(libs.plugins.springDependencyManagement)
+    alias(libs.plugins.openjfx)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.ktlintIdea)
     id("application")
     id("java")
     id("idea")
@@ -16,6 +17,12 @@ plugins {
 
 group = "io.github.dylmeadows"
 version = "2.0.1"
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
 
 javafx {
     version = "11.0.2"
@@ -29,7 +36,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":eon-timer-audio"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.5.2")
+    implementation(libs.kotlinCoroutinesJavaFx)
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     kapt("org.springframework.boot:spring-boot-autoconfigure-processor")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

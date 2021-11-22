@@ -10,9 +10,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
-    compileOnly("io.github.landerlyoung:jenny-annotation:1.2.0")
-    kapt("io.github.landerlyoung:jenny-compiler:1.2.0")
+    implementation(libs.kotlinCoroutinesCore)
+    compileOnly(libs.jennyAnnotations)
+    kapt(libs.jennyCompiler)
 }
 
 tasks.create<Copy>("copyJniGenerated") {
