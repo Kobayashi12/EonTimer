@@ -2,7 +2,7 @@
 // Created by Dylan Meadows on 2020-03-10.
 //
 
-#include "TimerService.h"
+#include "ChronoEngine.h"
 
 #include <util/Clock.h>
 #include <util/Functions.h>
@@ -18,65 +18,54 @@ using namespace std::literals::chrono_literals;
 constexpr CStr UPDATE = "update";
 
 namespace service {
-    TimerService::TimerService(model::settings::TimerSettingsModel *timerSettings,
-                               model::settings::ActionSettingsModel *actionSettings,
-                               QObject *parent)
-        : QObject(parent),
-          running(false),
-          timerThread(nullptr),
-          timerSettings(timerSettings),
-          actionSettings(actionSettings) {
-        auto *sounds = new SoundService(actionSettings, this);
-        connect(this, &TimerService::actionTriggered, [sounds] { sounds->play(); });
+    ChronoEngine::ChronoEngine(QObject *parent) : QObject(parent),
+                                                  running(false),
+                                                  timerThread(nullptr) {
+        /*auto *sounds = new SoundService(actionSettings, this);
+        connect(this, &ChronoEngine::actionTriggered, [sounds] { sounds->play(); });*/
     }
 
-    TimerService::~TimerService() {
+    ChronoEngine::~ChronoEngine() {
         if (running) {
-            running = false;
             timerThread->quit();
             timerThread->wait();
+            delete timerThread;
         }
     }
 
-    void TimerService::setStages(std::shared_ptr<std::vector<Microseconds>> stages) {
-        if (!running) {
-            this->stages = std::move(stages);
-            reset();
-        }
-    }
-
-    void TimerService::start() {
+    void ChronoEngine::run() {
         if (!running) {
             running = true;
             util::Clock clock;
-            timerThread = QThread::create(&TimerService::run, this, clock);
+            timerThread = QThread::create(&ChronoEngine::runStages, this, clock);
             timerThread->start();
             emit activated(true);
         }
     }
 
-    void TimerService::stop() {
+    void ChronoEngine::stop() {
         if (running) {
             running = false;
             timerThread->quit();
             timerThread->wait();
+            delete timerThread;
+            timerThread = nullptr;
             emit activated(false);
-            reset();
         }
     }
 
-    void TimerService::reset() {
-        auto totalTime = 0us;
-        for (Microseconds stage : (*stages)) {
-            totalTime += stage;
-        }
-        const auto currentStage = (*stages)[0];
-        emit stateChanged(0us, currentStage);
-        emit minutesBeforeTargetChanged(MINUTES(totalTime));
-        emit nextStageChanged(stages->size() >= 2 ? MILLIS((*stages)[1]) : 0ms);
-    }
+    //    void ChronoEngine::reset() {
+    //        auto totalTime = 0us;
+    //        for (Microseconds stage : (*stages)) {
+    //            totalTime += stage;
+    //        }
+    //        const auto currentStage = (*stages)[0];
+    //        emit stateChanged(0us, currentStage);
+    //        emit minutesBeforeTargetChanged(MINUTES(totalTime));
+    //        emit nextStageChanged(stages->size() >= 2 ? MILLIS((*stages)[1]) : 0ms);
+    //    }
 
-    void TimerService::run(util::Clock &clock) {
+    void ChronoEngine::runStages(std::shared_ptr<std::vector<Microseconds>> stages, util::Clock &clock) {
         // create checkpoint for "update"
         clock.checkpoint(UPDATE);
         // initialize required variables
@@ -87,17 +76,14 @@ namespace service {
         // run stages while engine is running
         while (running) {
             auto currentStage = (*stages)[stageIndex];
-            elapsed += runStage(clock, currentStage);
+            elapsed += runStage(currentStage, clock);
             if (stageIndex + 1 >= stagesSize) break;
             stageIndex++;
         }
-
-        running = false;
-        emit activated(false);
-        reset();
+        stop();
     }
 
-    Microseconds TimerService::runStage(util::Clock &clock, const Microseconds &stage) {
+    Microseconds ChronoEngine::runStage(const Microseconds &stage, util::Clock &clock) {
         // set up variables
         const auto period = MICROS(timerSettings->getRefreshInterval());
         // set up scheduled actions
@@ -144,5 +130,5 @@ namespace service {
         return elapsed;
     }
 
-    bool TimerService::isRunning() const { return running; }
+    bool ChronoEngine::isRunning() const { return timerThread != nullptr; }
 }  // namespace service

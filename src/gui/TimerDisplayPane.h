@@ -5,7 +5,7 @@
 #ifndef EONTIMER_TIMERDISPLAYPANE_H
 #define EONTIMER_TIMERDISPLAYPANE_H
 
-#include <services/TimerService.h>
+#include <services/ChronoEngine.h>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -14,7 +14,7 @@
 namespace gui {
     class TimerDisplayPane : public QGroupBox {
     public:
-        TimerDisplayPane(service::TimerService *timerService,
+        TimerDisplayPane(service::ChronoEngine *timerService,
                          const model::settings::ActionSettingsModel *actionSettings);
 
     private:

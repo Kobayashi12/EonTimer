@@ -5,46 +5,29 @@
 #include "SoundService.h"
 
 #include <QResource>
-#include <SFML/Audio/SoundBuffer.hpp>
 
 namespace service {
-
-    static sf::Sound *loadSound(const char *filename);
-
     SoundService::SoundService(const model::settings::ActionSettingsModel *actionSettings, QObject *parent)
         : QObject(parent), actionSettings(actionSettings) {
-        mBeep = loadSound(":/sounds/beep.wav");
-        mDing = loadSound(":/sounds/ding.wav");
-        mTick = loadSound(":/sounds/tick.wav");
-        mPop = loadSound(":/sounds/pop.wav");
+        soundEffects[model::Sound::BEEP] = loadSound(":/sounds/beep.wav");
+        soundEffects[model::Sound::DING] = loadSound(":/sounds/ding.wav");
+        soundEffects[model::Sound::TICK] = loadSound(":/sounds/tick.wav");
+        soundEffects[model::Sound::POP] = loadSound(":/sounds/pop.wav");
     }
 
     void SoundService::play() {
         const auto mode = actionSettings->getMode();
         if (mode == model::ActionMode::AUDIO || mode == model::ActionMode::AV) {
-            switch (actionSettings->getSound()) {
-                case model::Sound::BEEP:
-                    mBeep->play();
-                    break;
-                case model::Sound::DING:
-                    mDing->play();
-                    break;
-                case model::Sound::TICK:
-                    mTick->play();
-                    break;
-                case model::Sound::POP:
-                    mPop->play();
-                    break;
+            auto sound = soundEffects.find(actionSettings->getSound());
+            if (sound != soundEffects.end()) {
+                sound->second->play();
             }
         }
     }
 
-    sf::Sound *loadSound(const char *filename) {
-        QResource resource(filename);
-        auto *sound = new sf::Sound();
-        auto *buffer = new sf::SoundBuffer();
-        buffer->loadFromMemory(resource.data(), static_cast<size_t>(resource.size()));
-        sound->setBuffer(*buffer);
+    QSoundEffect *SoundService::loadSound(const char *filename) {
+        auto *sound = new QSoundEffect(this);
+        sound->setSource(QUrl(filename));
         return sound;
     }
 }  // namespace service

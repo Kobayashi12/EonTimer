@@ -10,12 +10,12 @@
 #include <QVBoxLayout>
 
 namespace gui {
-    TimerDisplayPane::TimerDisplayPane(service::TimerService *timerService,
+    TimerDisplayPane::TimerDisplayPane(service::ChronoEngine *timerService,
                                        const model::settings::ActionSettingsModel *actionSettings)
         : QGroupBox(nullptr), actionSettings(actionSettings) {
         currentStage = new QLabel("0:000");
         setVisualCue(actionSettings->getColor());
-        connect(timerService, &service::TimerService::stateChanged, [this](const model::TimerState &state) {
+        connect(timerService, &service::ChronoEngine::stateChanged, [this](const model::TimerState &state) {
             currentStage->setText(formatTime(state.remaining));
         });
         connect(actionSettings, &model::settings::ActionSettingsModel::colorChanged, [this](const QColor &color) {
@@ -23,16 +23,16 @@ namespace gui {
         });
         minutesBeforeTarget = new QLabel("0");
         connect(timerService,
-                &service::TimerService::minutesBeforeTargetChanged,
+                &service::ChronoEngine::minutesBeforeTargetChanged,
                 [this](const std::chrono::minutes &minutesBeforeTarget) {
                     this->minutesBeforeTarget->setText(QString::number(minutesBeforeTarget.count()));
                 });
         nextStage = new QLabel("0:000");
         connect(
             timerService,
-            &service::TimerService::nextStageChanged,
+            &service::ChronoEngine::nextStageChanged,
             [this](const std::chrono::milliseconds &nextStage) { this->nextStage->setText(formatTime(nextStage)); });
-        connect(timerService, &service::TimerService::actionTriggered, this, &TimerDisplayPane::activate);
+        connect(timerService, &service::ChronoEngine::actionTriggered, this, &TimerDisplayPane::activate);
         connect(&timer, &QTimer::timeout, this, &TimerDisplayPane::deactivate);
         initComponents();
     }

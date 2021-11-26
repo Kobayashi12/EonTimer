@@ -10,7 +10,7 @@
 #include <models/timers/Gen3TimerModel.h>
 #include <models/timers/Gen4TimerModel.h>
 #include <models/timers/Gen5TimerModel.h>
-#include <services/TimerService.h>
+#include <services/ChronoEngine.h>
 
 #include <QMainWindow>
 #include <QSettings>
@@ -27,7 +27,7 @@ namespace gui {
         model::timer::Gen5TimerModel *gen5Timer;
         model::timer::Gen4TimerModel *gen4Timer;
         model::timer::Gen3TimerModel *gen3Timer;
-        service::TimerService *timerService;
+        service::ChronoEngine *timerService;
         ApplicationPane *applicationPane;
 
     public:

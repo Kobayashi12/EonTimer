@@ -7,6 +7,7 @@
 
 #include <models/ActionMode.h>
 #include <models/Sound.h>
+#include <util/Types.h>
 
 #include <QSettings>
 #include <QtGui/QColor>
@@ -19,7 +20,7 @@ namespace model::settings {
         model::ActionMode mode;
         model::Sound sound;
         QColor color;
-        unsigned int interval;
+        Microseconds interval;
         unsigned int count;
 
     public:
@@ -39,9 +40,9 @@ namespace model::settings {
 
         void setColor(const QColor &color);
 
-        unsigned int getInterval() const;
+        Microseconds getInterval() const;
 
-        void setInterval(unsigned int interval);
+        void setInterval(Microseconds interval);
 
         unsigned getCount() const;
 

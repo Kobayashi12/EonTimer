@@ -2,8 +2,8 @@
 // Created by Dylan Meadows on 2020-03-10.
 //
 
-#ifndef EONTIMER_TIMERSERVICE_H
-#define EONTIMER_TIMERSERVICE_H
+#ifndef EONTIMER_CHRONOENGINE_H
+#define EONTIMER_CHRONOENGINE_H
 
 #include <models/TimerState.h>
 #include <models/settings/ActionSettingsModel.h>
@@ -17,37 +17,27 @@
 #include <vector>
 
 namespace service {
-    class TimerService : public QObject {
+    class ChronoEngine : public QObject {
         Q_OBJECT
     private:
         bool running;
         QThread *timerThread;
-        std::shared_ptr<std::vector<Microseconds>> stages;
-        model::settings::TimerSettingsModel *timerSettings;
-        model::settings::ActionSettingsModel *actionSettings;
 
     public:
-        explicit TimerService(model::settings::TimerSettingsModel *timerSettings,
-                              model::settings::ActionSettingsModel *actionSettings,
-                              QObject *parent = nullptr);
+        explicit ChronoEngine(QObject *parent = nullptr);
 
-        ~TimerService() override;
+        ~ChronoEngine() override;
 
-        [[nodiscard]] bool isRunning() const;
-
-        void setStages(std::shared_ptr<std::vector<Microseconds>> stages);
-
-        void start();
+        void run();
 
         void stop();
 
+        [[nodiscard]] bool isRunning() const;
+
     private:
-        void reset();
+        void runStages(std::shared_ptr<std::vector<Microseconds>> stages, util::Clock &clock);
 
-        void run(util::Clock &clock);
-
-        Microseconds runStage(util::Clock &clock,
-                              const Microseconds &stage);
+        Microseconds runStage(const Microseconds &stage, util::Clock &clock);
 
         // @formatter:off
     signals:
@@ -57,7 +47,12 @@ namespace service {
         void minutesBeforeTargetChanged(const Minutes &minutesBeforeTarget);
         void nextStageChanged(const Microseconds &nextStage);
         // @formatter:on
+
+    private:
+        class ChronoThread : public QThread {
+
+        };
     };
 }  // namespace service
 
-#endif  // EONTIMER_TIMERSERVICE_H
+#endif  // EONTIMER_CHRONOENGINE_H

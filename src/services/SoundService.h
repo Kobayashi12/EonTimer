@@ -8,21 +8,20 @@
 #include <models/settings/ActionSettingsModel.h>
 
 #include <QObject>
-#include <SFML/Audio/Sound.hpp>
+#include <QSoundEffect>
 
 namespace service {
     class SoundService : public QObject {
         Q_OBJECT
     private:
+        std::map<model::Sound, QSoundEffect *> soundEffects;
         const model::settings::ActionSettingsModel *actionSettings;
-        sf::Sound *mBeep;
-        sf::Sound *mDing;
-        sf::Sound *mTick;
-        sf::Sound *mPop;
 
     public:
         explicit SoundService(const model::settings::ActionSettingsModel *actionSettings, QObject *parent = nullptr);
 
+    private:
+        QSoundEffect *loadSound(const char *filename);
         // @formatter:off
     public slots:
         void play();

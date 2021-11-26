@@ -7,7 +7,7 @@
 
 #include <models/settings/ActionSettingsModel.h>
 #include <models/settings/TimerSettingsModel.h>
-#include <services/TimerService.h>
+#include <services/ChronoEngine.h>
 
 #include <QSettings>
 #include <QWidget>
@@ -24,7 +24,7 @@ namespace gui {
         QSettings *settings;
         model::settings::ActionSettingsModel *actionSettings;
         model::settings::TimerSettingsModel *timerSettings;
-        service::TimerService *timerService;
+        service::ChronoEngine *timerService;
         TimerDisplayPane *timerDisplayPane;
         timer::Gen5TimerPane *gen5TimerPane;
         timer::Gen4TimerPane *gen4TimerPane;
@@ -37,7 +37,7 @@ namespace gui {
                         model::timer::Gen5TimerModel *gen5Timer,
                         model::timer::Gen4TimerModel *gen4Timer,
                         model::timer::Gen3TimerModel *gen3Timer,
-                        service::TimerService *timerService,
+                        service::ChronoEngine *timerService,
                         QWidget *parent = nullptr);
 
     private:

@@ -4,17 +4,25 @@
 
 #include "Clock.h"
 
-#include <iostream>
-
 namespace util {
-    Clock::Clock() { lastTick = std::chrono::high_resolution_clock::now(); }
+    Clock::Clock() : init(NOW) { lastTick = init; }
 
-    std::chrono::microseconds Clock::tick() {
-        const auto now = std::chrono::high_resolution_clock::now();
-        const auto lastTick =
-            std::chrono::time_point_cast<std::chrono::microseconds>(this->lastTick).time_since_epoch();
-        const auto currentTick = std::chrono::time_point_cast<std::chrono::microseconds>(now).time_since_epoch();
-        this->lastTick = now;
-        return std::chrono::duration_cast<std::chrono::microseconds>(currentTick - lastTick);
+    Microseconds Clock::tick() {
+        const auto now = NOW;
+        const auto elapsed = ELAPSED(Microseconds, lastTick, now);
+        lastTick = now;
+        return elapsed;
+    }
+
+    Microseconds Clock::sinceInit() const { return sinceInit(NOW); }
+    Microseconds Clock::sinceInit(const Instant& instant) const { return ELAPSED(Microseconds, init, instant); }
+
+    Microseconds Clock::sinceLastTick() const { return sinceLastTick(NOW); }
+    Microseconds Clock::sinceLastTick(const Instant& instant) const { return ELAPSED(Microseconds, lastTick, instant); }
+
+    void Clock::checkpoint(CStr checkpoint) { checkpoints[checkpoint] = NOW; }
+    Microseconds Clock::sinceCheckpoint(CStr checkpoint) const { return sinceCheckpoint(checkpoint, NOW); }
+    Microseconds Clock::sinceCheckpoint(CStr checkpoint, const Instant& instant) const {
+        return ELAPSED(Microseconds, checkpoints.find(checkpoint)->second, instant);
     }
 }  // namespace util

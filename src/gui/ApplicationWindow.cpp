@@ -35,7 +35,7 @@ namespace gui {
         gen5Timer = new model::timer::Gen5TimerModel(settings);
         gen4Timer = new model::timer::Gen4TimerModel(settings);
         gen3Timer = new model::timer::Gen3TimerModel(settings);
-        timerService = new service::TimerService(timerSettings, actionSettings, this);
+        timerService = new service::ChronoEngine(timerSettings, actionSettings, this);
         applicationPane = new ApplicationPane(settings,
                                               actionSettings,
                                               timerSettings,
@@ -78,7 +78,7 @@ namespace gui {
                     auto dialog = gui::dialog::SettingsDialog(timerSettings, actionSettings, this);
                     dialog.exec();
                 });
-                connect(timerService, &service::TimerService::activated, [preferences](const bool activated) {
+                connect(timerService, &service::ChronoEngine::activated, [preferences](const bool activated) {
                     preferences->setEnabled(!activated);
                 });
                 menu->addAction(preferences);

@@ -24,7 +24,7 @@ namespace gui {
                                      model::timer::Gen5TimerModel *gen5Timer,
                                      model::timer::Gen4TimerModel *gen4Timer,
                                      model::timer::Gen3TimerModel *gen3Timer,
-                                     service::TimerService *timerService,
+                                     service::ChronoEngine *timerService,
                                      QWidget *parent)
         : QWidget(parent),
           settings(settings),
@@ -73,7 +73,7 @@ namespace gui {
         {
             auto *tabPane = new QTabWidget();
             tabPane->setProperty("class", "themeable-panel themeable-border");
-            connect(timerService, &service::TimerService::activated, [tabPane](const bool activated) {
+            connect(timerService, &service::ChronoEngine::activated, [tabPane](const bool activated) {
                 tabPane->setEnabled(!activated);
             });
             connect(tabPane, &QTabWidget::currentChanged, [this](const int index) { setSelectedTab((uint) index); });
@@ -91,7 +91,7 @@ namespace gui {
             const auto family = QFontDatabase::applicationFontFamilies(id)[0];
             settingsBtn->setFont(QFont(family));
             settingsBtn->setText(QChar(0xf013));
-            connect(timerService, &service::TimerService::activated, [settingsBtn](const bool activated) {
+            connect(timerService, &service::ChronoEngine::activated, [settingsBtn](const bool activated) {
                 settingsBtn->setEnabled(!activated);
             });
             connect(settingsBtn, &QPushButton::clicked, [this] {
@@ -109,7 +109,7 @@ namespace gui {
         {
             auto *updateBtn = new QPushButton("Update");
             connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(onUpdate()));
-            connect(timerService, &service::TimerService::activated, [updateBtn](const bool activated) {
+            connect(timerService, &service::ChronoEngine::activated, [updateBtn](const bool activated) {
                 updateBtn->setEnabled(!activated);
             });
             layout->addWidget(updateBtn, 2, 1);
@@ -118,12 +118,12 @@ namespace gui {
         // ----- startStopBtn -----
         {
             auto *startStopBtn = new QPushButton("Start");
-            connect(timerService, &service::TimerService::activated, [startStopBtn](const bool activated) {
+            connect(timerService, &service::ChronoEngine::activated, [startStopBtn](const bool activated) {
                 startStopBtn->setText(activated ? "Stop" : "Start");
             });
             connect(startStopBtn, &QPushButton::clicked, [this] {
                 if (!timerService->isRunning()) {
-                    timerService->start();
+                    timerService->run();
                 } else {
                     timerService->stop();
                 }

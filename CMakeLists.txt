@@ -18,11 +18,8 @@ if (UNIX AND NOT APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 endif ()
 
-message("--- CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}")
-
-include("${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
 find_package(Qt5Widgets CONFIG REQUIRED)
-find_package(SFML COMPONENTS audio CONFIG REQUIRED)
+find_package(Qt5Multimedia CONFIG REQUIRED)
 
 set(SOURCES
     resources/resources.qrc
@@ -65,8 +62,8 @@ set(SOURCES
     src/services/timers/DelayTimer.h
     src/services/timers/SecondTimer.cpp
     src/services/timers/SecondTimer.h
-    src/services/TimerService.cpp
-    src/services/TimerService.h
+    src/services/ChronoEngine.cpp
+    src/services/ChronoEngine.h
     src/util/instrumentation/Timer.cpp
     src/util/instrumentation/Timer.h
     src/util/Functions.cpp
@@ -92,7 +89,18 @@ set(SOURCES
     src/gui/timers/Gen3TimerPane.h
     src/app.h.in
     src/main.cpp
-)
+    )
+
+set(LIBRARIES
+    Qt::Widgets
+    Qt5::Widgets
+    Qt::WidgetsPrivate
+    Qt5::WidgetsPrivate
+    Qt::Multimedia
+    Qt5::Multimedia
+    Qt5::CoreAudioPlugin
+    Qt5::AVFServicePlugin
+    )
 
 if (APPLE)
     add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
@@ -101,4 +109,4 @@ else ()
     add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 endif ()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt5::Widgets Qt::WidgetsPrivate Qt5::WidgetsPrivate sfml-audio)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBRARIES})

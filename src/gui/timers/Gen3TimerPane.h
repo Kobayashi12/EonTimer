@@ -7,7 +7,7 @@
 
 #include <models/timers/Gen3TimerModel.h>
 #include <services/CalibrationService.h>
-#include <services/TimerService.h>
+#include <services/ChronoEngine.h>
 #include <services/timers/FrameTimer.h>
 
 #include <QSpinBox>

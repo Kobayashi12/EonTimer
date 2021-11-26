@@ -6,16 +6,31 @@
 #define EONTIMER_CLOCK_H
 
 #include <chrono>
+#include <map>
+#include <string>
+#include "Types.h"
 
 namespace util {
     class Clock {
     public:
         Clock();
 
-        std::chrono::microseconds tick();
+        Microseconds tick();
+
+        [[nodiscard]] Microseconds sinceInit() const;
+        [[nodiscard]] Microseconds sinceInit(const Instant &instant) const;
+
+        [[nodiscard]] Microseconds sinceLastTick() const;
+        [[nodiscard]] Microseconds sinceLastTick(const Instant &instant) const;
+
+        void checkpoint(CStr checkpoint);
+        [[nodiscard]] Microseconds sinceCheckpoint(CStr checkpoint) const;
+        [[nodiscard]] Microseconds sinceCheckpoint(CStr checkpoint, const Instant &instant) const;
 
     private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> lastTick;
+        Instant lastTick;
+        const Instant init;
+        std::map<CStr, Instant> checkpoints;
     };
 }  // namespace util
 

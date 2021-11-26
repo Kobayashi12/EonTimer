@@ -30,7 +30,7 @@ namespace model::settings {
         sound =
             model::sound(settings->value(ActionSettingsFields::SOUND, ActionSettingsFields::Defaults::SOUND).toUInt());
         color = settings->value(ActionSettingsFields::COLOR, ActionSettingsFields::Defaults::COLOR).value<QColor>();
-        interval = settings->value(ActionSettingsFields::INTERVAL, ActionSettingsFields::Defaults::INTERVAL).toUInt();
+        interval = MICROS(settings->value(ActionSettingsFields::INTERVAL, ActionSettingsFields::Defaults::INTERVAL).toUInt());
         count = settings->value(ActionSettingsFields::COUNT, ActionSettingsFields::Defaults::COUNT).toUInt();
         settings->endGroup();
     }
@@ -39,7 +39,7 @@ namespace model::settings {
         settings->beginGroup(ActionSettingsFields::GROUP);
         settings->setValue(ActionSettingsFields::MODE, model::indexOf(mode));
         settings->setValue(ActionSettingsFields::SOUND, model::indexOf(sound));
-        settings->setValue(ActionSettingsFields::INTERVAL, interval);
+        settings->setValue(ActionSettingsFields::INTERVAL, interval.count());
         settings->setValue(ActionSettingsFields::COUNT, count);
         settings->setValue(ActionSettingsFields::COLOR, color);
         settings->endGroup();
@@ -62,9 +62,9 @@ namespace model::settings {
         }
     }
 
-    unsigned int ActionSettingsModel::getInterval() const { return interval; }
+    Microseconds ActionSettingsModel::getInterval() const { return interval; }
 
-    void ActionSettingsModel::setInterval(const unsigned int interval) { this->interval = interval; }
+    void ActionSettingsModel::setInterval(const Microseconds interval) { this->interval = interval; }
 
     unsigned int ActionSettingsModel::getCount() const { return count; }
 
