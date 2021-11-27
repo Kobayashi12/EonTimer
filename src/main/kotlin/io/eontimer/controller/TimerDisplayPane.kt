@@ -1,7 +1,7 @@
 package io.eontimer.controller
 
 import io.eontimer.model.TimerState
-import io.eontimer.model.settings.ActionSettings
+import io.eontimer.action.Settings
 import io.eontimer.service.action.TimerActionService
 import io.eontimer.util.INDEFINITE
 import io.eontimer.util.javafx.isActive
@@ -24,7 +24,7 @@ import java.time.Duration
 class TimerDisplayPane(
     private val timerState: TimerState,
     private val timerActionService: TimerActionService,
-    private val actionSettingsModel: ActionSettings,
+    private val actionSettingsModel: Settings,
     private val coroutineScope: CoroutineScope
 ) {
     // @formatter:off
@@ -49,10 +49,10 @@ class TimerDisplayPane(
 
             timerState.nextStageProperty.asFlow()
                 .collect { nextStageLbl.text = formatTime(it) }
-            timerActionService.activeProperty.asFlow()
+            timerActionService.active.asFlow()
                 .collect { currentStageLbl.isActive = it }
 
-            actionSettingsModel.colorProperty.asFlow()
+            actionSettingsModel.color.asFlow()
                 .collect {
                     currentStageLbl.style = "-theme-active: ${it.toHex()}"
                 }

@@ -1,8 +1,8 @@
-package io.eontimer.model.settings
+package io.eontimer.action
 
 import io.eontimer.util.javafx.Choice
 
-enum class ActionMode(
+enum class Mode(
     override val displayName: String
 ): Choice {
     AUDIO("Audio"),

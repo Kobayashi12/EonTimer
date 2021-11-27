@@ -1,24 +1,22 @@
 package io.eontimer.gen4
 
 import io.eontimer.model.TimerState
-import io.eontimer.util.javafx.asChoiceField
 import io.eontimer.util.javafx.bindBidirectional
 import io.eontimer.util.javafx.spinner.LongValueFactory
 import io.eontimer.util.javafx.spinner.setOnFocusLost
 import io.eontimer.util.javafx.spinner.text
 import io.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
-import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Spinner
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.springframework.stereotype.Component
 
-@Component
+@Component("gen4Controller")
 @ExperimentalCoroutinesApi
-class Gen4TimerPane(
-    private val model: Gen4Timer,
+class Controller(
+    private val model: Model,
     private val timerState: TimerState,
-    private val timerFactory: Gen4TimerFactory
+    private val timerFactory: TimerFactory
 ) {
     // @formatter:off
     @FXML private lateinit var targetDelayField: Spinner<Long>

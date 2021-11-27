@@ -13,8 +13,9 @@ class EonTimerPane(
     private val settingsDialog: SettingsDialog,
     private val timerState: TimerState
 ) {
-    @FXML
-    private lateinit var settingsBtn: Button
+    // @formatter:off
+    @FXML private lateinit var settingsBtn: Button
+    // @formatter:on
 
     fun initialize() {
         settingsBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.GEAR)

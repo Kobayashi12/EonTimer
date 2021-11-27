@@ -2,7 +2,7 @@ package io.eontimer.service.factory
 
 import io.eontimer.model.ApplicationModel
 import io.eontimer.model.TimerState
-import io.eontimer.model.settings.TimerSettings
+import io.eontimer.timer.Settings
 import io.eontimer.model.timer.TimerType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +22,7 @@ class TimerFactoryService(
     private val gen5TimerFactory: TimerFactory,
     private val customTimerFactory: TimerFactory,
     private val applicationModel: ApplicationModel,
-    private val timerSettings: TimerSettings,
+    private val timerSettings: Settings,
     private val coroutineScope: CoroutineScope
 ) {
     val stages: List<Duration> get() = timerFactory.stages
@@ -34,8 +34,8 @@ class TimerFactoryService(
             applicationModel.selectedTimerTypeProperty.asFlow()
                 .collect { timerState.update(it.timerFactory.stages) }
             listOf(
-                timerSettings.consoleProperty,
-                timerSettings.precisionCalibrationModeProperty
+                timerSettings.console,
+                timerSettings.precisionCalibrationMode
             ).forEach {
                 it.asFlow().collect {
                     timerState.update(stages)

@@ -1,10 +1,8 @@
 package io.eontimer.service.action
 
-import io.eontimer.model.settings.ActionMode
-import io.eontimer.model.settings.ActionSettings
-import io.eontimer.util.javafx.getValue
-import io.eontimer.util.javafx.setValue
-import javafx.beans.property.BooleanProperty
+import io.eontimer.action.Mode
+import io.eontimer.action.Settings
+import io.eontimer.action.SoundPlayer
 import javafx.beans.property.SimpleBooleanProperty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,21 +19,20 @@ import javax.annotation.PostConstruct
 @Service
 @ExperimentalCoroutinesApi
 class TimerActionService(
-    private val actionSettings: ActionSettings,
+    private val actionSettings: Settings,
     private val soundPlayer: SoundPlayer,
     private val coroutineScope: CoroutineScope
 ) {
     final var actionInterval: List<Duration> = Collections.emptyList()
         private set
 
-    final val activeProperty: BooleanProperty = SimpleBooleanProperty(false)
-    private var active by activeProperty
+    val active = SimpleBooleanProperty(false)
 
     @PostConstruct
     private fun initialize() {
         coroutineScope.launch {
-            actionSettings.countProperty.asFlow()
-                .zip(actionSettings.intervalProperty.asFlow()) { count, interval ->
+            actionSettings.count.asFlow()
+                .zip(actionSettings.interval.asFlow()) { count, interval ->
                     createActionInterval(count.toInt(), interval.toInt())
                 }.collect {
                     actionInterval = it
@@ -43,23 +40,24 @@ class TimerActionService(
         }
     }
 
-    private fun createActionInterval(count: Int, interval: Int): List<Duration> {
-        return IntRange(0, count - 1).reversed()
+    private fun createActionInterval(count: Int, interval: Int): List<Duration> =
+        IntRange(0, count - 1)
+            .reversed()
             .asSequence()
             .map { it * interval }
             .map(Number::toLong)
             .map(Duration::ofMillis)
             .toList()
-    }
 
     fun invokeAction() {
-        if (actionSettings.mode == ActionMode.AUDIO || actionSettings.mode == ActionMode.AV)
+        val mode = actionSettings.mode.get()
+        if (mode == Mode.AUDIO || mode == Mode.AV)
             soundPlayer.play()
-        if (actionSettings.mode == ActionMode.VISUAL || actionSettings.mode == ActionMode.AV) {
-            active = true
+        if (mode == Mode.VISUAL || mode == Mode.AV) {
+            active.set(true)
             coroutineScope.launch {
                 delay(75)
-                active = false
+                active.set(false)
             }
         }
     }

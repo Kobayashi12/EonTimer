@@ -1,14 +1,14 @@
 package io.eontimer.service
 
-import io.eontimer.model.settings.TimerSettings
+import io.eontimer.timer.Settings
 import org.springframework.stereotype.Service
 import kotlin.math.roundToLong
 
 @Service
 class CalibrationService(
-    private val timerSettings: TimerSettings
+    private val timerSettings: Settings
 ) {
-    private val console get() = timerSettings.console
+    private val console get() = timerSettings.console.get()
 
     fun toMillis(delays: Long): Long =
         (delays * console.frameRate).roundToLong()
@@ -20,10 +20,10 @@ class CalibrationService(
         toMillis(delay - toDelays(second * 1000))
 
     fun calibrateToMillis(value: Long): Long {
-        return if (timerSettings.precisionCalibrationMode) value else toMillis(value)
+        return if (timerSettings.precisionCalibrationMode.get()) value else toMillis(value)
     }
 
     fun calibrateToDelays(value: Long): Long {
-        return if (timerSettings.precisionCalibrationMode) value else toDelays(value)
+        return if (timerSettings.precisionCalibrationMode.get()) value else toDelays(value)
     }
 }

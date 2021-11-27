@@ -1,13 +1,11 @@
 package io.eontimer.model.resource
 
-import io.eontimer.util.javafx.Choice
 import java.io.InputStream
 import java.net.URL
-import java.util.*
 
 const val BASE_RESOURCE_PATH = "io/eontimer"
 
-sealed interface Resource {
+interface Resource {
     val path: String
 
     val url: URL
@@ -59,16 +57,3 @@ enum class ImageResource(
     override val path = "$BASE_RESOURCE_PATH/img/$fileName"
 }
 
-enum class SoundResource(
-    fileName: String
-) : Resource, Choice {
-    BEEP("beep.wav"),
-    TICK("tick.wav"),
-    DING("ding.wav"),
-    POP("pop.wav");
-
-    override val path = "$BASE_RESOURCE_PATH/sounds/$fileName"
-    override val displayName = name.lowercase().replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-    }
-}

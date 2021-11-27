@@ -1,7 +1,7 @@
 package io.eontimer.service
 
 import io.eontimer.model.TimerState
-import io.eontimer.model.settings.TimerSettings
+import io.eontimer.timer.Settings
 import io.eontimer.service.action.TimerActionService
 import io.eontimer.util.Stack
 import io.eontimer.util.asStack
@@ -10,13 +10,10 @@ import io.eontimer.util.isIndefinite
 import io.eontimer.util.milliseconds
 import io.eontimer.util.sum
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -27,7 +24,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 class TimerRunnerService(
     private val timerState: TimerState,
-    private val timerSettings: TimerSettings,
+    private val timerSettings: Settings,
     private val timerActionService: TimerActionService,
     private val coroutineScope: CoroutineScope
 ) {
@@ -48,7 +45,7 @@ class TimerRunnerService(
             .filter { it < currentStage }
             .asStack()
 
-    private val period: Duration get() = timerSettings.refreshInterval.milliseconds
+    private val period: Duration get() = timerSettings.refreshInterval.get().milliseconds
 
     fun start(stages: List<Duration> = mStages) {
         if (!isRunning) {

@@ -1,4 +1,4 @@
-package io.eontimer.model.settings
+package io.eontimer.timer
 
 import io.eontimer.util.javafx.Choice
 
@@ -9,7 +9,7 @@ enum class Console(
     GBA("GBA", 59.7271),
     NDS("NDS", 59.8261),
     DSI("DSI", 59.8261),
-    _3DS("3DS", 59.8261);
+    THREE_DS("3DS", 59.8261);
 
     val frameRate = 1000 / fps
 }

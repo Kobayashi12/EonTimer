@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import javax.annotation.PostConstruct
 
-@Component
+@Component("gen4TimerFactory")
 @ExperimentalCoroutinesApi
-class Gen4TimerFactory(
-    private val gen4Timer: Gen4Timer,
+class TimerFactory(
+    private val gen4Timer: Model,
     private val timerState: TimerState,
     private val delayTimerFactory: DelayTimerFactory,
     private val calibrationService: CalibrationService,
