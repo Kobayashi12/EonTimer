@@ -1,9 +1,11 @@
-package io.eontimer.service.factory
+package io.eontimer.gen3
 
 import io.eontimer.model.TimerState
-import io.eontimer.model.timer.Gen3Timer
+import io.eontimer.service.factory.TimerFactory
 import io.eontimer.service.factory.timer.FixedFrameTimerFactory
 import io.eontimer.service.factory.timer.VariableFrameTimerFactory
+import io.eontimer.service.factory.update
+import io.eontimer.util.javafx.plusAssign
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -14,10 +16,10 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import javax.annotation.PostConstruct
 
-@Component
+@Component("gen3TimerFactory")
 @ExperimentalCoroutinesApi
-class Gen3TimerFactory(
-    private val gen3Timer: Gen3Timer,
+class TimerFactory(
+    private val model: Model,
     private val timerState: TimerState,
     private val fixedFrameTimerFactory: FixedFrameTimerFactory,
     private val variableFrameTimerFactory: VariableFrameTimerFactory,
@@ -25,34 +27,37 @@ class Gen3TimerFactory(
 ) : TimerFactory {
     @PostConstruct
     private fun initialize() {
-        coroutineScope.launch {
-            listOf(
-                gen3Timer.modeProperty,
-                gen3Timer.preTimerProperty,
-                gen3Timer.calibrationProperty
-            ).forEach {
-                it.asFlow().collect {
-                    timerState.update(stages)
-                }
+        listOf(
+            model.mode,
+            model.preTimer,
+            model.calibration
+        ).forEach {
+            coroutineScope.launch {
+                it.asFlow()
+                    .collect {
+                        timerState.update(stages)
+                    }
             }
-            gen3Timer.targetFrameProperty.asFlow()
-                .filter { gen3Timer.mode == Gen3Timer.Mode.STANDARD }
+        }
+        coroutineScope.launch {
+            model.targetFrame.asFlow()
+                .filter { model.mode.get() == Mode.STANDARD }
                 .collect { timerState.update(stages) }
         }
     }
 
     override val stages: List<Duration>
         get() {
-            return when (gen3Timer.mode) {
-                Gen3Timer.Mode.STANDARD ->
+            return when (model.mode.get()!!) {
+                Mode.STANDARD ->
                     fixedFrameTimerFactory.createStages(
-                        gen3Timer.preTimer,
-                        gen3Timer.targetFrame,
-                        gen3Timer.calibration
+                        model.preTimer.get(),
+                        model.targetFrame.get(),
+                        model.calibration.get()
                     )
-                Gen3Timer.Mode.VARIABLE_TARGET ->
+                Mode.VARIABLE_TARGET ->
                     variableFrameTimerFactory.createStages(
-                        gen3Timer.preTimer
+                        model.preTimer.get()
                     )
             }
         }
@@ -61,10 +66,9 @@ class Gen3TimerFactory(
         // NOTE: VariableFrameTimer is essentially a FixedFrameTimer
         // just with a floating target frame value. Therefore, the
         // calibration process is the same for both.
-        gen3Timer.calibration +=
-            fixedFrameTimerFactory.calibrate(
-                gen3Timer.targetFrame,
-                gen3Timer.frameHit
-            )
+        model.calibration += fixedFrameTimerFactory.calibrate(
+            model.targetFrame.get(),
+            model.frameHit.get()
+        )
     }
 }

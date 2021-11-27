@@ -1,14 +1,10 @@
-package io.eontimer.controller.timer
+package io.eontimer.gen3
 
 import io.eontimer.model.TimerState
-import io.eontimer.model.timer.Gen3Timer
 import io.eontimer.service.CalibrationService
 import io.eontimer.service.TimerRunnerService
-import io.eontimer.service.factory.Gen3TimerFactory
 import io.eontimer.util.javafx.asChoiceField
 import io.eontimer.util.javafx.bindBidirectional
-import io.eontimer.util.javafx.getValue
-import io.eontimer.util.javafx.setValue
 import io.eontimer.util.javafx.showWhen
 import io.eontimer.util.javafx.spinner.LongValueFactory
 import io.eontimer.util.javafx.spinner.setOnFocusLost
@@ -16,7 +12,6 @@ import io.eontimer.util.javafx.spinner.text
 import io.eontimer.util.javafx.spinner.valueProperty
 import io.eontimer.util.milliseconds
 import io.eontimer.util.sum
-import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.fxml.FXML
 import javafx.scene.control.Button
@@ -29,18 +24,18 @@ import kotlinx.coroutines.javafx.asFlow
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
 
-@Component
+@Component("gen3Controller")
 @ExperimentalCoroutinesApi
-class Gen3TimerPane(
-    private val model: Gen3Timer,
+class Controller(
+    private val model: Model,
     private val timerState: TimerState,
-    private val timerFactory: Gen3TimerFactory,
+    private val timerFactory: TimerFactory,
     private val timerRunnerService: TimerRunnerService,
     private val calibrationService: CalibrationService,
     private val coroutineScope: CoroutineScope
 ) {
     // @formatter:off
-    @FXML private lateinit var modeField: ChoiceBox<Gen3Timer.Mode>
+    @FXML private lateinit var modeField: ChoiceBox<Mode>
     @FXML private lateinit var calibrationField: Spinner<Long>
     @FXML private lateinit var preTimerField: Spinner<Long>
     @FXML private lateinit var targetFrameField: Spinner<Long>
@@ -48,62 +43,58 @@ class Gen3TimerPane(
     @FXML private lateinit var frameHitField: Spinner<Long>
     // @formatter:on
 
-    private val isPrimedProperty: BooleanProperty = SimpleBooleanProperty(true)
-    private var isPrimed by isPrimedProperty
+    private val primed = SimpleBooleanProperty(true)
 
     fun initialize() {
         modeField.asChoiceField().valueProperty
-            .bindBidirectional(model.modeProperty)
+            .bindBidirectional(model.mode)
         modeField.parent.disableProperty().bind(timerState.runningProperty)
 
         calibrationField.valueFactory = LongValueFactory()
-        calibrationField.valueProperty!!.bindBidirectional(model.calibrationProperty)
+        calibrationField.valueProperty!!.bindBidirectional(model.calibration)
         calibrationField.parent.disableProperty().bind(timerState.runningProperty)
         calibrationField.setOnFocusLost(calibrationField::commitValue)
 
         preTimerField.valueFactory = LongValueFactory(0)
-        preTimerField.valueProperty!!.bindBidirectional(model.preTimerProperty)
+        preTimerField.valueProperty!!.bindBidirectional(model.preTimer)
         preTimerField.parent.disableProperty().bind(timerState.runningProperty)
         preTimerField.setOnFocusLost(preTimerField::commitValue)
 
         targetFrameField.valueFactory = LongValueFactory(0)
-        targetFrameField.valueProperty!!.bindBidirectional(model.targetFrameProperty)
+        targetFrameField.valueProperty!!.bindBidirectional(model.targetFrame)
         targetFrameField.parent.disableProperty().bind(
-            model.modeProperty.isEqualTo(Gen3Timer.Mode.VARIABLE_TARGET)
+            model.mode.isEqualTo(Mode.VARIABLE_TARGET)
                 .and(
                     timerState.runningProperty.not()
-                        .or(isPrimedProperty.not())
+                        .or(primed.not())
                 )
                 .or(
-                    model.modeProperty.isEqualTo(Gen3Timer.Mode.STANDARD)
+                    model.mode.isEqualTo(Mode.STANDARD)
                         .and(timerState.runningProperty)
                 )
         )
         targetFrameField.setOnFocusLost(targetFrameField::commitValue)
 
-        setTargetFrameBtn.showWhen(
-            model.modeProperty
-                .isEqualTo(Gen3Timer.Mode.VARIABLE_TARGET)
-        )
-        setTargetFrameBtn.disableProperty().bind(isPrimedProperty.not())
+        setTargetFrameBtn.showWhen(model.mode.isEqualTo(Mode.VARIABLE_TARGET))
+        setTargetFrameBtn.disableProperty().bind(primed.not())
         setTargetFrameBtn.setOnAction {
             if (timerState.running) {
-                val duration = calibrationService.toMillis(model.targetFrame)
-                timerRunnerService.stages[1] = (duration + model.calibration).milliseconds
+                val duration = calibrationService.toMillis(model.targetFrame.get())
+                timerRunnerService.stages[1] = (duration + model.calibration.get()).milliseconds
                 timerState.totalTime = timerRunnerService.stages.sum()
-                isPrimed = false
+                primed.set(false)
             }
         }
 
         frameHitField.valueFactory = LongValueFactory(0)
-        frameHitField.valueProperty!!.bindBidirectional(model.frameHitProperty)
+        frameHitField.valueProperty!!.bindBidirectional(model.frameHit)
         frameHitField.parent.disableProperty().bind(timerState.runningProperty)
         frameHitField.setOnFocusLost(frameHitField::commitValue)
         frameHitField.text = ""
 
         coroutineScope.launch {
             timerState.runningProperty.asFlow()
-                .collect { isPrimed = it }
+                .collect { primed.set(it) }
         }
     }
 

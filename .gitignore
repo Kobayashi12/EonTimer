@@ -10,3 +10,4 @@ out/
 EonTimer.json
 EonTimer.log
 *.log
+.DS_Store

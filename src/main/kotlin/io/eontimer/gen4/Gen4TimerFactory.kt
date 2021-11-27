@@ -1,9 +1,11 @@
-package io.eontimer.service.factory
+package io.eontimer.gen4
 
 import io.eontimer.model.TimerState
-import io.eontimer.model.timer.Gen4Timer
 import io.eontimer.service.CalibrationService
+import io.eontimer.service.factory.TimerFactory
 import io.eontimer.service.factory.timer.DelayTimerFactory
+import io.eontimer.service.factory.update
+import io.eontimer.util.javafx.plusAssign
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -23,17 +25,17 @@ class Gen4TimerFactory(
     private val coroutineScope: CoroutineScope
 ) : TimerFactory {
     private val calibration: Long
-        get() = calibrationService.createCalibration(gen4Timer.calibratedDelay, gen4Timer.calibratedSecond)
+        get() = calibrationService.createCalibration(gen4Timer.calibratedDelay.get(), gen4Timer.calibratedSecond.get())
 
     @PostConstruct
     private fun initialize() {
-        coroutineScope.launch {
-            listOf(
-                gen4Timer.calibratedDelayProperty,
-                gen4Timer.calibratedSecondProperty,
-                gen4Timer.targetDelayProperty,
-                gen4Timer.targetSecondProperty
-            ).forEach {
+        listOf(
+            gen4Timer.targetDelay,
+            gen4Timer.targetSecond,
+            gen4Timer.calibratedDelay,
+            gen4Timer.calibratedSecond
+        ).forEach {
+            coroutineScope.launch {
                 it.asFlow().collect {
                     timerState.update(stages)
                 }
@@ -43,8 +45,8 @@ class Gen4TimerFactory(
 
     override val stages: List<Duration>
         get() = delayTimerFactory.createStages(
-            gen4Timer.targetSecond,
-            gen4Timer.targetDelay,
+            gen4Timer.targetSecond.get(),
+            gen4Timer.targetDelay.get(),
             calibration
         )
 
@@ -52,8 +54,8 @@ class Gen4TimerFactory(
         gen4Timer.calibratedDelay +=
             calibrationService.calibrateToDelays(
                 delayTimerFactory.calibrate(
-                    gen4Timer.targetDelay,
-                    gen4Timer.delayHit
+                    gen4Timer.targetDelay.get(),
+                    gen4Timer.delayHit.get()
                 )
             )
     }

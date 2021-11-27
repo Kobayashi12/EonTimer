@@ -1,5 +1,7 @@
 package io.eontimer.controller.timer
 
+import io.eontimer.gen3.Controller
+import io.eontimer.gen4.Gen4TimerPane
 import io.eontimer.model.ApplicationModel
 import io.eontimer.model.TimerState
 import io.eontimer.model.timer.TimerType
@@ -23,7 +25,7 @@ class TimerControlPane(
     private val timerState: TimerState,
     private val timerRunner: TimerRunnerService,
     private val timerFactory: TimerFactoryService,
-    private val gen3TimerPane: Gen3TimerPane,
+    private val gen3Controller: Controller,
     private val gen4TimerPane: Gen4TimerPane,
     private val gen5TimerPane: Gen5TimerPane,
     private val coroutineScope: CoroutineScope
@@ -88,7 +90,7 @@ class TimerControlPane(
 
     private fun calibrate() {
         when (timerType) {
-            TimerType.GEN3 -> gen3TimerPane.calibrate()
+            TimerType.GEN3 -> gen3Controller.calibrate()
             TimerType.GEN4 -> gen4TimerPane.calibrate()
             TimerType.GEN5 -> gen5TimerPane.calibrate()
             else -> Unit

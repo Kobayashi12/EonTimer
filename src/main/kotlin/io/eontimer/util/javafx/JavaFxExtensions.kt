@@ -19,6 +19,10 @@ import javafx.scene.Scene
 import javafx.scene.control.Label
 import kotlin.reflect.KProperty
 
+operator fun LongProperty.plusAssign(value: Long) {
+    setValue(getValue() + value)
+}
+
 operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = this.value!!
 operator fun <T> Property<T>.setValue(thisRef: Any, property: KProperty<*>, value: T?) = setValue(value)
 

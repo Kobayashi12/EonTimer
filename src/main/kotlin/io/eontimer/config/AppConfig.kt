@@ -2,70 +2,73 @@ package io.eontimer.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.eontimer.gen4.Gen4Timer
 import io.eontimer.model.ApplicationModel
 import io.eontimer.model.settings.ActionSettings
 import io.eontimer.model.settings.TimerSettings
 import io.eontimer.model.timer.CustomTimer
-import io.eontimer.model.timer.Gen3Timer
-import io.eontimer.model.timer.Gen4Timer
 import io.eontimer.model.timer.Gen5Timer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.javafx.JavaFx
-import org.springframework.beans.factory.getBean
+import org.springframework.beans.factory.DisposableBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import java.io.File
 import java.io.FileOutputStream
-import javax.annotation.PreDestroy
+import io.eontimer.gen3.Model as Gen3Model
+import io.eontimer.gen3.StoredSettings as Gen3StoredSettings
 
 @Configuration
 @EnableConfigurationProperties(AppProperties::class, DebugProperties::class)
-class AppConfig(
-    private val properties: AppProperties,
-    private val context: ApplicationContext
-) {
-    @PreDestroy
-    private fun destroy() {
+class AppConfig {
+    @Bean
+    fun shutdownHook(
+        properties: AppProperties,
+        gen3Model: Gen3Model,
+        objectMapper: ObjectMapper
+    ) = DisposableBean {
         try {
-            val settings = context.getBean<ApplicationModel>()
-            val objectMapper = context.getBean<ObjectMapper>()
-            objectMapper.writeValue(FileOutputStream("${properties.name}.json"), settings)
+            val storedSettings = StoredSettingsDto(Gen3StoredSettings(gen3Model))
+            objectMapper.writeValue(FileOutputStream("${properties.name}.json"), storedSettings)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     @Bean
-    fun settings(objectMapper: ObjectMapper): ApplicationModel {
-        val file = File("${properties.name}.json")
-        return when {
-            file.exists() -> objectMapper.readValue(file)
-            else -> ApplicationModel()
-        }
-    }
+    fun storedSettings(
+        properties: AppProperties,
+        objectMapper: ObjectMapper
+    ): StoredSettingsDto =
+        File("${properties.name}.json")
+            .takeIf(File::exists)
+            ?.let(objectMapper::readValue)
+            ?: StoredSettingsDto()
 
     @Bean
-    fun gen3TimerModel(settings: ApplicationModel): Gen3Timer = settings.gen3
+    fun applicationModel() = ApplicationModel()
 
     @Bean
-    fun gen4TimerModel(settings: ApplicationModel): Gen4Timer = settings.gen4
+    fun gen3TimerModel(
+        storedSettings: StoredSettingsDto
+    ) = Gen3Model(storedSettings.gen3)
 
     @Bean
-    fun gen5TimerModel(settings: ApplicationModel): Gen5Timer = settings.gen5
+    fun gen4TimerModel(): Gen4Timer = Gen4Timer()
 
     @Bean
-    fun customTimerModel(settings: ApplicationModel): CustomTimer = settings.custom
+    fun gen5TimerModel(): Gen5Timer = Gen5Timer()
 
     @Bean
-    fun actionSettingsModel(settings: ApplicationModel): ActionSettings = settings.actionSettings
+    fun customTimerModel(): CustomTimer = CustomTimer()
 
     @Bean
-    fun timerSettingsModel(settings: ApplicationModel): TimerSettings = settings.timerSettings
+    fun actionSettingsModel(): ActionSettings = ActionSettings()
+
+    @Bean
+    fun timerSettingsModel(): TimerSettings = TimerSettings()
 
     @Bean
     fun defaultScope() = CoroutineScope(Dispatchers.Default + SupervisorJob())
