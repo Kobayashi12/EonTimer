@@ -29,27 +29,27 @@ class Controller(
     fun initialize() {
         calibratedDelayField.valueFactory = LongValueFactory()
         calibratedDelayField.valueProperty!!.bindBidirectional(model.calibratedDelay)
-        calibratedDelayField.parent.disableProperty().bind(timerState.runningProperty)
+        calibratedDelayField.parent.disableProperty().bind(timerState.running)
         calibratedDelayField.setOnFocusLost(calibratedDelayField::commitValue)
 
         calibratedSecondField.valueFactory = LongValueFactory()
         calibratedSecondField.valueProperty!!.bindBidirectional(model.calibratedSecond)
-        calibratedSecondField.parent.disableProperty().bind(timerState.runningProperty)
+        calibratedSecondField.parent.disableProperty().bind(timerState.running)
         calibratedSecondField.setOnFocusLost(calibratedSecondField::commitValue)
 
         targetDelayField.valueFactory = LongValueFactory(0)
         targetDelayField.valueProperty!!.bindBidirectional(model.targetDelay)
-        targetDelayField.parent.disableProperty().bind(timerState.runningProperty)
+        targetDelayField.parent.disableProperty().bind(timerState.running)
         targetDelayField.setOnFocusLost(targetDelayField::commitValue)
 
         targetSecondField.valueFactory = LongValueFactory(0)
         targetSecondField.valueProperty!!.bindBidirectional(model.targetSecond)
-        targetSecondField.parent.disableProperty().bind(timerState.runningProperty)
+        targetSecondField.parent.disableProperty().bind(timerState.running)
         targetSecondField.setOnFocusLost(targetSecondField::commitValue)
 
         delayHitField.valueFactory = LongValueFactory(0)
         delayHitField.valueProperty!!.bindBidirectional(model.delayHit)
-        delayHitField.parent.disableProperty().bind(timerState.runningProperty)
+        delayHitField.parent.disableProperty().bind(timerState.running)
         delayHitField.setOnFocusLost(delayHitField::commitValue)
         delayHitField.text = ""
     }

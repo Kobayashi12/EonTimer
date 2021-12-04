@@ -30,10 +30,10 @@ class Controller(
     fun initialize() {
         list.items = model.stages
         list.selectionModel.selectionMode = SelectionMode.MULTIPLE
-        list.disableProperty().bind(timerState.runningProperty)
+        list.disableProperty().bind(timerState.running)
 
         valueField.valueFactory = LongValueFactory(0L)
-        valueField.disableProperty().bind(timerState.runningProperty)
+        valueField.disableProperty().bind(timerState.running)
         valueField.setOnKeyPressed {
             if (it.code == KeyCode.ENTER) {
                 model.stages.add(valueField.value)
@@ -46,7 +46,7 @@ class Controller(
         valueAddBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.PLUS)
         valueAddBtn.disableProperty().bind(
             valueField.textProperty.isEmpty
-                .or(timerState.runningProperty)
+                .or(timerState.running)
         )
         valueAddBtn.setOnAction {
             model.stages.add(valueField.value)
@@ -56,7 +56,7 @@ class Controller(
         valueRemoveBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.MINUS)
         valueRemoveBtn.disableProperty().bind(
             list.selectionModel.selectedItemProperty().isNull
-                .or(timerState.runningProperty)
+                .or(timerState.running)
         )
         valueRemoveBtn.setOnAction {
             list.selectionModel.selectedIndices

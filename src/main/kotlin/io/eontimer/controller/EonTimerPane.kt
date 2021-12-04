@@ -19,7 +19,7 @@ class EonTimerPane(
 
     fun initialize() {
         settingsBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.GEAR)
-        settingsBtn.disableProperty().bind(timerState.runningProperty)
+        settingsBtn.disableProperty().bind(timerState.running)
         settingsBtn.setOnAction {
             settingsDialog.showAndWait()
         }

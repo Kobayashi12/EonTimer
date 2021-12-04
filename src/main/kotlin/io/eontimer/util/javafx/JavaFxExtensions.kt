@@ -2,6 +2,7 @@ package io.eontimer.util.javafx
 
 import com.sun.javafx.binding.BidirectionalBinding
 import io.eontimer.model.resource.CssResource
+import javafx.beans.InvalidationListener
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.FloatProperty
@@ -9,6 +10,7 @@ import javafx.beans.property.IntegerProperty
 import javafx.beans.property.LongProperty
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.Property
+import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableDoubleValue
 import javafx.beans.value.ObservableFloatValue
@@ -17,10 +19,45 @@ import javafx.beans.value.ObservableLongValue
 import javafx.beans.value.ObservableValue
 import javafx.scene.Scene
 import javafx.scene.control.Label
+import java.util.WeakHashMap
 import kotlin.reflect.KProperty
 
 operator fun LongProperty.plusAssign(value: Long) {
     setValue(getValue() + value)
+}
+
+class MappedObservableValue<T, R>(
+    private val delegate: ObservableValue<T>,
+    private val mapper: (T) -> R
+) : ObservableValue<R> {
+    override fun addListener(listener: ChangeListener<in R>) {
+        delegate.addListener { _, oldValue, newValue ->
+            listener.changed(this, mapper(oldValue), mapper(newValue))
+        }
+    }
+
+    override fun addListener(listener: InvalidationListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeListener(listener: ChangeListener<in R>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeListener(listener: InvalidationListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getValue(): R =
+        mapper(delegate.value)
+}
+
+class DelegatingChangeListener<T, R>(
+    private val delegate: ChangeListener<R>
+) : ChangeListener<T> {
+    override fun changed(observable: ObservableValue<out T>, oldValue: T, newValue: T) {
+        delegate.changed()
+    }
 }
 
 operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = this.value!!

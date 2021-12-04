@@ -1,4 +1,4 @@
-package io.eontimer.controller.timer
+package io.eontimer
 
 import io.eontimer.model.ApplicationModel
 import io.eontimer.model.TimerState
@@ -50,31 +50,35 @@ class TimerControlPane(
     fun initialize() {
         coroutineScope.launch {
             timerTabPane.selectionModel.select(timerType.tab)
-            timerTabPane.selectionModel.selectedItemProperty().asFlow()
-                .collect { timerType = it.timerType }
-
-            gen3Tab.disableProperty().bind(
-                timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen3Tab)
-                    .and(timerState.runningProperty)
-            )
-            gen4Tab.disableProperty().bind(
-                timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen4Tab)
-                    .and(timerState.runningProperty)
-            )
-            gen5Tab.disableProperty().bind(
-                timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen5Tab)
-                    .and(timerState.runningProperty)
-            )
-            customTab.disableProperty().bind(
-                timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(customTab)
-                    .and(timerState.runningProperty)
-            )
-
-            timerState.runningProperty.asFlow()
-                .collect { timerBtn.text = if (!it) "Start" else "Stop" }
         }
+
+        gen3Tab.disableProperty().bind(
+            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen3Tab)
+                .and(timerState.running)
+        )
+        gen4Tab.disableProperty().bind(
+            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen4Tab)
+                .and(timerState.running)
+        )
+        gen5Tab.disableProperty().bind(
+            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen5Tab)
+                .and(timerState.running)
+        )
+        customTab.disableProperty().bind(
+            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(customTab)
+                .and(timerState.running)
+        )
+
+        timerTabPane.selectionModel.selectedItemProperty()
+            .addListener { _, _, newValue ->
+                timerType = newValue.timerType
+            }
+        timerState.running.addListener { _, _, newValue ->
+            timerBtn.text = if (!newValue) "Start" else "Stop"
+        }
+
         timerBtn.setOnAction {
-            if (!timerState.running) {
+            if (!timerState.running.get()) {
                 timerRunner.start(timerFactory.stages)
             } else {
                 timerRunner.stop()
@@ -82,7 +86,7 @@ class TimerControlPane(
         }
 
         updateBtn.disableProperty().bind(
-            timerState.runningProperty
+            timerState.running
         )
         updateBtn.setOnAction {
             calibrate()

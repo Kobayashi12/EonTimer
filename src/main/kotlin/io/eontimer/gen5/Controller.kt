@@ -37,16 +37,16 @@ class Controller(
     fun initialize() {
         modeField.asChoiceField().valueProperty
             .bindBidirectional(model.mode)
-        modeField.parent.disableProperty().bind(timerState.runningProperty)
+        modeField.parent.disableProperty().bind(timerState.running)
 
         calibrationField.valueFactory = LongValueFactory()
         calibrationField.valueProperty!!.bindBidirectional(model.calibration)
-        calibrationField.parent.disableProperty().bind(timerState.runningProperty)
+        calibrationField.parent.disableProperty().bind(timerState.running)
         calibrationField.setOnFocusLost(calibrationField::commitValue)
 
         targetDelayField.valueFactory = LongValueFactory(0)
         targetDelayField.valueProperty!!.bindBidirectional(model.targetDelay)
-        targetDelayField.parent.disableProperty().bind(timerState.runningProperty)
+        targetDelayField.parent.disableProperty().bind(timerState.running)
         targetDelayField.parent.showWhen(
             model.mode.isEqualTo(Mode.C_GEAR)
                 .or(model.mode.isEqualTo(Mode.ENTRALINK))
@@ -56,12 +56,12 @@ class Controller(
 
         targetSecondField.valueFactory = LongValueFactory(0)
         targetSecondField.valueProperty!!.bindBidirectional(model.targetSecond)
-        targetSecondField.parent.disableProperty().bind(timerState.runningProperty)
+        targetSecondField.parent.disableProperty().bind(timerState.running)
         targetSecondField.setOnFocusLost(targetSecondField::commitValue)
 
         entralinkCalibrationField.valueFactory = LongValueFactory()
         entralinkCalibrationField.valueProperty!!.bindBidirectional(model.entralinkCalibration)
-        entralinkCalibrationField.parent.disableProperty().bind(timerState.runningProperty)
+        entralinkCalibrationField.parent.disableProperty().bind(timerState.running)
         entralinkCalibrationField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENTRALINK)
                 .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
@@ -70,7 +70,7 @@ class Controller(
 
         frameCalibrationField.valueFactory = LongValueFactory()
         frameCalibrationField.valueProperty!!.bindBidirectional(model.frameCalibration)
-        frameCalibrationField.parent.disableProperty().bind(timerState.runningProperty)
+        frameCalibrationField.parent.disableProperty().bind(timerState.running)
         frameCalibrationField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
         )
@@ -78,7 +78,7 @@ class Controller(
 
         targetAdvancesField.valueFactory = LongValueFactory(0)
         targetAdvancesField.valueProperty!!.bindBidirectional(model.targetAdvances)
-        targetAdvancesField.parent.disableProperty().bind(timerState.runningProperty)
+        targetAdvancesField.parent.disableProperty().bind(timerState.running)
         targetAdvancesField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
         )
@@ -86,7 +86,7 @@ class Controller(
 
         secondHitField.valueFactory = LongValueFactory(0)
         secondHitField.valueProperty!!.bindBidirectional(model.secondHit)
-        secondHitField.parent.disableProperty().bind(timerState.runningProperty)
+        secondHitField.parent.disableProperty().bind(timerState.running)
         secondHitField.parent.showWhen(
             model.mode.isEqualTo(Mode.STANDARD)
                 .or(model.mode.isEqualTo(Mode.ENTRALINK))
@@ -97,7 +97,7 @@ class Controller(
 
         delayHitField.valueFactory = LongValueFactory(0)
         delayHitField.valueProperty!!.bindBidirectional(model.delayHit)
-        delayHitField.parent.disableProperty().bind(timerState.runningProperty)
+        delayHitField.parent.disableProperty().bind(timerState.running)
         delayHitField.parent.showWhen(
             model.mode.isEqualTo(Mode.C_GEAR)
                 .or(model.mode.isEqualTo(Mode.ENTRALINK))
@@ -108,7 +108,7 @@ class Controller(
 
         actualAdvancesField.valueFactory = LongValueFactory(0)
         actualAdvancesField.valueProperty!!.bindBidirectional(model.advancesHit)
-        actualAdvancesField.parent.disableProperty().bind(timerState.runningProperty)
+        actualAdvancesField.parent.disableProperty().bind(timerState.running)
         actualAdvancesField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
         )

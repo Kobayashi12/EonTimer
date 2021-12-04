@@ -48,16 +48,16 @@ class Controller(
     fun initialize() {
         modeField.asChoiceField().valueProperty
             .bindBidirectional(model.mode)
-        modeField.parent.disableProperty().bind(timerState.runningProperty)
+        modeField.parent.disableProperty().bind(timerState.running)
 
         calibrationField.valueFactory = LongValueFactory()
         calibrationField.valueProperty!!.bindBidirectional(model.calibration)
-        calibrationField.parent.disableProperty().bind(timerState.runningProperty)
+        calibrationField.parent.disableProperty().bind(timerState.running)
         calibrationField.setOnFocusLost(calibrationField::commitValue)
 
         preTimerField.valueFactory = LongValueFactory(0)
         preTimerField.valueProperty!!.bindBidirectional(model.preTimer)
-        preTimerField.parent.disableProperty().bind(timerState.runningProperty)
+        preTimerField.parent.disableProperty().bind(timerState.running)
         preTimerField.setOnFocusLost(preTimerField::commitValue)
 
         targetFrameField.valueFactory = LongValueFactory(0)
@@ -65,12 +65,12 @@ class Controller(
         targetFrameField.parent.disableProperty().bind(
             model.mode.isEqualTo(Mode.VARIABLE_TARGET)
                 .and(
-                    timerState.runningProperty.not()
+                    timerState.running.not()
                         .or(primed.not())
                 )
                 .or(
                     model.mode.isEqualTo(Mode.STANDARD)
-                        .and(timerState.runningProperty)
+                        .and(timerState.running)
                 )
         )
         targetFrameField.setOnFocusLost(targetFrameField::commitValue)
@@ -88,12 +88,12 @@ class Controller(
 
         frameHitField.valueFactory = LongValueFactory(0)
         frameHitField.valueProperty!!.bindBidirectional(model.frameHit)
-        frameHitField.parent.disableProperty().bind(timerState.runningProperty)
+        frameHitField.parent.disableProperty().bind(timerState.running)
         frameHitField.setOnFocusLost(frameHitField::commitValue)
         frameHitField.text = ""
 
         coroutineScope.launch {
-            timerState.runningProperty.asFlow()
+            timerState.running.asFlow()
                 .collect { primed.set(it) }
         }
     }

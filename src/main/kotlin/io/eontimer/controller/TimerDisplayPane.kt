@@ -35,19 +35,19 @@ class TimerDisplayPane(
 
     fun initialize() {
         coroutineScope.launch(Dispatchers.JavaFx) {
-            timerState.currentStageProperty.asFlow()
+            timerState.currentStage.asFlow()
                 .collect { currentStageLbl.text = formatTime(it) }
-            timerState.currentRemainingProperty.asFlow()
+            timerState.currentRemaining.asFlow()
                 .collect { currentStageLbl.text = formatTime(it) }
 
-            timerState.totalTimeProperty.asFlow()
-                .zip(timerState.totalElapsedProperty.asFlow()) { totalTime, totalElapsed ->
+            timerState.totalTime.asFlow()
+                .zip(timerState.totalElapsed.asFlow()) { totalTime, totalElapsed ->
                     formatMinutesBeforeTarget(totalTime, totalElapsed)
                 }.collect {
                     minutesBeforeTargetLbl.text = it
                 }
 
-            timerState.nextStageProperty.asFlow()
+            timerState.nextStage.asFlow()
                 .collect { nextStageLbl.text = formatTime(it) }
             timerActionService.active.asFlow()
                 .collect { currentStageLbl.isActive = it }
