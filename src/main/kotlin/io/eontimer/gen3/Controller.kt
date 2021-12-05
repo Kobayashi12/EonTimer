@@ -78,10 +78,10 @@ class Controller(
         setTargetFrameBtn.showWhen(model.mode.isEqualTo(Mode.VARIABLE_TARGET))
         setTargetFrameBtn.disableProperty().bind(primed.not())
         setTargetFrameBtn.setOnAction {
-            if (timerState.running) {
+            if (timerState.running.get()) {
                 val duration = calibrationService.toMillis(model.targetFrame.get())
                 timerRunnerService.stages[1] = (duration + model.calibration.get()).milliseconds
-                timerState.totalTime = timerRunnerService.stages.sum()
+                timerState.totalTime.set(timerRunnerService.stages.sum())
                 primed.set(false)
             }
         }

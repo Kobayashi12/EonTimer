@@ -11,8 +11,6 @@ import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.javafx.asFlow
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
 import io.eontimer.gen3.Controller as Gen3Controller

@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.Instant
 import java.util.*
+import io.eontimer.util.javafx.getValue
+import io.eontimer.util.javafx.setValue
 
 @Service
 @ExperimentalCoroutinesApi
@@ -33,12 +35,12 @@ class TimerRunnerService(
         private set
     private var mStages: List<Duration> = Collections.emptyList()
 
-    private var totalTime by timerState::totalTime
-    private var totalElapsed by timerState::totalElapsed
-    private var currentStage by timerState::currentStage
-    private var currentRemaining by timerState::currentRemaining
-    private var nextStage by timerState::nextStage
-    private var isRunning by timerState::running
+    private var totalTime by timerState.totalTime
+    private var totalElapsed by timerState.totalElapsed
+    private var currentStage by timerState.currentStage
+    private var currentRemaining by timerState.currentRemaining
+    private var nextStage by timerState.nextStage
+    private var running by timerState.running
 
     private val actionInterval: Stack<Duration>
         get() = timerActionService.actionInterval
@@ -48,7 +50,7 @@ class TimerRunnerService(
     private val period: Duration get() = timerSettings.refreshInterval.get().milliseconds
 
     fun start(stages: List<Duration> = mStages) {
-        if (!isRunning) {
+        if (!running) {
             resetState(stages)
             timerJob = coroutineScope.launch {
                 var stageIndex = 0
@@ -57,10 +59,10 @@ class TimerRunnerService(
                     preElapsed = runStage(this, stageIndex, preElapsed) - stages.getStage(stageIndex)
                     stageIndex++
                 }
-                isRunning = false
+                running = false
                 resetState()
             }
-            isRunning = true
+            running = true
         }
     }
 
@@ -90,9 +92,9 @@ class TimerRunnerService(
     }
 
     fun stop() {
-        if (timerState.running) {
+        if (running) {
             timerJob.cancel()
-            isRunning = false
+            running = false
             resetState()
         }
     }

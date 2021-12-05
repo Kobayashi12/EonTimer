@@ -12,9 +12,11 @@ interface TimerFactory {
 }
 
 internal fun TimerState.update(stages: List<Duration>) {
-    currentStage = stages.getStage(0)
-    currentRemaining = if (currentStage.isIndefinite) Duration.ZERO else currentStage
-    nextStage = stages.getStage(1)
-    totalTime = stages.sum()
+    val stage = stages.firstOrNull() ?: Duration.ZERO
+
+    currentStage.set(stage)
+    currentRemaining.set(if (stage.isIndefinite) Duration.ZERO else stage)
+    nextStage.set(stages.elementAtOrNull(1) ?: Duration.ZERO)
+    totalTime.set(stages.sum())
 }
 
