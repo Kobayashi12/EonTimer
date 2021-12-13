@@ -1,10 +1,13 @@
 package io.eontimer.util.javafx.spinner
 
-import io.eontimer.util.javafx.Disposable
+import io.eontimer.util.javafx.bindBidirectional
+import javafx.beans.property.IntegerProperty
+import javafx.beans.property.LongProperty
 import javafx.beans.property.ObjectProperty
+import javafx.beans.property.Property
 import javafx.beans.property.StringProperty
-import javafx.beans.value.ChangeListener
 import javafx.scene.control.Spinner
+import javafx.scene.control.SpinnerValueFactory
 
 val <T> Spinner<T>.valueProperty: ObjectProperty<T>?
     get() = valueFactory?.valueProperty()
@@ -17,17 +20,18 @@ var <T> Spinner<T>.text: String
         editor.text = value
     }
 
-fun <T> Spinner<T>.setValue(value: T) {
-    valueFactory?.value = value
+fun SpinnerValueFactory<Int>.bindBidirectional(other: IntegerProperty) {
+    valueProperty().bindBidirectional(other)
 }
 
-fun <T> Spinner<T>.setOnFocusLost(onFocusLost: () -> Unit): Disposable {
-    val property = focusedProperty()
-    val listener = ChangeListener<Boolean> { _, _, newValue ->
-        if (!newValue) onFocusLost()
-    }
-    property.addListener(listener)
-    return Disposable {
-        property.removeListener(listener)
-    }
+fun SpinnerValueFactory<Long>.bindBidirectional(other: LongProperty) {
+    valueProperty().bindBidirectional(other)
+}
+
+fun <T> SpinnerValueFactory<T>.bindBidirectional(other: Property<T>) {
+    valueProperty().bindBidirectional(other)
+}
+
+fun <T> Spinner<T>.setValue(value: T) {
+    valueFactory?.value = value
 }

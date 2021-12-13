@@ -1,11 +1,11 @@
 package io.eontimer.gen4
 
 import io.eontimer.model.TimerState
-import io.eontimer.util.javafx.bindBidirectional
+import io.eontimer.util.javafx.disableWhen
+import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.spinner.LongValueFactory
-import io.eontimer.util.javafx.spinner.setOnFocusLost
+import io.eontimer.util.javafx.spinner.bindBidirectional
 import io.eontimer.util.javafx.spinner.text
-import io.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
 import javafx.scene.control.Spinner
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,28 +28,28 @@ class Controller(
 
     fun initialize() {
         calibratedDelayField.valueFactory = LongValueFactory()
-        calibratedDelayField.valueProperty!!.bindBidirectional(model.calibratedDelay)
-        calibratedDelayField.parent.disableProperty().bind(timerState.running)
+            .also { it.bindBidirectional(model.calibratedDelay) }
+        calibratedDelayField.parent.disableWhen(timerState.running)
         calibratedDelayField.setOnFocusLost(calibratedDelayField::commitValue)
 
         calibratedSecondField.valueFactory = LongValueFactory()
-        calibratedSecondField.valueProperty!!.bindBidirectional(model.calibratedSecond)
-        calibratedSecondField.parent.disableProperty().bind(timerState.running)
+            .also { it.bindBidirectional(model.calibratedDelay) }
+        calibratedSecondField.parent.disableWhen(timerState.running)
         calibratedSecondField.setOnFocusLost(calibratedSecondField::commitValue)
 
-        targetDelayField.valueFactory = LongValueFactory(0)
-        targetDelayField.valueProperty!!.bindBidirectional(model.targetDelay)
-        targetDelayField.parent.disableProperty().bind(timerState.running)
+        targetDelayField.valueFactory = LongValueFactory(min = 0)
+            .also { it.bindBidirectional(model.targetDelay) }
+        targetDelayField.parent.disableWhen(timerState.running)
         targetDelayField.setOnFocusLost(targetDelayField::commitValue)
 
-        targetSecondField.valueFactory = LongValueFactory(0)
-        targetSecondField.valueProperty!!.bindBidirectional(model.targetSecond)
-        targetSecondField.parent.disableProperty().bind(timerState.running)
+        targetSecondField.valueFactory = LongValueFactory(min = 0)
+            .also { it.bindBidirectional(model.targetSecond) }
+        targetSecondField.parent.disableWhen(timerState.running)
         targetSecondField.setOnFocusLost(targetSecondField::commitValue)
 
-        delayHitField.valueFactory = LongValueFactory(0)
-        delayHitField.valueProperty!!.bindBidirectional(model.delayHit)
-        delayHitField.parent.disableProperty().bind(timerState.running)
+        delayHitField.valueFactory = LongValueFactory(min = 0)
+            .also { it.bindBidirectional(model.delayHit) }
+        delayHitField.parent.disableWhen(timerState.running)
         delayHitField.setOnFocusLost(delayHitField::commitValue)
         delayHitField.text = ""
     }

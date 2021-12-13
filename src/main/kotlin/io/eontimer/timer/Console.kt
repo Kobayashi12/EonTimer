@@ -7,6 +7,7 @@ enum class Console(
     fps: Double
 ) : Choice {
     GBA("GBA", 59.7271),
+    NDS_GBA("NDS/GBA", 59.6555),
     NDS("NDS", 59.8261),
     DSI("DSI", 59.8261),
     THREE_DS("3DS", 59.8261);

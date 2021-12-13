@@ -4,15 +4,18 @@ import javafx.beans.binding.BooleanExpression
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.scene.Node
+import javafx.scene.control.Tab
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 
 fun Node.showWhen(
     condition: BooleanExpression
-): Disposable = hideWhen(condition.not())
+): Disposable = hideWhen(!condition)
 
 fun Node.hideWhen(
     condition: BooleanExpression
 ): Disposable {
-    visibleProperty().bind(condition.not())
+    visibleProperty().bind(!condition)
     managedProperty().bind(visibleProperty())
     return object : Disposable, ChangeListener<Boolean> {
         init {
@@ -33,28 +36,45 @@ fun Node.hideWhen(
     }
 }
 
+fun Node.enableWhen(
+    condition: BooleanExpression
+): Disposable = disableWhen(!condition)
+
+fun Node.disableWhen(
+    condition: BooleanExpression
+): Disposable {
+    disableProperty().bind(condition)
+    return Disposable {
+        disableProperty().unbind()
+    }
+}
+
+fun Tab.disableWhen(
+    condition: BooleanExpression
+): Disposable {
+    disableProperty().bind(condition)
+    return Disposable {
+        disableProperty().unbind()
+    }
+}
+
 fun Node.setOnFocusLost(
     onFocusLost: () -> Unit
 ): Disposable {
-    return object : Disposable, ChangeListener<Boolean> {
-        private val property by lazy(::focusedProperty)
+    val property = focusedProperty()
+    val listener = ChangeListener<Boolean> { _, _, newValue ->
+        if (!newValue) onFocusLost()
+    }
+    property.addListener(listener)
+    return Disposable {
+        property.removeListener(listener)
+    }
+}
 
-        init {
-            property.addListener(this)
-        }
-
-        override fun changed(
-            observable: ObservableValue<out Boolean>?,
-            oldValue: Boolean?,
-            newValue: Boolean?
-        ) {
-            if (newValue != null && !newValue) {
-                onFocusLost()
-            }
-        }
-
-        override fun dispose() {
-            property.removeListener(this)
+fun Node.onKeyPressed(vararg keys: KeyCode, onKeyPressed: (KeyEvent) -> Unit) {
+    setOnKeyPressed {
+        if (it.code in keys) {
+            onKeyPressed(it)
         }
     }
 }

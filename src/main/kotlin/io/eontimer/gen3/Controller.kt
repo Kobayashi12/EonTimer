@@ -3,11 +3,16 @@ package io.eontimer.gen3
 import io.eontimer.model.TimerState
 import io.eontimer.service.CalibrationService
 import io.eontimer.service.TimerRunnerService
+import io.eontimer.util.javafx.and
+import io.eontimer.util.javafx.or
 import io.eontimer.util.javafx.asChoiceField
 import io.eontimer.util.javafx.bindBidirectional
+import io.eontimer.util.javafx.disableWhen
+import io.eontimer.util.javafx.onChange
+import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.showWhen
 import io.eontimer.util.javafx.spinner.LongValueFactory
-import io.eontimer.util.javafx.spinner.setOnFocusLost
+import io.eontimer.util.javafx.spinner.bindBidirectional
 import io.eontimer.util.javafx.spinner.text
 import io.eontimer.util.javafx.spinner.valueProperty
 import io.eontimer.util.milliseconds
@@ -48,35 +53,28 @@ class Controller(
     fun initialize() {
         modeField.asChoiceField().valueProperty
             .bindBidirectional(model.mode)
-        modeField.parent.disableProperty().bind(timerState.running)
+        modeField.parent.disableWhen(timerState.running)
 
         calibrationField.valueFactory = LongValueFactory()
-        calibrationField.valueProperty!!.bindBidirectional(model.calibration)
-        calibrationField.parent.disableProperty().bind(timerState.running)
+            .also { it.bindBidirectional(model.calibration) }
+        calibrationField.parent.disableWhen(timerState.running)
         calibrationField.setOnFocusLost(calibrationField::commitValue)
 
-        preTimerField.valueFactory = LongValueFactory(0)
-        preTimerField.valueProperty!!.bindBidirectional(model.preTimer)
-        preTimerField.parent.disableProperty().bind(timerState.running)
+        preTimerField.valueFactory = LongValueFactory(min = 0)
+            .also { it.bindBidirectional(model.preTimer) }
+        preTimerField.parent.disableWhen(timerState.running)
         preTimerField.setOnFocusLost(preTimerField::commitValue)
 
-        targetFrameField.valueFactory = LongValueFactory(0)
-        targetFrameField.valueProperty!!.bindBidirectional(model.targetFrame)
-        targetFrameField.parent.disableProperty().bind(
-            model.mode.isEqualTo(Mode.VARIABLE_TARGET)
-                .and(
-                    timerState.running.not()
-                        .or(primed.not())
-                )
-                .or(
-                    model.mode.isEqualTo(Mode.STANDARD)
-                        .and(timerState.running)
-                )
+        targetFrameField.valueFactory = LongValueFactory(min = 0)
+            .also { it.bindBidirectional(model.targetFrame) }
+        targetFrameField.parent.disableWhen(
+            (model.mode.isEqualTo(Mode.VARIABLE_TARGET) and !(timerState.running or primed))
+                or (model.mode.isEqualTo(Mode.STANDARD) and timerState.running)
         )
         targetFrameField.setOnFocusLost(targetFrameField::commitValue)
 
         setTargetFrameBtn.showWhen(model.mode.isEqualTo(Mode.VARIABLE_TARGET))
-        setTargetFrameBtn.disableProperty().bind(primed.not())
+        setTargetFrameBtn.disableWhen(!primed)
         setTargetFrameBtn.setOnAction {
             if (timerState.running.get()) {
                 val duration = calibrationService.toMillis(model.targetFrame.get())
@@ -86,16 +84,13 @@ class Controller(
             }
         }
 
-        frameHitField.valueFactory = LongValueFactory(0)
-        frameHitField.valueProperty!!.bindBidirectional(model.frameHit)
-        frameHitField.parent.disableProperty().bind(timerState.running)
+        frameHitField.valueFactory = LongValueFactory(min = 0)
+            .also { it.bindBidirectional(model.frameHit) }
+        frameHitField.parent.disableWhen(timerState.running)
         frameHitField.setOnFocusLost(frameHitField::commitValue)
         frameHitField.text = ""
 
-        coroutineScope.launch {
-            timerState.running.asFlow()
-                .collect { primed.set(it) }
-        }
+        timerState.running.onChange(fn = primed::set)
     }
 
     fun calibrate() {

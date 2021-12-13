@@ -2,9 +2,8 @@ package io.eontimer.timer
 
 import io.eontimer.util.javafx.asChoiceField
 import io.eontimer.util.javafx.bindBidirectional
+import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.spinner.LongValueFactory
-import io.eontimer.util.javafx.spinner.setOnFocusLost
-import io.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
 import javafx.scene.control.ChoiceBox
@@ -25,8 +24,8 @@ class SettingsController(
         consoleField.asChoiceField().valueProperty
             .bindBidirectional(settings.console)
 
-        refreshIntervalField.valueFactory = LongValueFactory(0L, 1000L)
-        refreshIntervalField.valueProperty!!.bindBidirectional(settings.refreshInterval)
+        refreshIntervalField.valueFactory = LongValueFactory(min = 0L, max = 1000L)
+            .also { it.valueProperty().bindBidirectional(settings.refreshInterval) }
         refreshIntervalField.setOnFocusLost(refreshIntervalField::commitValue)
 
         precisionCalibrationField.selectedProperty()

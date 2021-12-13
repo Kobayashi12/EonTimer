@@ -5,6 +5,11 @@ import io.eontimer.model.TimerState
 import io.eontimer.model.timer.TimerType
 import io.eontimer.service.TimerRunnerService
 import io.eontimer.service.factory.TimerFactoryService
+import io.eontimer.util.ifElse
+import io.eontimer.util.javafx.and
+import io.eontimer.util.javafx.disableWhen
+import io.eontimer.util.javafx.mapped
+import io.eontimer.util.javafx.onChange
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.control.Tab
@@ -50,30 +55,26 @@ class TimerControlPane(
             timerTabPane.selectionModel.select(timerType.tab)
         }
 
-        gen3Tab.disableProperty().bind(
-            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen3Tab)
-                .and(timerState.running)
-        )
-        gen4Tab.disableProperty().bind(
-            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen4Tab)
-                .and(timerState.running)
-        )
-        gen5Tab.disableProperty().bind(
-            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(gen5Tab)
-                .and(timerState.running)
-        )
-        customTab.disableProperty().bind(
-            timerTabPane.selectionModel.selectedItemProperty().isNotEqualTo(customTab)
-                .and(timerState.running)
-        )
+        val selectedItem = timerTabPane.selectionModel.selectedItemProperty()
+        gen3Tab.disableWhen(selectedItem.isNotEqualTo(gen3Tab) and timerState.running)
+        gen4Tab.disableWhen(selectedItem.isNotEqualTo(gen4Tab) and timerState.running)
+        gen5Tab.disableWhen(selectedItem.isNotEqualTo(gen5Tab) and timerState.running)
+        customTab.disableWhen(selectedItem.isNotEqualTo(customTab) and timerState.running)
 
-        timerTabPane.selectionModel.selectedItemProperty()
-            .addListener { _, _, newValue ->
-                timerType = newValue.timerType
+        timerTabPane.selectionModel
+            .selectedItemProperty()
+            .mapped { it.timerType }
+            .onChange {
+                timerType = it
             }
-        timerState.running.addListener { _, _, newValue ->
-            timerBtn.text = if (!newValue) "Start" else "Stop"
-        }
+        timerState.running
+            .mapped {
+                it.ifElse(
+                    whenTrue = { "Start" },
+                    whenFalse = { "Stop" }
+                )
+            }
+            .onChange(fn = timerBtn::setText)
 
         timerBtn.setOnAction {
             if (!timerState.running.get()) {
@@ -83,9 +84,7 @@ class TimerControlPane(
             }
         }
 
-        updateBtn.disableProperty().bind(
-            timerState.running
-        )
+        updateBtn.disableWhen(timerState.running)
         updateBtn.setOnAction {
             calibrate()
         }

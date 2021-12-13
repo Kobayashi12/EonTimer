@@ -2,8 +2,8 @@ package io.eontimer.action
 
 import io.eontimer.util.javafx.asChoiceField
 import io.eontimer.util.javafx.bindBidirectional
+import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.spinner.IntValueFactory
-import io.eontimer.util.javafx.spinner.setOnFocusLost
 import io.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
 import javafx.scene.control.ChoiceBox
