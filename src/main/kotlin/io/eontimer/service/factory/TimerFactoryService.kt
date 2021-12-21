@@ -2,13 +2,10 @@ package io.eontimer.service.factory
 
 import io.eontimer.model.ApplicationModel
 import io.eontimer.model.TimerState
+import io.eontimer.model.timer.TimerTab
 import io.eontimer.timer.Settings
-import io.eontimer.model.timer.TimerType
-import kotlinx.coroutines.CoroutineScope
+import io.eontimer.util.javafx.easybind.subscribe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.javafx.asFlow
-import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
 import java.time.Duration
 import javax.annotation.PostConstruct
@@ -16,41 +13,36 @@ import javax.annotation.PostConstruct
 @ExperimentalCoroutinesApi
 @Component
 class TimerFactoryService(
-    private val timerState: TimerState,
+    private val model: ApplicationModel,
+    override val timerState: TimerState,
     private val gen3TimerFactory: TimerFactory,
     private val gen4TimerFactory: TimerFactory,
     private val gen5TimerFactory: TimerFactory,
     private val customTimerFactory: TimerFactory,
-    private val applicationModel: ApplicationModel,
-    private val timerSettings: Settings,
-    private val coroutineScope: CoroutineScope
-) {
-    val stages: List<Duration> get() = timerFactory.stages
-    private val timerFactory: TimerFactory get() = applicationModel.selectedTimerType.timerFactory
+    private val timerSettings: Settings
+) : TimerFactory {
+
 
     @PostConstruct
     private fun initialize() {
-        coroutineScope.launch {
-            applicationModel.selectedTimerTypeProperty.asFlow()
-                .collect { timerState.update(it.timerFactory.stages) }
-            listOf(
-                timerSettings.console,
-                timerSettings.precisionCalibrationMode
-            ).forEach {
-                it.asFlow().collect {
-                    timerState.update(stages)
-                }
-            }
-        }
+        model.selectedTimerTab
+            .subscribe { resetTimerState() }
+        timerSettings.console
+            .subscribe { resetTimerState() }
+        timerSettings.precisionCalibrationMode
+            .subscribe { resetTimerState() }
     }
 
-    fun calibrate() = timerFactory.calibrate()
+    override val stages: List<Duration>
+        get() = TODO("Not yet implemented")
 
-    private val TimerType.timerFactory: TimerFactory
+    override fun calibrate() = timerFactory.calibrate()
+
+    private val TimerTab.timerFactory: TimerFactory
         get() = when (this) {
-            TimerType.GEN3 -> gen3TimerFactory
-            TimerType.GEN4 -> gen4TimerFactory
-            TimerType.GEN5 -> gen5TimerFactory
-            TimerType.CUSTOM -> customTimerFactory
+            TimerTab.GEN3 -> gen3TimerFactory
+            TimerTab.GEN4 -> gen4TimerFactory
+            TimerTab.GEN5 -> gen5TimerFactory
+            TimerTab.CUSTOM -> customTimerFactory
         }
 }

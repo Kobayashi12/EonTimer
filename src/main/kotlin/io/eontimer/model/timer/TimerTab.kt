@@ -1,5 +1,5 @@
 package io.eontimer.model.timer
 
-enum class TimerType {
+enum class TimerTab {
     GEN3, GEN4, GEN5, CUSTOM
 }

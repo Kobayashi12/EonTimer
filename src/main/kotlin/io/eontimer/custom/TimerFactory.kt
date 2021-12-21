@@ -2,7 +2,6 @@ package io.eontimer.custom
 
 import io.eontimer.model.TimerState
 import io.eontimer.service.factory.TimerFactory
-import io.eontimer.service.factory.update
 import javafx.collections.ListChangeListener
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.springframework.stereotype.Component

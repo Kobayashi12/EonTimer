@@ -1,10 +1,7 @@
 package io.eontimer.model
 
+import io.eontimer.config.StoredSettings
 import io.eontimer.model.timer.TimerConstants
-import io.eontimer.model.timer.TimerType
-import io.eontimer.util.javafx.getValue
-import io.eontimer.util.javafx.setValue
-import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import io.eontimer.custom.Model as CustomModel
 import io.eontimer.gen3.Model as Gen3Model
@@ -19,8 +16,20 @@ data class ApplicationModel(
     val gen5: Gen5Model = Gen5Model(),
     val custom: CustomModel = CustomModel(),
     val actionSettings: ActionSettings = ActionSettings(),
-    val timerSettings: TimerSettings = TimerSettings()
+    val timerSettings: TimerSettings = TimerSettings(),
 ) {
-    val selectedTimerTypeProperty: ObjectProperty<TimerType> = SimpleObjectProperty(TimerConstants.DEFAULT_TIMER_TYPE)
-    var selectedTimerType: TimerType by selectedTimerTypeProperty
+    val selectedTimerTab = SimpleObjectProperty(TimerConstants.DEFAULT_TIMER_TAB)
+
+    constructor(
+        storedSettings: StoredSettings
+    ) : this(
+        gen3 = Gen3Model(storedSettings.gen3),
+        gen4 = Gen4Model(storedSettings.gen4),
+        gen5 = Gen5Model(storedSettings.gen5),
+        custom = CustomModel(storedSettings.custom),
+        actionSettings = ActionSettings(storedSettings.actionSettings),
+        timerSettings = TimerSettings(storedSettings.timerSettings),
+    ) {
+        selectedTimerTab.set(storedSettings.selectedTimerTab)
+    }
 }

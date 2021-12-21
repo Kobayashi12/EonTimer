@@ -14,3 +14,7 @@ class TimerState {
     val currentRemaining = SimpleObjectProperty(Duration.ZERO)
     val running = SimpleBooleanProperty(false)
 }
+
+interface TimerStateAware {
+    val timerState: TimerState
+}

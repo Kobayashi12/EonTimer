@@ -37,10 +37,13 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":eon-timer-audio"))
     implementation(libs.kotlinCoroutinesJavaFx)
+    implementation("org.fxmisc.easybind:easybind:1.0.3")
+
+    implementation("io.projectreactor:reactor-core")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     kapt("org.springframework.boot:spring-boot-autoconfigure-processor")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("de.jensd:fontawesomefx:8.9")
 

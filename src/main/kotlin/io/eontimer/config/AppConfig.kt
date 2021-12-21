@@ -67,7 +67,9 @@ class AppConfig {
             ?: StoredSettings()
 
     @Bean
-    fun applicationModel() = ApplicationModel()
+    fun applicationModel(
+        storedSettings: StoredSettings
+    ) = ApplicationModel()
 
     @Bean
     fun gen3Model(

@@ -1,6 +1,8 @@
 package io.eontimer.gen5
 
+import io.eontimer.TimerController
 import io.eontimer.model.TimerState
+import io.eontimer.model.timer.TimerTab
 import io.eontimer.util.javafx.asChoiceField
 import io.eontimer.util.javafx.bindBidirectional
 import io.eontimer.util.javafx.disableWhen
@@ -20,10 +22,12 @@ import org.springframework.stereotype.Component
 @Component("gen5Controller")
 @ExperimentalCoroutinesApi
 class Controller(
-    private val model: Model,
-    private val timerState: TimerState,
+    override val model: Model,
+    override val timerState: TimerState,
     private val timerFactory: TimerFactory
-) {
+) : TimerController<Model> {
+    override val timerTab = TimerTab.GEN5
+
     // @formatter:off
     @FXML private lateinit var modeField: ChoiceBox<Mode>
     @FXML private lateinit var calibrationField: Spinner<Long>
@@ -119,7 +123,7 @@ class Controller(
         actualAdvancesField.text = ""
     }
 
-    fun calibrate() {
+    override fun calibrate() {
         timerFactory.calibrate()
         secondHitField.text = ""
         delayHitField.text = ""

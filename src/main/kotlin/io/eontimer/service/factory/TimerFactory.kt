@@ -1,22 +1,27 @@
 package io.eontimer.service.factory
 
-import io.eontimer.model.TimerState
-import io.eontimer.util.getStage
+import io.eontimer.model.TimerStateAware
 import io.eontimer.util.isIndefinite
 import io.eontimer.util.sum
+import javafx.application.Platform
 import java.time.Duration
 
-interface TimerFactory {
+interface TimerFactory : TimerStateAware {
     val stages: List<Duration>
     fun calibrate()
 }
 
-internal fun TimerState.update(stages: List<Duration>) {
-    val stage = stages.firstOrNull() ?: Duration.ZERO
+fun TimerFactory.resetTimerState() {
+    val firstStage = stages.elementAtOrNull(0) ?: Duration.ZERO
+    val currentRemaining = if (firstStage.isIndefinite) Duration.ZERO else firstStage
+    val secondStage = stages.elementAtOrNull(1) ?: Duration.ZERO
+    val totalTime = stages.sum()
 
-    currentStage.set(stage)
-    currentRemaining.set(if (stage.isIndefinite) Duration.ZERO else stage)
-    nextStage.set(stages.elementAtOrNull(1) ?: Duration.ZERO)
-    totalTime.set(stages.sum())
+    Platform.runLater {
+        timerState.currentStage.set(firstStage)
+        timerState.currentRemaining.set(currentRemaining)
+        timerState.nextStage.set(secondStage)
+        timerState.totalTime.set(totalTime)
+    }
 }
 

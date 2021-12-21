@@ -1,6 +1,8 @@
 package io.eontimer.gen4
 
+import io.eontimer.TimerController
 import io.eontimer.model.TimerState
+import io.eontimer.model.timer.TimerTab
 import io.eontimer.util.javafx.disableWhen
 import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.spinner.LongValueFactory
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Component
 @Component("gen4Controller")
 @ExperimentalCoroutinesApi
 class Controller(
-    private val model: Model,
-    private val timerState: TimerState,
+    override val model: Model,
+    override val timerState: TimerState,
     private val timerFactory: TimerFactory
-) {
+) : TimerController<Model> {
+    override val timerTab = TimerTab.GEN4
+
     // @formatter:off
     @FXML private lateinit var targetDelayField: Spinner<Long>
     @FXML private lateinit var targetSecondField: Spinner<Long>
@@ -54,7 +58,7 @@ class Controller(
         delayHitField.text = ""
     }
 
-    fun calibrate() {
+    override fun calibrate() {
         timerFactory.calibrate()
         delayHitField.text = ""
     }

@@ -2,7 +2,9 @@ package io.eontimer.custom
 
 import de.jensd.fx.glyphs.GlyphsDude
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import io.eontimer.TimerController
 import io.eontimer.model.TimerState
+import io.eontimer.model.timer.TimerTab
 import io.eontimer.util.javafx.disableWhen
 import io.eontimer.util.javafx.onKeyPressed
 import io.eontimer.util.javafx.or
@@ -18,15 +20,16 @@ import javafx.scene.control.SelectionMode
 import javafx.scene.control.Spinner
 import javafx.scene.control.cell.TextFieldListCell
 import javafx.scene.input.KeyCode
-import javafx.util.StringConverter
 import javafx.util.converter.LongStringConverter
 import org.springframework.stereotype.Component
 
 @Component("customController")
 class Controller(
-    private val model: Model,
-    private val timerState: TimerState
-) {
+    override val model: Model,
+    override val timerState: TimerState
+) : TimerController<Model> {
+    override val timerTab = TimerTab.CUSTOM
+
     // @formatter:off
     @FXML private lateinit var list: ListView<Long>
     @FXML private lateinit var valueField: Spinner<Long>
@@ -70,6 +73,8 @@ class Controller(
             removeSelectedIndices()
         }
     }
+
+    override fun calibrate() = Unit
 
     private fun addValue() {
         model.stages.add(valueField.value)

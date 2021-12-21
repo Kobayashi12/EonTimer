@@ -1,20 +1,20 @@
 package io.eontimer.gen3
 
+import io.eontimer.TimerController
 import io.eontimer.model.TimerState
+import io.eontimer.model.timer.TimerTab
 import io.eontimer.service.CalibrationService
 import io.eontimer.service.TimerRunnerService
 import io.eontimer.util.javafx.and
-import io.eontimer.util.javafx.or
 import io.eontimer.util.javafx.asChoiceField
-import io.eontimer.util.javafx.bindBidirectional
 import io.eontimer.util.javafx.disableWhen
 import io.eontimer.util.javafx.onChange
+import io.eontimer.util.javafx.or
 import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.showWhen
 import io.eontimer.util.javafx.spinner.LongValueFactory
 import io.eontimer.util.javafx.spinner.bindBidirectional
 import io.eontimer.util.javafx.spinner.text
-import io.eontimer.util.javafx.spinner.valueProperty
 import io.eontimer.util.milliseconds
 import io.eontimer.util.sum
 import javafx.beans.property.SimpleBooleanProperty
@@ -24,21 +24,19 @@ import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Spinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.javafx.asFlow
-import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
 
 @Component("gen3Controller")
 @ExperimentalCoroutinesApi
 class Controller(
-    private val model: Model,
-    private val timerState: TimerState,
+    override val model: Model,
+    override val timerState: TimerState,
     private val timerFactory: TimerFactory,
     private val timerRunnerService: TimerRunnerService,
     private val calibrationService: CalibrationService,
-    private val coroutineScope: CoroutineScope
-) {
+) : TimerController<Model> {
+    override val timerTab = TimerTab.GEN3
+
     // @formatter:off
     @FXML private lateinit var modeField: ChoiceBox<Mode>
     @FXML private lateinit var calibrationField: Spinner<Long>
@@ -51,7 +49,8 @@ class Controller(
     private val primed = SimpleBooleanProperty(true)
 
     fun initialize() {
-        modeField.asChoiceField().valueProperty
+        modeField.asChoiceField()
+            .valueProperty
             .bindBidirectional(model.mode)
         modeField.parent.disableWhen(timerState.running)
 
@@ -93,7 +92,7 @@ class Controller(
         timerState.running.onChange(fn = primed::set)
     }
 
-    fun calibrate() {
+    override fun calibrate() {
         timerFactory.calibrate()
         frameHitField.text = ""
     }
