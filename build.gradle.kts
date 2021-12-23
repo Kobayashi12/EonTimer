@@ -36,6 +36,8 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":eon-timer-audio"))
+    implementation(libs.kotlinCoroutinesCore)
+    implementation(libs.kotlinCoroutinesCoreJvm)
     implementation(libs.kotlinCoroutinesJavaFx)
     implementation("org.fxmisc.easybind:easybind:1.0.3")
 
@@ -44,16 +46,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     kapt("org.springframework.boot:spring-boot-autoconfigure-processor")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("com.google.guava:guava:31.0.1-jre")
     implementation("de.jensd:fontawesomefx:8.9")
 
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.2")
 //    testImplementation("org.testfx:testfx-core:$testfxVersion")
 //    testImplementation("org.testfx:testfx-junit:$testfxVersion")
 }
 
 application {
-    mainClass.set("io.eontimer.AppLauncher")
+    mainClass.set("io.eontimer.Launcher")
 }
 
 tasks.withType<KotlinCompile>  {

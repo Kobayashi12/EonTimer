@@ -1,4 +1,4 @@
-package io.eontimer.controller.settings
+package io.eontimer
 
 import io.eontimer.SpringFxmlLoader
 import io.eontimer.config.AppProperties

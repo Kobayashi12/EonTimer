@@ -10,6 +10,6 @@ data class StoredSettings(
     ) : this(
         console = settings.console.get(),
         refreshInterval = settings.refreshInterval.get(),
-        precisionCalibrationMode = settings.precisionCalibrationMode.get()
+        precisionCalibrationMode = settings.precisionCalibration.get()
     )
 }

@@ -9,5 +9,5 @@ class Settings(
 ) {
     val console = SimpleObjectProperty(storedSettings.console)
     val refreshInterval = SimpleLongProperty(storedSettings.refreshInterval)
-    val precisionCalibrationMode = SimpleBooleanProperty(storedSettings.precisionCalibrationMode)
+    val precisionCalibration = SimpleBooleanProperty(storedSettings.precisionCalibrationMode)
 }

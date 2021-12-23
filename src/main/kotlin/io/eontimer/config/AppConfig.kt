@@ -2,7 +2,7 @@ package io.eontimer.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.eontimer.model.ApplicationModel
+import javafx.beans.property.SimpleObjectProperty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -67,9 +67,9 @@ class AppConfig {
             ?: StoredSettings()
 
     @Bean
-    fun applicationModel(
+    fun selectedTimerTab(
         storedSettings: StoredSettings
-    ) = ApplicationModel()
+    ) = SimpleObjectProperty(storedSettings.selectedTimerTab)
 
     @Bean
     fun gen3Model(

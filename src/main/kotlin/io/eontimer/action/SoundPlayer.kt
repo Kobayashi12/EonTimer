@@ -1,11 +1,12 @@
 package io.eontimer.action
 
 import io.eontimer.model.resource.BASE_RESOURCE_PATH
+import io.eontimer.util.javafx.getValue
+import javafx.application.Platform
 import javafx.scene.media.Media
 import javafx.scene.media.MediaPlayer
 import javafx.util.Duration
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.javafx.asFlow
 import kotlinx.coroutines.launch
@@ -14,18 +15,17 @@ import java.net.URL
 import javax.annotation.PostConstruct
 
 @Component
-@ExperimentalCoroutinesApi
 class SoundPlayer(
-    private val actionSettings: Settings,
+    actionSettings: Settings,
     private val coroutineScope: CoroutineScope
 ) {
+    private val sound by actionSettings.sound
     private lateinit var mediaPlayer: MediaPlayer
 
     @PostConstruct
     private fun initialize() {
-        coroutineScope.launch {
-            actionSettings.sound.asFlow()
-                .collect { mediaPlayer = createMediaPlayer(it.url) }
+        Platform.runLater {
+            mediaPlayer = createMediaPlayer(sound.url)
         }
         // NOTE: this buffers the MediaPlayer.
         // Without this buffering, the first time

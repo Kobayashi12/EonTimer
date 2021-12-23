@@ -3,8 +3,8 @@ package io.eontimer.custom
 import de.jensd.fx.glyphs.GlyphsDude
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import io.eontimer.TimerController
-import io.eontimer.model.TimerState
-import io.eontimer.model.timer.TimerTab
+import io.eontimer.TimerState
+import io.eontimer.TimerTab
 import io.eontimer.util.javafx.disableWhen
 import io.eontimer.util.javafx.onKeyPressed
 import io.eontimer.util.javafx.or
@@ -26,8 +26,9 @@ import org.springframework.stereotype.Component
 @Component("customController")
 class Controller(
     override val model: Model,
-    override val timerState: TimerState
-) : TimerController<Model> {
+    override val state: TimerState,
+    override val timerFactory: ControllerTimerFactory
+) : TimerController<Model, ControllerTimerFactory> {
     override val timerTab = TimerTab.CUSTOM
 
     // @formatter:off
@@ -45,10 +46,10 @@ class Controller(
             removeSelectedIndices()
         }
         list.selectionModel.selectionMode = SelectionMode.MULTIPLE
-        list.disableWhen(timerState.running)
+        list.disableWhen(state.running)
 
         valueField.valueFactory = LongValueFactory(min = 0)
-        valueField.disableWhen(timerState.running)
+        valueField.disableWhen(state.running)
         valueField.onKeyPressed(KeyCode.ENTER) {
             addValue()
         }
@@ -58,7 +59,7 @@ class Controller(
         valueAddBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.PLUS)
         valueAddBtn.disableWhen(
             valueField.textProperty.isEmpty
-                or timerState.running
+                or state.running
         )
         valueAddBtn.setOnAction {
             addValue()
@@ -67,7 +68,7 @@ class Controller(
         valueRemoveBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.MINUS)
         valueRemoveBtn.disableWhen(
             list.selectionModel.selectedItemProperty().isNull
-                or timerState.running
+                or state.running
         )
         valueRemoveBtn.setOnAction {
             removeSelectedIndices()

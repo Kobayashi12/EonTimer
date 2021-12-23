@@ -1,17 +1,16 @@
-package io.eontimer.controller
+package io.eontimer
 
 import de.jensd.fx.glyphs.GlyphsDude
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import io.eontimer.controller.settings.SettingsDialog
-import io.eontimer.model.TimerState
+import io.eontimer.util.javafx.disableWhen
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import org.springframework.stereotype.Component
 
 @Component
-class EonTimerPane(
-    private val settingsDialog: SettingsDialog,
-    private val timerState: TimerState
+class EonTimerController(
+    private val timerState: TimerState,
+    private val settingsDialog: SettingsDialog
 ) {
     // @formatter:off
     @FXML private lateinit var settingsBtn: Button
@@ -19,7 +18,7 @@ class EonTimerPane(
 
     fun initialize() {
         settingsBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.GEAR)
-        settingsBtn.disableProperty().bind(timerState.running)
+        settingsBtn.disableWhen(timerState.running)
         settingsBtn.setOnAction {
             settingsDialog.showAndWait()
         }

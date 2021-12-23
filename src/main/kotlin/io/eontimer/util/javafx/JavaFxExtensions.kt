@@ -3,6 +3,7 @@ package io.eontimer.util.javafx
 import com.sun.javafx.binding.BidirectionalBinding
 import io.eontimer.model.resource.CssResource
 import javafx.application.Platform
+import javafx.beans.InvalidationListener
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.binding.BooleanExpression
@@ -11,6 +12,7 @@ import javafx.beans.property.IntegerProperty
 import javafx.beans.property.LongProperty
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.Property
+import javafx.beans.property.ReadOnlyProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableIntegerValue
@@ -90,12 +92,3 @@ operator fun LongProperty.plusAssign(value: Long) {
 fun Scene.addCss(resource: CssResource) {
     stylesheets.add(resource.path)
 }
-
-var Label.isActive: Boolean
-    get() = this.styleClass.contains("active")
-    set(value) {
-        when (value) {
-            true -> styleClass.add("active")
-            false -> styleClass.remove("active")
-        }
-    }

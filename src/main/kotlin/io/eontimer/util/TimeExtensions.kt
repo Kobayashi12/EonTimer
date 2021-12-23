@@ -1,31 +1,24 @@
 package io.eontimer.util
 
-import java.time.Duration
-import java.time.Instant
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
-val INDEFINITE = Duration.between(Instant.MIN, Instant.MAX)!!
-val Duration.isIndefinite: Boolean get() = this == INDEFINITE
 const val MINIMUM_LENGTH = 14000L
-
-inline val Long.minutes: Duration get() = Duration.ofMinutes(this)
-inline val Long.seconds: Duration get() = Duration.ofSeconds(this)
-inline val Long.milliseconds: Duration get() = Duration.ofMillis(this)
-inline val Long.nanoseconds: Duration get() = Duration.ofNanos(this)
+private val ONE_MINUTE = 1.minutes.inWholeMilliseconds
 
 fun List<Duration>.sum(): Duration =
-    if (INDEFINITE !in this) {
-        Duration.ofMillis(sumOf(Duration::toMillis))
-    } else {
-        INDEFINITE
+    when (contains(Duration.INFINITE)) {
+        false -> reduceRight { duration, acc -> acc + duration }
+        true -> Duration.INFINITE
     }
 
 fun Long.toMinimumLength(): Long {
     var normalized = this
     while (normalized < MINIMUM_LENGTH)
-        normalized += 1L.minutes.toMillis()
+        normalized += ONE_MINUTE
     return normalized
 }
 
-fun List<Duration>.getStage(index: Int): Duration {
-    return if (index < size) get(index) else Duration.ZERO
-}
+@Suppress("NOTHING_TO_INLINE")
+inline fun List<Duration>.getStage(index: Int): Duration =
+    elementAtOrElse(index) { Duration.ZERO }

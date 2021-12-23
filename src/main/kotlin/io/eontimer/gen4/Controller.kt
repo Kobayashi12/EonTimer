@@ -1,8 +1,8 @@
 package io.eontimer.gen4
 
 import io.eontimer.TimerController
-import io.eontimer.model.TimerState
-import io.eontimer.model.timer.TimerTab
+import io.eontimer.TimerState
+import io.eontimer.TimerTab
 import io.eontimer.util.javafx.disableWhen
 import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.spinner.LongValueFactory
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component
 @ExperimentalCoroutinesApi
 class Controller(
     override val model: Model,
-    override val timerState: TimerState,
-    private val timerFactory: TimerFactory
-) : TimerController<Model> {
+    override val state: TimerState,
+    override val timerFactory: ControllerTimerFactory
+) : TimerController<Model, ControllerTimerFactory> {
     override val timerTab = TimerTab.GEN4
 
     // @formatter:off
@@ -33,27 +33,27 @@ class Controller(
     fun initialize() {
         calibratedDelayField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.calibratedDelay) }
-        calibratedDelayField.parent.disableWhen(timerState.running)
+        calibratedDelayField.parent.disableWhen(state.running)
         calibratedDelayField.setOnFocusLost(calibratedDelayField::commitValue)
 
         calibratedSecondField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.calibratedDelay) }
-        calibratedSecondField.parent.disableWhen(timerState.running)
+        calibratedSecondField.parent.disableWhen(state.running)
         calibratedSecondField.setOnFocusLost(calibratedSecondField::commitValue)
 
         targetDelayField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetDelay) }
-        targetDelayField.parent.disableWhen(timerState.running)
+        targetDelayField.parent.disableWhen(state.running)
         targetDelayField.setOnFocusLost(targetDelayField::commitValue)
 
         targetSecondField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetSecond) }
-        targetSecondField.parent.disableWhen(timerState.running)
+        targetSecondField.parent.disableWhen(state.running)
         targetSecondField.setOnFocusLost(targetSecondField::commitValue)
 
         delayHitField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.delayHit) }
-        delayHitField.parent.disableWhen(timerState.running)
+        delayHitField.parent.disableWhen(state.running)
         delayHitField.setOnFocusLost(delayHitField::commitValue)
         delayHitField.text = ""
     }

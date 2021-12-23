@@ -29,6 +29,6 @@ class SettingsController(
         refreshIntervalField.setOnFocusLost(refreshIntervalField::commitValue)
 
         precisionCalibrationField.selectedProperty()
-            .bindBidirectional(settings.precisionCalibrationMode)
+            .bindBidirectional(settings.precisionCalibration)
     }
 }

@@ -1,10 +1,9 @@
 package io.eontimer.gen5
 
 import io.eontimer.TimerController
-import io.eontimer.model.TimerState
-import io.eontimer.model.timer.TimerTab
+import io.eontimer.TimerState
+import io.eontimer.TimerTab
 import io.eontimer.util.javafx.asChoiceField
-import io.eontimer.util.javafx.bindBidirectional
 import io.eontimer.util.javafx.disableWhen
 import io.eontimer.util.javafx.or
 import io.eontimer.util.javafx.setOnFocusLost
@@ -12,7 +11,6 @@ import io.eontimer.util.javafx.showWhen
 import io.eontimer.util.javafx.spinner.LongValueFactory
 import io.eontimer.util.javafx.spinner.bindBidirectional
 import io.eontimer.util.javafx.spinner.text
-import io.eontimer.util.javafx.spinner.valueProperty
 import javafx.fxml.FXML
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Spinner
@@ -23,9 +21,9 @@ import org.springframework.stereotype.Component
 @ExperimentalCoroutinesApi
 class Controller(
     override val model: Model,
-    override val timerState: TimerState,
-    private val timerFactory: TimerFactory
-) : TimerController<Model> {
+    override val state: TimerState,
+    override val timerFactory: ControllerTimerFactory
+) : TimerController<Model, ControllerTimerFactory> {
     override val timerTab = TimerTab.GEN5
 
     // @formatter:off
@@ -44,16 +42,16 @@ class Controller(
     fun initialize() {
         modeField.asChoiceField().valueProperty
             .bindBidirectional(model.mode)
-        modeField.parent.disableWhen(timerState.running)
+        modeField.parent.disableWhen(state.running)
 
         calibrationField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.calibration) }
-        calibrationField.parent.disableWhen(timerState.running)
+        calibrationField.parent.disableWhen(state.running)
         calibrationField.setOnFocusLost(calibrationField::commitValue)
 
         targetDelayField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetDelay) }
-        targetDelayField.parent.disableWhen(timerState.running)
+        targetDelayField.parent.disableWhen(state.running)
         targetDelayField.parent.showWhen(
             model.mode.isEqualTo(Mode.C_GEAR)
                 or model.mode.isEqualTo(Mode.ENTRALINK)
@@ -63,12 +61,12 @@ class Controller(
 
         targetSecondField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetSecond) }
-        targetSecondField.parent.disableWhen(timerState.running)
+        targetSecondField.parent.disableWhen(state.running)
         targetSecondField.setOnFocusLost(targetSecondField::commitValue)
 
         entralinkCalibrationField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.entralinkCalibration) }
-        entralinkCalibrationField.parent.disableWhen(timerState.running)
+        entralinkCalibrationField.parent.disableWhen(state.running)
         entralinkCalibrationField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENTRALINK)
                 or model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
@@ -77,7 +75,7 @@ class Controller(
 
         frameCalibrationField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.frameCalibration) }
-        frameCalibrationField.parent.disableWhen(timerState.running)
+        frameCalibrationField.parent.disableWhen(state.running)
         frameCalibrationField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
         )
@@ -85,7 +83,7 @@ class Controller(
 
         targetAdvancesField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetAdvances) }
-        targetAdvancesField.parent.disableWhen(timerState.running)
+        targetAdvancesField.parent.disableWhen(state.running)
         targetAdvancesField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
         )
@@ -93,7 +91,7 @@ class Controller(
 
         secondHitField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.secondHit) }
-        secondHitField.parent.disableWhen(timerState.running)
+        secondHitField.parent.disableWhen(state.running)
         secondHitField.parent.showWhen(
             model.mode.isEqualTo(Mode.STANDARD)
                 or model.mode.isEqualTo(Mode.ENTRALINK)
@@ -104,7 +102,7 @@ class Controller(
 
         delayHitField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.delayHit) }
-        delayHitField.parent.disableWhen(timerState.running)
+        delayHitField.parent.disableWhen(state.running)
         delayHitField.parent.showWhen(
             model.mode.isEqualTo(Mode.C_GEAR)
                 or model.mode.isEqualTo(Mode.ENTRALINK)
@@ -115,7 +113,7 @@ class Controller(
 
         actualAdvancesField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.advancesHit) }
-        actualAdvancesField.parent.disableWhen(timerState.running)
+        actualAdvancesField.parent.disableWhen(state.running)
         actualAdvancesField.parent.showWhen(
             model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
         )

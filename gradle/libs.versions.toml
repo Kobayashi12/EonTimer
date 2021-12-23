@@ -1,12 +1,13 @@
 [versions]
 kotlin = "1.6.0"
-kotlinCoroutines = "1.5.2"
+kotlinCoroutines = "1.6.0"
 springBoot = "2.5.6"
 ktlint = "10.2.0"
 jenny = "1.2.0"
 
 [libraries]
 kotlinCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+kotlinCoroutinesCoreJvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinCoroutines" }
 kotlinCoroutinesJavaFx = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-javafx", version.ref = "kotlinCoroutines" }
 jennyAnnotations = { module = "io.github.landerlyoung:jenny-annotation", version.ref = "jenny" }
 jennyCompiler = { module = "io.github.landerlyoung:jenny-compiler", version.ref = "jenny" }

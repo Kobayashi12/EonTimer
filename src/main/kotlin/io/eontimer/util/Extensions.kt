@@ -1,19 +1,17 @@
 package io.eontimer.util
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+fun <T> MutableList<T>.peek() = elementAtOrNull(0)
 
-fun <T> Boolean.ifElse(
-    whenTrue: () -> T,
-    whenFalse: () -> T
-): T =
-    when (this) {
-        true -> whenTrue()
-        false -> whenFalse()
-    }
+fun <T> MutableList<T>.pop(): T? = if (isEmpty()) null else removeAt(0)
 
 fun <T> MutableList<T>.removeIndices(indices: List<Int>) {
     indices.forEachIndexed { offset, selectedIndex -> removeAt(selectedIndex - offset) }
+}
+
+fun <T> List<T>.toBuilder(
+    builderAction: MutableList<T>.() -> Unit
+): List<T> {
+    val mutable = toMutableList()
+    mutable.builderAction()
+    return mutable
 }

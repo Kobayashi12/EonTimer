@@ -17,9 +17,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ConfigurableApplicationContext
 
 @SpringBootApplication
-class AppLauncher : Application() {
+class EonTimerLauncher : Application() {
     private lateinit var ctx: ConfigurableApplicationContext
-    private val log = LoggerFactory.getLogger(AppLauncher::class.java)
+    private val log = LoggerFactory.getLogger(EonTimerLauncher::class.java)
 
     override fun init() {
         val args = parameters.raw.toTypedArray()
@@ -49,5 +49,5 @@ class AppLauncher : Application() {
 }
 
 fun main(args: Array<String>) {
-    launch(AppLauncher::class.java, *args)
+    launch(EonTimerLauncher::class.java, *args)
 }
