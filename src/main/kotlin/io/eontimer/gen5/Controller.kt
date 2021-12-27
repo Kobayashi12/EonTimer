@@ -3,9 +3,9 @@ package io.eontimer.gen5
 import io.eontimer.TimerController
 import io.eontimer.TimerState
 import io.eontimer.TimerTab
-import io.eontimer.util.javafx.asChoiceField
-import io.eontimer.util.javafx.disableWhen
-import io.eontimer.util.javafx.or
+import io.eontimer.resetTimerState
+import io.eontimer.util.javafx.anyChangesOf
+import io.eontimer.util.javafx.initializeChoices
 import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.showWhen
 import io.eontimer.util.javafx.spinner.LongValueFactory
@@ -14,11 +14,9 @@ import io.eontimer.util.javafx.spinner.text
 import javafx.fxml.FXML
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Spinner
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.springframework.stereotype.Component
 
-@Component("gen5Controller")
-@ExperimentalCoroutinesApi
+@Component("gen5TimerController")
 class Controller(
     override val model: Model,
     override val state: TimerState,
@@ -40,83 +38,117 @@ class Controller(
     // @formatter:on
 
     fun initialize() {
-        modeField.asChoiceField().valueProperty
+        anyChangesOf(
+            model.mode,
+            model.targetDelay,
+            model.targetSecond,
+            model.targetAdvances,
+            model.calibration,
+            model.frameCalibration,
+            model.entralinkCalibration
+        ) {
+            resetTimerState()
+        }
+
+        modeField.initializeChoices()
+        modeField.valueProperty()
             .bindBidirectional(model.mode)
-        modeField.parent.disableWhen(state.running)
+        modeField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
 
         calibrationField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.calibration) }
-        calibrationField.parent.disableWhen(state.running)
+        calibrationField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
         calibrationField.setOnFocusLost(calibrationField::commitValue)
 
         targetDelayField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetDelay) }
-        targetDelayField.parent.disableWhen(state.running)
-        targetDelayField.parent.showWhen(
-            model.mode.isEqualTo(Mode.C_GEAR)
-                or model.mode.isEqualTo(Mode.ENTRALINK)
-                or model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
-        )
+        targetDelayField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
+        targetDelayField.parent
+            .showWhen(
+                model.mode.isEqualTo(Mode.C_GEAR)
+                    .or(model.mode.isEqualTo(Mode.ENTRALINK))
+                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+            )
         targetDelayField.setOnFocusLost(targetDelayField::commitValue)
 
         targetSecondField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetSecond) }
-        targetSecondField.parent.disableWhen(state.running)
+        targetSecondField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
         targetSecondField.setOnFocusLost(targetSecondField::commitValue)
 
         entralinkCalibrationField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.entralinkCalibration) }
-        entralinkCalibrationField.parent.disableWhen(state.running)
-        entralinkCalibrationField.parent.showWhen(
-            model.mode.isEqualTo(Mode.ENTRALINK)
-                or model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
-        )
+        entralinkCalibrationField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
+        entralinkCalibrationField.parent
+            .showWhen(
+                model.mode.isEqualTo(Mode.ENTRALINK)
+                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+            )
         entralinkCalibrationField.setOnFocusLost(entralinkCalibrationField::commitValue)
 
         frameCalibrationField.valueFactory = LongValueFactory()
             .also { it.bindBidirectional(model.frameCalibration) }
-        frameCalibrationField.parent.disableWhen(state.running)
-        frameCalibrationField.parent.showWhen(
-            model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
-        )
+        frameCalibrationField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
+        frameCalibrationField.parent
+            .showWhen(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
         frameCalibrationField.setOnFocusLost(frameCalibrationField::commitValue)
 
         targetAdvancesField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.targetAdvances) }
-        targetAdvancesField.parent.disableWhen(state.running)
-        targetAdvancesField.parent.showWhen(
-            model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
-        )
+        targetAdvancesField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
+        targetAdvancesField.parent
+            .showWhen(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
         targetAdvancesField.setOnFocusLost(targetAdvancesField::commitValue)
 
         secondHitField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.secondHit) }
-        secondHitField.parent.disableWhen(state.running)
-        secondHitField.parent.showWhen(
-            model.mode.isEqualTo(Mode.STANDARD)
-                or model.mode.isEqualTo(Mode.ENTRALINK)
-                or model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
-        )
+        secondHitField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
+        secondHitField.parent
+            .showWhen(
+                model.mode.isEqualTo(Mode.STANDARD)
+                    .or(model.mode.isEqualTo(Mode.ENTRALINK))
+                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+            )
         secondHitField.setOnFocusLost(secondHitField::commitValue)
         secondHitField.text = ""
 
         delayHitField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.delayHit) }
-        delayHitField.parent.disableWhen(state.running)
-        delayHitField.parent.showWhen(
-            model.mode.isEqualTo(Mode.C_GEAR)
-                or model.mode.isEqualTo(Mode.ENTRALINK)
-                or model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
-        )
+        delayHitField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
+        delayHitField.parent
+            .showWhen(
+                model.mode.isEqualTo(Mode.C_GEAR)
+                    .or(model.mode.isEqualTo(Mode.ENTRALINK))
+                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+            )
         delayHitField.setOnFocusLost(delayHitField::commitValue)
         delayHitField.text = ""
 
         actualAdvancesField.valueFactory = LongValueFactory(min = 0)
             .also { it.bindBidirectional(model.advancesHit) }
-        actualAdvancesField.parent.disableWhen(state.running)
-        actualAdvancesField.parent.showWhen(
-            model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK)
-        )
+        actualAdvancesField.parent
+            .disableProperty()
+            .bind(state.runningProperty)
+        actualAdvancesField.parent
+            .showWhen(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
         actualAdvancesField.setOnFocusLost(actualAdvancesField::commitValue)
         actualAdvancesField.text = ""
     }

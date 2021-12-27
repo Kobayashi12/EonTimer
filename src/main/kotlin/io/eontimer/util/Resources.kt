@@ -1,4 +1,4 @@
-package io.eontimer.model.resource
+package io.eontimer.util
 
 import java.io.InputStream
 import java.net.URL

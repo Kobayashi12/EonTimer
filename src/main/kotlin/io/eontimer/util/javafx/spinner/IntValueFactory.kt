@@ -1,12 +1,14 @@
 package io.eontimer.util.javafx.spinner
 
+import io.eontimer.util.ifPresent
+import io.eontimer.util.javafx.subscribe
 import io.eontimer.util.javafx.getValue
 import io.eontimer.util.javafx.setValue
+import io.eontimer.util.map
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.SpinnerValueFactory
 import javafx.util.converter.IntegerStringConverter
-import java.util.*
 
 class IntValueFactory(
     min: Int = Int.MIN_VALUE,
@@ -48,24 +50,21 @@ class IntValueFactory(
 
     init {
         converter = IntegerStringConverter()
-        valueProperty().addListener { _, _, newValue ->
+        valueProperty().subscribe { newValue ->
             // when the value is set, we need to react to ensure it is a
             // valid value (and if not, blow up appropriately)
-            Optional.ofNullable(newValue)
-                .ifPresent {
-                    this@IntValueFactory.value = when {
-                        newValue < this@IntValueFactory.min -> this@IntValueFactory.min
-                        newValue > this@IntValueFactory.max -> this@IntValueFactory.max
-                        else -> newValue
-                    }
-                }
+            newValue?.ifPresent {
+                this@IntValueFactory.value = it.coerceIn(
+                    this@IntValueFactory.min,
+                    this@IntValueFactory.max
+                )
+            }
         }
-        value = if (initialValue in min..max) initialValue else min
+        value = initialValue.coerceIn(min, max)
     }
 
     override fun increment(steps: Int) {
-        Optional.ofNullable(value)
-            .map { it + (steps * step) }
+        value?.map { it + (steps * step) }
             .ifPresent { newValue ->
                 value = when {
                     newValue <= max -> newValue
@@ -76,8 +75,7 @@ class IntValueFactory(
     }
 
     override fun decrement(steps: Int) {
-        Optional.ofNullable(value)
-            .map { it - (steps * step) }
+        value?.map { it - (steps * step) }
             .ifPresent { newValue ->
                 value = when {
                     newValue >= min -> newValue

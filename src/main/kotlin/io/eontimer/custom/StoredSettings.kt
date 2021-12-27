@@ -4,7 +4,7 @@ data class StoredSettings(
     val stages: List<Long> = emptyList()
 ) {
     constructor(
-        model: Model
+        model: CustomTimerModel
     ) : this(
         stages = model.stages.toList()
     )

@@ -1,14 +1,13 @@
 package io.eontimer
 
-import io.eontimer.model.resource.Resource
+import io.eontimer.util.Resource
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.util.Callback
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.stereotype.Component
-import java.io.InputStream
 import java.net.URL
-import java.util.*
+import java.util.ResourceBundle
 
 @Component
 class SpringFxmlLoader(

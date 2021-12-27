@@ -3,19 +3,19 @@ package io.eontimer.action
 import io.eontimer.util.javafx.toHex
 
 data class StoredSettings(
-    val mode: Mode = Defaults.MODE,
-    val color: String = Defaults.COLOR.toHex(),
-    val sound: Sound = Defaults.SOUND,
-    val interval: Int = Defaults.INTERVAL,
-    val count: Int = Defaults.COUNT
+    val mode: ActionMode = ActionSettings.Defaults.MODE,
+    val color: String = ActionSettings.Defaults.COLOR.toHex(),
+    val sound: Sound = ActionSettings.Defaults.SOUND,
+    val interval: Int = ActionSettings.Defaults.INTERVAL,
+    val count: Int = ActionSettings.Defaults.COUNT
 ) {
     constructor(
-        settings: Settings
+        actionSettings: ActionSettings
     ) : this(
-        mode = settings.mode.get(),
-        color = settings.color.get().toHex(),
-        sound = settings.sound.get(),
-        interval = settings.interval.get(),
-        count = settings.count.get()
+        mode = actionSettings.mode.get(),
+        color = actionSettings.color.get().toHex(),
+        sound = actionSettings.sound.get(),
+        interval = actionSettings.interval.get(),
+        count = actionSettings.count.get()
     )
 }

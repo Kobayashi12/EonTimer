@@ -1,14 +1,14 @@
 package io.eontimer.action
 
-import io.eontimer.util.milliseconds
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ObservableValue
 import javafx.scene.paint.Color
 import org.fxmisc.easybind.EasyBind
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
-class Settings(
+class ActionSettings(
     storedSettings: StoredSettings = StoredSettings()
 ) {
     val mode = SimpleObjectProperty(storedSettings.mode)
@@ -25,4 +25,12 @@ class Settings(
                 .map { (it * interval.toLong()).milliseconds }
                 .toList()
         }
+
+    object Defaults {
+        val MODE = ActionMode.AUDIO
+        val SOUND = Sound.BEEP
+        val COLOR: Color = Color.CYAN
+        const val INTERVAL = 500
+        const val COUNT = 6
+    }
 }

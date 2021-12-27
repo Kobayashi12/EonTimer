@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component
 import kotlin.time.Duration
 
 @Component("gen4ControllerTimerFactory")
-class ControllerTimerFactory(
-    private val model: Model,
+class Gen4TimerControllerFactory(
+    private val model: Gen4TimerModel,
     private val delayTimerFactory: DelayTimerFactory,
     private val calibrator: Calibrator,
 ) : ControllerTimerFactory {

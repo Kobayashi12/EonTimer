@@ -1,9 +1,9 @@
 package io.eontimer.action
 
-import io.eontimer.model.resource.BASE_RESOURCE_PATH
-import io.eontimer.model.resource.Resource
+import io.eontimer.util.BASE_RESOURCE_PATH
+import io.eontimer.util.Resource
 import io.eontimer.util.javafx.Choice
-import java.util.*
+import java.util.Locale
 
 enum class Sound(
     fileName: String

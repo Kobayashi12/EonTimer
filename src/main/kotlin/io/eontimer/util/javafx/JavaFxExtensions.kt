@@ -1,77 +1,88 @@
 package io.eontimer.util.javafx
 
 import com.sun.javafx.binding.BidirectionalBinding
-import io.eontimer.model.resource.CssResource
-import javafx.application.Platform
-import javafx.beans.InvalidationListener
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
-import javafx.beans.binding.BooleanExpression
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.LongProperty
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.Property
-import javafx.beans.property.ReadOnlyProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableIntegerValue
 import javafx.beans.value.ObservableLongValue
 import javafx.beans.value.ObservableValue
-import javafx.scene.Scene
-import javafx.scene.control.Label
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.javafx.JavaFx
+import kotlinx.coroutines.withContext
+import org.fxmisc.easybind.EasyBind
+import org.fxmisc.easybind.Subscription
 import kotlin.reflect.KProperty
 
-infix fun BooleanExpression.or(
-    other: ObservableBooleanValue
-): BooleanBinding = or(other)
-
-infix fun BooleanExpression.and(
-    other: ObservableBooleanValue
-): BooleanBinding = and(other)
-
-infix fun <T> ObservableValue<T>.isEqualTo(
-    value: T
-): BooleanBinding =
-    Bindings.createBooleanBinding({
-        this@isEqualTo.value == value
-    }, this)
-
-infix fun <T> ObservableValue<T>.isNotEqualTo(
-    value: T
-): BooleanBinding = !isEqualTo(value)
-
-fun <T> ObservableValue<T>.onChange(scheduler: Scheduler = Scheduler.PLATFORM, fn: (T) -> Unit) =
-    ChangeListener<T> { _, _, newValue -> scheduler.execute { fn(newValue) } }
-        .also(this::addListener)
-
-enum class Scheduler {
-    IMMEDIATE {
-        override fun execute(fn: () -> Unit) {
-            fn()
-        }
-    },
-    PLATFORM {
-        override fun execute(fn: () -> Unit) {
-            Platform.runLater(fn)
-        }
-    };
-
-    abstract fun execute(fn: () -> Unit)
-    operator fun invoke(fn: () -> Unit) = execute(fn)
+fun anyChangesOf(
+    vararg properties: ObservableValue<*>,
+    onChange: (ObservableValue<*>) -> Unit
+) {
+    properties.forEach { observable ->
+        observable.subscribe { onChange(observable) }
+    }
 }
 
-operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = this.value!!
-operator fun <T> Property<T>.setValue(thisRef: Any, property: KProperty<*>, value: T?) = setValue(value)
+suspend inline fun onPlatform(noinline block: suspend CoroutineScope.() -> Unit) {
+    withContext(Dispatchers.JavaFx, block)
+}
 
-operator fun ObservableLongValue.getValue(thisRef: Any, property: KProperty<*>) = get()
-operator fun LongProperty.setValue(thisRef: Any, property: KProperty<*>, value: Long) = set(value)
+fun ObservableBooleanValue.or(
+    other: ObservableBooleanValue
+): BooleanBinding = BooleanBinding.booleanExpression(this).or(other)
 
-operator fun ObservableIntegerValue.getValue(thisRef: Any, property: KProperty<*>) = get()
-operator fun IntegerProperty.setValue(thisRef: Any, property: KProperty<*>, value: Int) = set(value)
+fun <T, R> ObservableValue<T>.map(
+    mapper: (T) -> R
+): ObservableValue<R> =
+    EasyBind.map(this, mapper)
 
-operator fun ObservableBooleanValue.getValue(thisRef: Any, property: KProperty<*>) = get()
-operator fun BooleanProperty.setValue(thisRef: Any, property: KProperty<*>, value: Boolean) = set(value)
+fun <T> ObservableValue<T>.mapToBoolean(
+    mapper: (T) -> Boolean
+): ObservableBooleanValue =
+    Bindings.createBooleanBinding({ mapper(value) }, this)
+
+fun <T, R> ObservableValue<T>.flatMap(
+    mapper: (T) -> ObservableValue<R>
+): ObservableValue<R> =
+    EasyBind.monadic(this)
+        .flatMap(mapper)
+
+fun <T> ObservableValue<T>.filter(
+    predicate: (T) -> Boolean
+): ObservableValue<T> =
+    EasyBind.monadic(this)
+        .filter(predicate)
+
+fun <T> ObservableValue<T>.subscribe(
+    emitCurrentValue: Boolean = true,
+    subscriber: (T) -> Unit
+): Subscription {
+    if (emitCurrentValue) subscriber(value)
+    val listener = ChangeListener<T> { _, _, newValue -> subscriber(newValue) }
+    addListener(listener)
+    return Subscription {
+        removeListener(listener)
+    }
+}
+
+operator fun <T> ObservableValue<T>.getValue(thisRef: Any?, property: KProperty<*>): T = this.value!!
+operator fun <T> Property<T>.setValue(thisRef: Any?, property: KProperty<*>, value: T?) = setValue(value)
+
+operator fun ObservableLongValue.getValue(thisRef: Any?, property: KProperty<*>) = get()
+operator fun LongProperty.setValue(thisRef: Any?, property: KProperty<*>, value: Long) = set(value)
+
+operator fun ObservableIntegerValue.getValue(thisRef: Any?, property: KProperty<*>) = get()
+operator fun IntegerProperty.setValue(thisRef: Any?, property: KProperty<*>, value: Int) = set(value)
+
+operator fun ObservableBooleanValue.getValue(thisRef: Any?, property: KProperty<*>) = get()
+operator fun BooleanProperty.setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) = set(value)
 
 fun ObjectProperty<Int>.bindBidirectional(property: IntegerProperty) {
     BidirectionalBinding.bindNumber(this, property)
@@ -81,14 +92,10 @@ fun ObjectProperty<Long>.bindBidirectional(property: LongProperty) {
     BidirectionalBinding.bindNumber(this, property)
 }
 
-fun BooleanProperty.flip() {
-    set(!get())
-}
-
 operator fun LongProperty.plusAssign(value: Long) {
     setValue(getValue() + value)
 }
 
-fun Scene.addCss(resource: CssResource) {
-    stylesheets.add(resource.path)
+fun BooleanProperty.flip() {
+    set(!get())
 }

@@ -1,8 +1,8 @@
 package io.eontimer.timer.factory
 
-import io.eontimer.util.milliseconds
 import io.eontimer.util.toMinimumLength
 import org.springframework.stereotype.Service
+import kotlin.time.Duration.Companion.milliseconds
 
 @Service
 class SecondTimerFactory : TimerFactory<SecondTimerFactory.Params> {

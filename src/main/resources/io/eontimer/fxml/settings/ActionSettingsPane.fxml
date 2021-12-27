@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.eontimer.action.SettingsController">
+<GridPane hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.eontimer.action.ActionSettingsController">
    <columnConstraints>
       <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" />
       <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />

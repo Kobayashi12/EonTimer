@@ -1,14 +1,16 @@
 package io.eontimer.util.javafx.spinner
 
+import io.eontimer.util.ifPresent
+import io.eontimer.util.javafx.subscribe
 import io.eontimer.util.javafx.getValue
 import io.eontimer.util.javafx.setValue
+import io.eontimer.util.map
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.LongProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleLongProperty
 import javafx.scene.control.SpinnerValueFactory
 import javafx.util.converter.LongStringConverter
-import java.util.*
 
 class LongValueFactory(
     min: Long = Long.MIN_VALUE,
@@ -49,24 +51,19 @@ class LongValueFactory(
 
     init {
         converter = LongStringConverter()
-        valueProperty().addListener { _, _, newValue ->
-            // when the value is set, we need to react to ensure it is a
-            // valid value (and if not, blow up appropriately)
-            Optional.ofNullable(newValue)
-                .ifPresent {
-                    this@LongValueFactory.value = when {
-                        newValue < this@LongValueFactory.min -> this@LongValueFactory.min
-                        newValue > this@LongValueFactory.max -> this@LongValueFactory.max
-                        else -> newValue
-                    }
-                }
+        valueProperty().subscribe { newValue ->
+            newValue?.ifPresent {
+                this@LongValueFactory.value = it.coerceIn(
+                    this@LongValueFactory.min,
+                    this@LongValueFactory.max
+                )
+            }
         }
-        value = if (initialValue in min..max) initialValue else min
+        value = initialValue.coerceIn(min, max)
     }
 
     override fun increment(steps: Int) {
-        Optional.ofNullable(value)
-            .map { it + (steps * step) }
+        value?.map { it + (steps * step) }
             .ifPresent { newValue ->
                 value = when {
                     newValue <= max -> newValue
@@ -77,8 +74,7 @@ class LongValueFactory(
     }
 
     override fun decrement(steps: Int) {
-        Optional.ofNullable(value)
-            .map { it - (steps * step) }
+        value?.map { it - (steps * step) }
             .ifPresent { newValue ->
                 value = when {
                     newValue >= min -> newValue

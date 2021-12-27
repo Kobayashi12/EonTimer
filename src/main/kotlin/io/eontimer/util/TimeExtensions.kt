@@ -8,7 +8,7 @@ private val ONE_MINUTE = 1.minutes.inWholeMilliseconds
 
 fun List<Duration>.sum(): Duration =
     when (contains(Duration.INFINITE)) {
-        false -> reduceRight { duration, acc -> acc + duration }
+        false -> foldRight(Duration.ZERO) { curr, acc -> acc + curr }
         true -> Duration.INFINITE
     }
 

@@ -1,14 +1,12 @@
 package io.eontimer.action
 
-import io.eontimer.model.resource.BASE_RESOURCE_PATH
+import io.eontimer.util.BASE_RESOURCE_PATH
 import io.eontimer.util.javafx.getValue
 import javafx.application.Platform
 import javafx.scene.media.Media
 import javafx.scene.media.MediaPlayer
 import javafx.util.Duration
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.javafx.asFlow
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
 import java.net.URL
@@ -16,7 +14,7 @@ import javax.annotation.PostConstruct
 
 @Component
 class SoundPlayer(
-    actionSettings: Settings,
+    actionSettings: ActionSettings,
     private val coroutineScope: CoroutineScope
 ) {
     private val sound by actionSettings.sound

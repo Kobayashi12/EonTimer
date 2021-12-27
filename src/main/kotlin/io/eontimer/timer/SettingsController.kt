@@ -1,9 +1,15 @@
 package io.eontimer.timer
 
-import io.eontimer.util.javafx.asChoiceField
+import io.eontimer.AggregateControllerTimerFactory
+import io.eontimer.TimerState
+import io.eontimer.TimerStateAware
+import io.eontimer.resetTimerState
+import io.eontimer.util.javafx.anyChangesOf
 import io.eontimer.util.javafx.bindBidirectional
+import io.eontimer.util.javafx.initializeChoices
 import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.spinner.LongValueFactory
+import io.eontimer.util.javafx.spinner.bindBidirectional
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
 import javafx.scene.control.ChoiceBox
@@ -12,8 +18,10 @@ import org.springframework.stereotype.Component
 
 @Component("timerSettingsController")
 class SettingsController(
-    private val settings: Settings
-) {
+    override val state: TimerState,
+    private val settings: Settings,
+    private val timerFactory: AggregateControllerTimerFactory
+) : TimerStateAware {
     // @formatter:off
     @FXML private lateinit var consoleField: ChoiceBox<Console>
     @FXML private lateinit var refreshIntervalField: Spinner<Long>
@@ -21,11 +29,20 @@ class SettingsController(
     // @formatter:on
 
     fun initialize() {
-        consoleField.asChoiceField().valueProperty
+        anyChangesOf(
+            settings.console,
+            settings.refreshInterval,
+            settings.precisionCalibration
+        ) {
+            resetTimerState(timerFactory)
+        }
+
+        consoleField.initializeChoices()
+        consoleField.valueProperty()
             .bindBidirectional(settings.console)
 
         refreshIntervalField.valueFactory = LongValueFactory(min = 0L, max = 1000L)
-            .also { it.valueProperty().bindBidirectional(settings.refreshInterval) }
+            .also { it.bindBidirectional(settings.refreshInterval) }
         refreshIntervalField.setOnFocusLost(refreshIntervalField::commitValue)
 
         precisionCalibrationField.selectedProperty()

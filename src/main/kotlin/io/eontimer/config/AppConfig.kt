@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.io.FileOutputStream
-import io.eontimer.action.Settings as ActionSettings
+import io.eontimer.action.ActionSettings as ActionSettings
 import io.eontimer.action.StoredSettings as ActionStoredSettings
-import io.eontimer.custom.Model as CustomModel
+import io.eontimer.custom.CustomTimerModel as CustomModel
 import io.eontimer.custom.StoredSettings as CustomStoredSettings
-import io.eontimer.gen3.Model as Gen3Model
+import io.eontimer.gen3.Gen3TimerModel as Gen3Model
 import io.eontimer.gen3.StoredSettings as Gen3StoredSettings
-import io.eontimer.gen4.Model as Gen4Model
+import io.eontimer.gen4.Gen4TimerModel as Gen4Model
 import io.eontimer.gen4.StoredSettings as Gen4StoredSettings
 import io.eontimer.gen5.Model as Gen5Model
 import io.eontimer.gen5.StoredSettings as Gen5StoredSettings

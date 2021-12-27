@@ -1,8 +1,7 @@
 package io.eontimer
 
-import io.eontimer.SpringFxmlLoader
 import io.eontimer.config.AppProperties
-import io.eontimer.model.resource.FxmlResource
+import io.eontimer.util.FxmlResource
 import javafx.scene.Parent
 import javafx.scene.control.ButtonType
 import javafx.scene.control.Dialog

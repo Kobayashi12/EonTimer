@@ -1,8 +1,9 @@
 package io.eontimer
 
 import io.eontimer.util.javafx.disableWhen
-import io.eontimer.util.javafx.easybind.map
 import io.eontimer.util.javafx.flip
+import io.eontimer.util.javafx.map
+import io.eontimer.util.javafx.subscribe
 import javafx.application.Platform
 import javafx.beans.property.ObjectProperty
 import javafx.fxml.FXML
@@ -15,8 +16,9 @@ import org.springframework.stereotype.Component
 class TimerControlPane(
     private val state: TimerState,
     private val selectedTimerTab: ObjectProperty<TimerTab>,
-    private val aggregateTimerFactory: AggregateControllerTimerFactory,
+    private val aggregateTimerFactory: AggregateControllerTimerFactory
 ) {
+
     // @formatter:off
     @FXML private lateinit var gen3Tab: Tab
     @FXML private lateinit var gen4Tab: Tab
@@ -37,22 +39,24 @@ class TimerControlPane(
                 .selectedIndexProperty()
                 .map { TimerTab.values[it.toInt()] }
         )
-        state.stages.bind(
-            selectedTimerTab.map { aggregateTimerFactory.stages }
-        )
+        selectedTimerTab.subscribe {
+            Platform.runLater {
+                state.stagesProperty.set(aggregateTimerFactory.stages)
+            }
+        }
 
-        gen3Tab.disableWhen(state.running)
-        gen4Tab.disableWhen(state.running)
-        gen5Tab.disableWhen(state.running)
-        customTab.disableWhen(state.running)
+        gen3Tab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN3)))
+        gen4Tab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN4)))
+        gen5Tab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN5)))
+        customTab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.CUSTOM)))
 
-        updateBtn.disableWhen(state.running)
+        updateBtn.disableWhen(state.runningProperty)
         updateBtn.setOnAction {
             aggregateTimerFactory.calibrate()
         }
 
         timerBtn.textProperty()
-            .bind(state.running
+            .bind(state.runningProperty
                 .map { running ->
                     when (running) {
                         true -> "Stop"
@@ -60,7 +64,7 @@ class TimerControlPane(
                     }
                 })
         timerBtn.setOnAction {
-            state.running.flip()
+            state.runningProperty.flip()
         }
     }
 }

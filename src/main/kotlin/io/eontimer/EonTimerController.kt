@@ -18,7 +18,7 @@ class EonTimerController(
 
     fun initialize() {
         settingsBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.GEAR)
-        settingsBtn.disableWhen(timerState.running)
+        settingsBtn.disableWhen(timerState.runningProperty)
         settingsBtn.setOnAction {
             settingsDialog.showAndWait()
         }

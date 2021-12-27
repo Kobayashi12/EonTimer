@@ -1,13 +1,13 @@
 package io.eontimer.gen4
 
 data class StoredSettings(
-    val targetDelay: Long = Defaults.TARGET_DELAY,
-    val targetSecond: Long = Defaults.TARGET_SECOND,
-    val calibratedDelay: Long = Defaults.CALIBRATED_DELAY,
-    val calibratedSecond: Long = Defaults.CALIBRATED_SECOND
+    val targetDelay: Long = Gen4TimerModel.Defaults.TARGET_DELAY,
+    val targetSecond: Long = Gen4TimerModel.Defaults.TARGET_SECOND,
+    val calibratedDelay: Long = Gen4TimerModel.Defaults.CALIBRATED_DELAY,
+    val calibratedSecond: Long = Gen4TimerModel.Defaults.CALIBRATED_SECOND
 ) {
     constructor(
-        model: Model
+        model: Gen4TimerModel
     ) : this(
         targetDelay = model.targetDelay.get(),
         targetSecond = model.targetSecond.get(),

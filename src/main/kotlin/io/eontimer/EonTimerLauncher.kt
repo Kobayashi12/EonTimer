@@ -2,9 +2,8 @@ package io.eontimer
 
 import io.eontimer.config.AppProperties
 import io.eontimer.config.DebugProperties
-import io.eontimer.model.resource.CssResource
-import io.eontimer.model.resource.FxmlResource
-import io.eontimer.util.javafx.addCss
+import io.eontimer.util.CssResource
+import io.eontimer.util.FxmlResource
 import javafx.application.Application
 import javafx.application.Application.launch
 import javafx.scene.Scene
@@ -39,7 +38,7 @@ class EonTimerLauncher : Application() {
         val fxmlLoader = ctx.getBean<SpringFxmlLoader>()
         stage.title = ctx.getBean<AppProperties>().fullApplicationName
         stage.scene = Scene(fxmlLoader.load(FxmlResource.EonTimerPane))
-        stage.scene.addCss(CssResource.MAIN)
+        stage.scene.stylesheets.add(CssResource.MAIN.path)
         stage.show()
     }
 

@@ -1,12 +1,6 @@
 package io.eontimer.util
 
-fun <T> MutableList<T>.peek() = elementAtOrNull(0)
-
-fun <T> MutableList<T>.pop(): T? = if (isEmpty()) null else removeAt(0)
-
-fun <T> MutableList<T>.removeIndices(indices: List<Int>) {
-    indices.forEachIndexed { offset, selectedIndex -> removeAt(selectedIndex - offset) }
-}
+import kotlin.reflect.KProperty
 
 fun <T> List<T>.toBuilder(
     builderAction: MutableList<T>.() -> Unit
@@ -15,3 +9,12 @@ fun <T> List<T>.toBuilder(
     mutable.builderAction()
     return mutable
 }
+
+inline fun <T, R> T.map(crossinline block: (T) -> R): R = block(this)
+inline fun <T> T?.ifPresent(crossinline block: (T) -> Unit) {
+    if (this != null) {
+        block(this)
+    }
+}
+
+operator fun <T, Fn : () -> T> Fn.getValue(thisRef: Any?, property: KProperty<*>): T = invoke()

@@ -6,8 +6,8 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @Component("customControllerTimerFactory")
-class ControllerTimerFactory(
-    private val model: Model
+class CustomControllerTimerFactory(
+    private val model: CustomTimerModel
 ) : ControllerTimerFactory {
     override val stages: List<Duration> get() = model.stages.map { it.milliseconds }
 

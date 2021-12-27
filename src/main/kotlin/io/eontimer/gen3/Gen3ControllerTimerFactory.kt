@@ -9,8 +9,8 @@ import kotlin.time.Duration
 
 
 @Component("gen3ControllerTimerFactory")
-class ControllerTimerFactory(
-    private val model: Model,
+class Gen3ControllerTimerFactory(
+    private val model: Gen3TimerModel,
     private val fixedFrameTimerFactory: FixedFrameTimerFactory,
     private val variableFrameTimerFactory: VariableFrameTimerFactory,
 ) : ControllerTimerFactory {
@@ -31,7 +31,7 @@ class ControllerTimerFactory(
 
     override val stages: List<Duration>
         get() = when (model.mode.get()!!) {
-            Mode.STANDARD ->
+            Gen3TimerMode.STANDARD ->
                 fixedFrameTimerFactory.createStages(
                     FixedFrameTimerFactory.Params(
                         preTimer = model.preTimer.get(),
@@ -39,7 +39,7 @@ class ControllerTimerFactory(
                         calibration = model.calibration.get()
                     )
                 )
-            Mode.VARIABLE_TARGET ->
+            Gen3TimerMode.VARIABLE_TARGET ->
                 variableFrameTimerFactory.createStages(
                     VariableFrameTimerFactory.Params(
                         preTimer = model.preTimer.get()

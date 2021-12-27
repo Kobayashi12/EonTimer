@@ -1,13 +1,13 @@
 package io.eontimer.timer.factory
 
-import io.eontimer.util.INDEFINITE
-import io.eontimer.util.milliseconds
 import org.springframework.stereotype.Service
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Service
 class VariableFrameTimerFactory : TimerFactory<VariableFrameTimerFactory.Params> {
     override fun createStages(params: Params) =
-        listOf(params.preTimer.milliseconds, INDEFINITE)
+        listOf(params.preTimer.milliseconds, Duration.INFINITE)
 
     data class Params(
         val preTimer: Long

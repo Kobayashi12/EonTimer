@@ -2,11 +2,11 @@ package io.eontimer.timer.factory
 
 import io.eontimer.Calibrator
 import io.eontimer.Constants
-import io.eontimer.util.milliseconds
 import io.eontimer.util.toMinimumLength
 import org.springframework.stereotype.Service
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Service
 class DelayTimerFactory(

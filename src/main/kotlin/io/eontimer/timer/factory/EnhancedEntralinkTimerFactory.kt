@@ -1,10 +1,10 @@
 package io.eontimer.timer.factory
 
-import io.eontimer.util.milliseconds
 import io.eontimer.util.toBuilder
 import org.springframework.stereotype.Service
-import kotlin.time.Duration
 import kotlin.math.roundToLong
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Service
 class EnhancedEntralinkTimerFactory(

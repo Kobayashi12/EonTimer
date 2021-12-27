@@ -3,8 +3,8 @@ package io.eontimer
 import io.eontimer.util.javafx.getValue
 import javafx.beans.property.ObjectProperty
 import org.springframework.stereotype.Component
+import java.util.EnumMap
 import kotlin.time.Duration
-import java.util.*
 
 @Component
 class AggregateControllerTimerFactory(

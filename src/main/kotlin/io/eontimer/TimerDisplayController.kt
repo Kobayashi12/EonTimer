@@ -1,11 +1,10 @@
 package io.eontimer
 
-import io.eontimer.action.Settings
+import io.eontimer.action.ActionSettings
 import io.eontimer.action.TimerActionService
-import io.eontimer.util.isFinite
-import io.eontimer.util.javafx.easybind.flatMap
-import io.eontimer.util.javafx.easybind.map
-import io.eontimer.util.javafx.easybind.subscribe
+import io.eontimer.util.javafx.flatMap
+import io.eontimer.util.javafx.map
+import io.eontimer.util.javafx.subscribe
 import io.eontimer.util.javafx.toHex
 import javafx.fxml.FXML
 import javafx.scene.control.Label
@@ -19,7 +18,7 @@ import kotlin.time.Duration
 class TimerDisplayController(
     private val state: TimerState,
     private val timerActionService: TimerActionService,
-    private val actionSettingsModel: Settings,
+    private val actionActionSettingsModel: ActionSettings,
 ) {
     // @formatter:off
     @FXML lateinit var currentStageLbl: Label
@@ -30,11 +29,11 @@ class TimerDisplayController(
     fun initialize() {
         currentStageLbl.textProperty()
             .bind(
-                state.running
+                state.runningProperty
                     .flatMap { running ->
                         when (running) {
-                            true -> state.elapsed
-                            false -> state.stage
+                            true -> state.currentRemainingProperty
+                            false -> state.currentStageProperty
                         }
                     }
                     .map(::formatTime)
@@ -42,14 +41,14 @@ class TimerDisplayController(
         minutesBeforeTargetLbl.textProperty()
             .bind(
                 EasyBind.combine(
-                    state.totalTime,
-                    state.totalElapsed,
+                    state.totalTimerProperty,
+                    state.totalElapsedProperty,
                     ::formatMinutesBeforeTarget
                 )
             )
         nextStageLbl.textProperty()
             .bind(
-                state.nextStage
+                state.nextStageProperty
                     .map(::formatTime)
             )
 
@@ -57,7 +56,7 @@ class TimerDisplayController(
             .subscribe { currentStageLbl.isActive = it }
         currentStageLbl.styleProperty()
             .bind(
-                actionSettingsModel.color
+                actionActionSettingsModel.color
                     .map { "-theme-active: ${it.toHex()}" }
             )
     }
@@ -73,7 +72,7 @@ class TimerDisplayController(
 
     private fun formatTime(
         duration: Duration
-    ) = when (duration.isFinite) {
+    ) = when (duration.isFinite()) {
         true -> "%d:%02d".format(
             duration.inWholeSeconds,
             duration.inWholeMilliseconds / 10 % 100
@@ -82,9 +81,9 @@ class TimerDisplayController(
     }
 
     private fun formatMinutesBeforeTarget(
-        totalTime: Duration = state.totalTime.get(),
-        totalElapsed: Duration = state.totalElapsed.get()
-    ) = when (totalTime.isFinite) {
+        totalTime: Duration = state.totalTimerProperty.value,
+        totalElapsed: Duration = state.totalElapsedProperty.value
+    ) = when (totalTime.isFinite()) {
         true -> (totalTime - totalElapsed)
             .inWholeMinutes
             .toString()

@@ -1,28 +1,23 @@
 package io.eontimer
 
 import io.eontimer.action.TimerActionService
-import io.eontimer.util.isFinite
-import io.eontimer.util.javafx.easybind.map
-import io.eontimer.util.javafx.easybind.subscribe
+import io.eontimer.util.getValue
+import io.eontimer.util.javafx.map
+import io.eontimer.util.javafx.subscribe
 import io.eontimer.util.javafx.getValue
-import io.eontimer.util.milliseconds
-import io.eontimer.util.nanoseconds
-import io.eontimer.util.peek
-import io.eontimer.util.pop
+import io.eontimer.util.javafx.onPlatform
+import javafx.application.Platform
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
-import kotlin.time.Duration
-import java.time.Instant
 import javax.annotation.PostConstruct
-import kotlin.system.measureTimeMillis
-import io.eontimer.action.Settings as ActionSettings
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
+import io.eontimer.action.ActionSettings as ActionSettings
 import io.eontimer.timer.Settings as TimerSettings
 
 @Service
@@ -33,8 +28,6 @@ class TimerRunner(
     actionSettings: ActionSettings,
     timerSettings: TimerSettings
 ) {
-    private val stateProxy = TimerStateProxy(state)
-
     private var timerJob: Job? = null
     private val actionInstants: List<Duration> by actionSettings.actionInstants
     private val period: Duration by timerSettings.refreshInterval
@@ -42,7 +35,7 @@ class TimerRunner(
 
     @PostConstruct
     private fun initialize() {
-        state.running
+        state.runningProperty
             .subscribe { running ->
                 coroutineScope.launch {
                     when (running) {
@@ -54,19 +47,16 @@ class TimerRunner(
     }
 
     private suspend fun start() {
-        stateProxy.reset()
-        val stages = stateProxy.stages
-        val stage by stateProxy::stage
-        var stageIndex by stateProxy::stageIndex
+        state.reset()
         timerJob = coroutineScope.launch {
             var elapsed = Duration.ZERO
-            while (isActive && stageIndex < stages.size) {
-                elapsed = runStage(elapsed) - stage
-                stageIndex++
+            while (isActive && state.stageIndex < state.stages.size) {
+                elapsed = runStage(elapsed) - state.currentStage
+                onPlatform { state.stageIndex++ }
             }
-            withContext(Dispatchers.JavaFx) {
-                stateProxy.running = false
-                stateProxy.reset()
+            onPlatform {
+                state.running = false
+                state.reset()
             }
         }
     }
@@ -74,34 +64,32 @@ class TimerRunner(
     private suspend fun CoroutineScope.runStage(
         preElapsed: Duration
     ): Duration {
+        var elapsed = preElapsed
+        val currentStage by state::currentStage
+        val remaining by { currentStage - elapsed }
+
         var adjustedDelay = period
         var lastTimestamp = System.nanoTime()
-
-        val stage by stateProxy::stage
-        var elapsed by stateProxy::elapsed
-        val remaining by stateProxy::remaining
-        var totalElapsed by stateProxy::totalElapsed
-
-        elapsed = preElapsed
         val actionInstants = actionInstants.asSequence()
             .filter { it < remaining }
             .toMutableList()
 
-        while (isActive && elapsed < stage) {
+        while (isActive && elapsed < currentStage) {
             delay(adjustedDelay)
 
             val now = System.nanoTime()
-            val delta = (lastTimestamp - now).nanoseconds
+            val delta = (now - lastTimestamp).nanoseconds
             adjustedDelay -= delta - period
             lastTimestamp = now
+            elapsed += delta
+
             // update the state
-            withContext(Dispatchers.JavaFx) {
-                totalElapsed += delta
-                elapsed += delta
+            Platform.runLater {
+                state.totalElapsed += delta
+                state.currentElapsed = elapsed
             }
 
-//            stateProxy.update(delta, elapsed)
-            if (stage.isFinite && remaining <= (actionInstants.peek() ?: Duration.ZERO)) {
+            if (currentStage.isFinite() && remaining <= (actionInstants.peek() ?: Duration.ZERO)) {
                 timerActionService.invokeAction()
                 actionInstants.pop()
             }
@@ -114,29 +102,20 @@ class TimerRunner(
             timerJob?.cancel()
             timerJob = null
         }
-        stateProxy.reset()
+        state.reset()
     }
 
-    private suspend fun TimerStateProxy.update(
-        delta: Duration = Duration.ZERO,
-    ) {
-        withContext(Dispatchers.JavaFx) {
-//            this@update.elapsed = when (stage.isFinite) {
-//                true -> stage - elapsed
-//                false -> elapsed
-//            }
-            elapsed += delta
-            totalElapsed += delta
-        }
-    }
-
-    private suspend fun TimerStateProxy.reset() =
-        withContext(Dispatchers.JavaFx) {
+    private suspend fun TimerState.reset() =
+        onPlatform {
             stageIndex = 0
             totalElapsed = Duration.ZERO
-            elapsed = when (stage.isFinite) {
-                true -> stage
+            currentElapsed = when (currentStage.isFinite()) {
+                true -> currentStage
                 false -> Duration.ZERO
             }
         }
+
+    private fun <T> MutableList<T>.peek() = elementAtOrNull(0)
+
+    private fun <T> MutableList<T>.pop(): T? = if (isEmpty()) null else removeAt(0)
 }
