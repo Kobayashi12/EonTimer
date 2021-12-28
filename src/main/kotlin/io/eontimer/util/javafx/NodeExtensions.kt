@@ -7,17 +7,18 @@ import javafx.scene.Node
 import javafx.scene.control.Tab
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import org.fxmisc.easybind.Subscription
 
 fun Node.showWhen(
     condition: BooleanExpression
-): Disposable = hideWhen(!condition)
+): Subscription = hideWhen(!condition)
 
 fun Node.hideWhen(
     condition: BooleanExpression
-): Disposable {
+): Subscription {
     visibleProperty().bind(!condition)
     managedProperty().bind(visibleProperty())
-    return object : Disposable, ChangeListener<Boolean> {
+    return object : Subscription, ChangeListener<Boolean> {
         init {
             condition.addListener(this)
         }
@@ -30,43 +31,21 @@ fun Node.hideWhen(
             autosize()
         }
 
-        override fun dispose() {
+        override fun unsubscribe() {
             condition.removeListener(this)
         }
     }
 }
 
-fun Node.enableWhen(
-    condition: BooleanExpression
-): Disposable = disableWhen(!condition)
-
-fun Node.disableWhen(
-    condition: BooleanExpression
-): Disposable {
-    disableProperty().bind(condition)
-    return Disposable {
-        disableProperty().unbind()
-    }
-}
-
-fun Tab.disableWhen(
-    condition: BooleanExpression
-): Disposable {
-    disableProperty().bind(condition)
-    return Disposable {
-        disableProperty().unbind()
-    }
-}
-
 fun Node.setOnFocusLost(
     onFocusLost: () -> Unit
-): Disposable {
+): Subscription {
     val property = focusedProperty()
     val listener = ChangeListener<Boolean> { _, _, newValue ->
         if (!newValue) onFocusLost()
     }
     property.addListener(listener)
-    return Disposable {
+    return Subscription {
         property.removeListener(listener)
     }
 }

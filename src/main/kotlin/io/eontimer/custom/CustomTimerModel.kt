@@ -4,7 +4,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 
 class CustomTimerModel(
-    storedSettings: StoredSettings = StoredSettings()
+    storedSettings: CustomTimerStoredSettings = CustomTimerStoredSettings()
 ) {
     val stages: ObservableList<Long> = FXCollections.observableArrayList(storedSettings.stages)
 }

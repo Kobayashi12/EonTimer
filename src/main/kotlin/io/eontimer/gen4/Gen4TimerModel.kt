@@ -3,7 +3,7 @@ package io.eontimer.gen4
 import javafx.beans.property.SimpleLongProperty
 
 class Gen4TimerModel(
-    storedSettings: StoredSettings = StoredSettings()
+    storedSettings: Gen4TimerStoredSettings = Gen4TimerStoredSettings()
 ) {
     val targetDelay = SimpleLongProperty(storedSettings.targetDelay)
     val targetSecond = SimpleLongProperty(storedSettings.targetSecond)

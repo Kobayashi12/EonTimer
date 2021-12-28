@@ -61,7 +61,7 @@ fun <T> ObservableValue<T>.filter(
         .filter(predicate)
 
 fun <T> ObservableValue<T>.subscribe(
-    emitCurrentValue: Boolean = true,
+    emitCurrentValue: Boolean = false,
     subscriber: (T) -> Unit
 ): Subscription {
     if (emitCurrentValue) subscriber(value)

@@ -2,8 +2,8 @@ package io.eontimer.util
 
 import kotlin.reflect.KProperty
 
-fun <T> List<T>.toBuilder(
-    builderAction: MutableList<T>.() -> Unit
+inline fun <T> List<T>.toBuilder(
+    crossinline builderAction: MutableList<T>.() -> Unit
 ): List<T> {
     val mutable = toMutableList()
     mutable.builderAction()

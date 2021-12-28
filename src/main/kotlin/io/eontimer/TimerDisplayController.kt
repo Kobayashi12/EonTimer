@@ -1,7 +1,6 @@
 package io.eontimer
 
 import io.eontimer.action.ActionSettings
-import io.eontimer.action.TimerActionService
 import io.eontimer.util.javafx.flatMap
 import io.eontimer.util.javafx.map
 import io.eontimer.util.javafx.subscribe
@@ -17,7 +16,7 @@ import kotlin.time.Duration
 @Component
 class TimerDisplayController(
     private val state: TimerState,
-    private val timerActionService: TimerActionService,
+    private val timerService: TimerService,
     private val actionActionSettingsModel: ActionSettings,
 ) {
     // @formatter:off
@@ -52,7 +51,7 @@ class TimerDisplayController(
                     .map(::formatTime)
             )
 
-        timerActionService.active
+        timerService.actionActive
             .subscribe { currentStageLbl.isActive = it }
         currentStageLbl.styleProperty()
             .bind(

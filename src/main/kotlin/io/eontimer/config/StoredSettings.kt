@@ -2,12 +2,12 @@ package io.eontimer.config
 
 import io.eontimer.Constants
 import io.eontimer.TimerTab
-import io.eontimer.action.StoredSettings as ActionStoredSettings
-import io.eontimer.custom.StoredSettings as CustomStoredSettings
-import io.eontimer.gen3.StoredSettings as Gen3StoredSettings
-import io.eontimer.gen4.StoredSettings as Gen4StoredSettings
-import io.eontimer.gen5.StoredSettings as Gen5StoredSettings
-import io.eontimer.timer.StoredSettings as TimerStoredSettings
+import io.eontimer.action.ActionStoredSettings as ActionStoredSettings
+import io.eontimer.custom.CustomTimerStoredSettings as CustomStoredSettings
+import io.eontimer.gen3.Gen3TimerStoredSettings as Gen3StoredSettings
+import io.eontimer.gen4.Gen4TimerStoredSettings as Gen4StoredSettings
+import io.eontimer.gen5.Gen5TimerStoredSettings as Gen5StoredSettings
+import io.eontimer.timer.TimerStoredSettings as TimerStoredSettings
 
 data class StoredSettings(
     val gen3: Gen3StoredSettings = Gen3StoredSettings(),

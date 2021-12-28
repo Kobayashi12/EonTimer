@@ -19,7 +19,12 @@ class TimerState {
     final val runningProperty = SimpleBooleanProperty(false)
     var running by runningProperty
 
-    final val stagesProperty = SimpleObjectProperty<List<Duration>>(emptyList())
+    final val stagesProperty = object : SimpleObjectProperty<List<Duration>>(emptyList()) {
+        override fun set(newValue: List<Duration>?) {
+            println(newValue)
+            super.set(newValue)
+        }
+    }
     var stages: List<Duration> by stagesProperty
 
     final val stageIndexProperty = SimpleIntegerProperty(0)

@@ -1,6 +1,6 @@
 package io.eontimer.custom
 
-data class StoredSettings(
+data class CustomTimerStoredSettings(
     val stages: List<Long> = emptyList()
 ) {
     constructor(

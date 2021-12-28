@@ -3,8 +3,8 @@ package io.eontimer.gen5
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleObjectProperty
 
-class Model(
-    storedSettings: StoredSettings = StoredSettings()
+class Gen5TimerModel(
+    storedSettings: Gen5TimerStoredSettings = Gen5TimerStoredSettings()
 ) {
     val mode = SimpleObjectProperty(storedSettings.mode)
     val targetDelay = SimpleLongProperty(storedSettings.targetDelay)
@@ -16,4 +16,14 @@ class Model(
     val secondHit = SimpleLongProperty()
     val delayHit = SimpleLongProperty()
     val advancesHit = SimpleLongProperty()
+
+    object Defaults {
+        val MODE = Gen5TimerMode.STANDARD
+        const val CALIBRATION = -95L
+        const val TARGET_DELAY = 1200L
+        const val TARGET_SECOND = 50L
+        const val ENTRALINK_CALIBRATION = 256L
+        const val FRAME_CALIBRATION = 0L
+        const val TARGET_ADVANCES = 100L
+    }
 }

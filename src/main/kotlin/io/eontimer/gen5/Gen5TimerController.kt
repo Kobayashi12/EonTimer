@@ -17,15 +17,15 @@ import javafx.scene.control.Spinner
 import org.springframework.stereotype.Component
 
 @Component("gen5TimerController")
-class Controller(
-    override val model: Model,
+class Gen5TimerController(
+    override val model: Gen5TimerModel,
     override val state: TimerState,
-    override val timerFactory: ControllerTimerFactory
-) : TimerController<Model, ControllerTimerFactory> {
+    override val timerFactory: Gen5TimerControllerTimerFactory
+) : TimerController<Gen5TimerModel, Gen5TimerControllerTimerFactory> {
     override val timerTab = TimerTab.GEN5
 
     // @formatter:off
-    @FXML private lateinit var modeField: ChoiceBox<Mode>
+    @FXML private lateinit var modeField: ChoiceBox<Gen5TimerMode>
     @FXML private lateinit var calibrationField: Spinner<Long>
     @FXML private lateinit var targetDelayField: Spinner<Long>
     @FXML private lateinit var targetSecondField: Spinner<Long>
@@ -71,9 +71,9 @@ class Controller(
             .bind(state.runningProperty)
         targetDelayField.parent
             .showWhen(
-                model.mode.isEqualTo(Mode.C_GEAR)
-                    .or(model.mode.isEqualTo(Mode.ENTRALINK))
-                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+                model.mode.isEqualTo(Gen5TimerMode.C_GEAR)
+                    .or(model.mode.isEqualTo(Gen5TimerMode.ENTRALINK))
+                    .or(model.mode.isEqualTo(Gen5TimerMode.ENHANCED_ENTRALINK))
             )
         targetDelayField.setOnFocusLost(targetDelayField::commitValue)
 
@@ -91,8 +91,8 @@ class Controller(
             .bind(state.runningProperty)
         entralinkCalibrationField.parent
             .showWhen(
-                model.mode.isEqualTo(Mode.ENTRALINK)
-                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+                model.mode.isEqualTo(Gen5TimerMode.ENTRALINK)
+                    .or(model.mode.isEqualTo(Gen5TimerMode.ENHANCED_ENTRALINK))
             )
         entralinkCalibrationField.setOnFocusLost(entralinkCalibrationField::commitValue)
 
@@ -102,7 +102,7 @@ class Controller(
             .disableProperty()
             .bind(state.runningProperty)
         frameCalibrationField.parent
-            .showWhen(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+            .showWhen(model.mode.isEqualTo(Gen5TimerMode.ENHANCED_ENTRALINK))
         frameCalibrationField.setOnFocusLost(frameCalibrationField::commitValue)
 
         targetAdvancesField.valueFactory = LongValueFactory(min = 0)
@@ -111,7 +111,7 @@ class Controller(
             .disableProperty()
             .bind(state.runningProperty)
         targetAdvancesField.parent
-            .showWhen(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+            .showWhen(model.mode.isEqualTo(Gen5TimerMode.ENHANCED_ENTRALINK))
         targetAdvancesField.setOnFocusLost(targetAdvancesField::commitValue)
 
         secondHitField.valueFactory = LongValueFactory(min = 0)
@@ -121,9 +121,9 @@ class Controller(
             .bind(state.runningProperty)
         secondHitField.parent
             .showWhen(
-                model.mode.isEqualTo(Mode.STANDARD)
-                    .or(model.mode.isEqualTo(Mode.ENTRALINK))
-                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+                model.mode.isEqualTo(Gen5TimerMode.STANDARD)
+                    .or(model.mode.isEqualTo(Gen5TimerMode.ENTRALINK))
+                    .or(model.mode.isEqualTo(Gen5TimerMode.ENHANCED_ENTRALINK))
             )
         secondHitField.setOnFocusLost(secondHitField::commitValue)
         secondHitField.text = ""
@@ -135,9 +135,9 @@ class Controller(
             .bind(state.runningProperty)
         delayHitField.parent
             .showWhen(
-                model.mode.isEqualTo(Mode.C_GEAR)
-                    .or(model.mode.isEqualTo(Mode.ENTRALINK))
-                    .or(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+                model.mode.isEqualTo(Gen5TimerMode.C_GEAR)
+                    .or(model.mode.isEqualTo(Gen5TimerMode.ENTRALINK))
+                    .or(model.mode.isEqualTo(Gen5TimerMode.ENHANCED_ENTRALINK))
             )
         delayHitField.setOnFocusLost(delayHitField::commitValue)
         delayHitField.text = ""
@@ -148,7 +148,7 @@ class Controller(
             .disableProperty()
             .bind(state.runningProperty)
         actualAdvancesField.parent
-            .showWhen(model.mode.isEqualTo(Mode.ENHANCED_ENTRALINK))
+            .showWhen(model.mode.isEqualTo(Gen5TimerMode.ENHANCED_ENTRALINK))
         actualAdvancesField.setOnFocusLost(actualAdvancesField::commitValue)
         actualAdvancesField.text = ""
     }

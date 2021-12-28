@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleObjectProperty
 
 class Gen3TimerModel(
-    storedSettings: StoredSettings = StoredSettings()
+    storedSettings: Gen3TimerStoredSettings = Gen3TimerStoredSettings()
 ) {
     val mode = SimpleObjectProperty(this, "mode", storedSettings.mode)
     val preTimer = SimpleLongProperty(this, "preTimer", storedSettings.preTimer)

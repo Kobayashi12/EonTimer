@@ -5,7 +5,6 @@ import io.eontimer.TimerState
 import io.eontimer.TimerStateAware
 import io.eontimer.resetTimerState
 import io.eontimer.util.javafx.anyChangesOf
-import io.eontimer.util.javafx.bindBidirectional
 import io.eontimer.util.javafx.initializeChoices
 import io.eontimer.util.javafx.setOnFocusLost
 import io.eontimer.util.javafx.spinner.LongValueFactory
@@ -17,9 +16,9 @@ import javafx.scene.control.Spinner
 import org.springframework.stereotype.Component
 
 @Component("timerSettingsController")
-class SettingsController(
+class TimerSettingsController(
     override val state: TimerState,
-    private val settings: Settings,
+    private val settings: TimerSettings,
     private val timerFactory: AggregateControllerTimerFactory
 ) : TimerStateAware {
     // @formatter:off

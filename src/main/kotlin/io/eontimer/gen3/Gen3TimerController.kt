@@ -6,7 +6,6 @@ import io.eontimer.TimerState
 import io.eontimer.TimerTab
 import io.eontimer.resetTimerState
 import io.eontimer.util.javafx.anyChangesOf
-import io.eontimer.util.javafx.filter
 import io.eontimer.util.javafx.getValue
 import io.eontimer.util.javafx.initializeChoices
 import io.eontimer.util.javafx.mapToBoolean
@@ -29,15 +28,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
 import kotlin.time.Duration.Companion.milliseconds
+import io.eontimer.gen3.Gen3ControllerTimerFactory as ControllerTimerFactory
+import io.eontimer.gen3.Gen3TimerModel as Model
 
 @Component("gen3TimerController")
 class Gen3TimerController(
-    override val model: Gen3TimerModel,
+    override val model: Model,
     override val state: TimerState,
-    override val timerFactory: Gen3ControllerTimerFactory,
+    override val timerFactory: ControllerTimerFactory,
     private val coroutineScope: CoroutineScope,
     private val calibrator: Calibrator,
-) : TimerController<Gen3TimerModel, Gen3ControllerTimerFactory> {
+) : TimerController<Model, ControllerTimerFactory> {
     override val timerTab = TimerTab.GEN3
 
     // @formatter:off
@@ -56,8 +57,7 @@ class Gen3TimerController(
         anyChangesOf(
             model.mode,
             model.preTimer,
-            model.targetFrame,
-            state.runningProperty.filter { !it }
+            model.targetFrame
         ) {
             resetTimerState()
         }

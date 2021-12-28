@@ -2,7 +2,6 @@ package io.eontimer
 
 import de.jensd.fx.glyphs.GlyphsDude
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import io.eontimer.util.javafx.disableWhen
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import org.springframework.stereotype.Component
@@ -18,7 +17,8 @@ class EonTimerController(
 
     fun initialize() {
         settingsBtn.graphic = GlyphsDude.createIcon(FontAwesomeIcon.GEAR)
-        settingsBtn.disableWhen(timerState.runningProperty)
+        settingsBtn.disableProperty()
+            .bind(timerState.runningProperty)
         settingsBtn.setOnAction {
             settingsDialog.showAndWait()
         }

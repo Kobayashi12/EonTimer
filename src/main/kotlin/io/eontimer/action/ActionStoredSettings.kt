@@ -2,7 +2,7 @@ package io.eontimer.action
 
 import io.eontimer.util.javafx.toHex
 
-data class StoredSettings(
+data class ActionStoredSettings(
     val mode: ActionMode = ActionSettings.Defaults.MODE,
     val color: String = ActionSettings.Defaults.COLOR.toHex(),
     val sound: Sound = ActionSettings.Defaults.SOUND,

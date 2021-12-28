@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component
 import kotlin.time.Duration
 
 @Component("gen5ControllerTimerFactory")
-class ControllerTimerFactory(
-    private val model: Model,
+class Gen5TimerControllerTimerFactory(
+    private val model: Gen5TimerModel,
     private val delayTimerFactory: DelayTimerFactory,
     private val secondTimerFactory: SecondTimerFactory,
     private val entralinkTimerFactory: EntralinkTimerFactory,
@@ -39,14 +39,14 @@ class ControllerTimerFactory(
 
     override val stages: List<Duration>
         get() = when (model.mode.get()!!) {
-            Mode.STANDARD ->
+            Gen5TimerMode.STANDARD ->
                 secondTimerFactory.createStages(
                     SecondTimerFactory.Params(
                         targetSecond = model.targetSecond.get(),
                         calibration = calibrator.calibrateToMillis(model.calibration.get())
                     )
                 )
-            Mode.C_GEAR ->
+            Gen5TimerMode.C_GEAR ->
                 delayTimerFactory.createStages(
                     DelayTimerFactory.Params(
                         targetDelay = model.targetDelay.get(),
@@ -54,7 +54,7 @@ class ControllerTimerFactory(
                         calibration = calibrator.calibrateToMillis(model.calibration.get())
                     )
                 )
-            Mode.ENTRALINK ->
+            Gen5TimerMode.ENTRALINK ->
                 entralinkTimerFactory.createStages(
                     EntralinkTimerFactory.Params(
                         targetDelay = model.targetDelay.get(),
@@ -63,7 +63,7 @@ class ControllerTimerFactory(
                         calibration = calibrator.calibrateToMillis(model.calibration.get()),
                     )
                 )
-            Mode.ENHANCED_ENTRALINK ->
+            Gen5TimerMode.ENHANCED_ENTRALINK ->
                 enhancedEntralinkTimerFactory.createStages(
                     EnhancedEntralinkTimerFactory.Params(
                         targetDelay = model.targetDelay.get(),
@@ -78,17 +78,17 @@ class ControllerTimerFactory(
 
     override fun calibrate() {
         when (model.mode.get()!!) {
-            Mode.STANDARD -> {
+            Gen5TimerMode.STANDARD -> {
                 model.calibration += calibrator.calibrateToDelays(secondCalibration)
             }
-            Mode.C_GEAR -> {
+            Gen5TimerMode.C_GEAR -> {
                 model.calibration += calibrator.calibrateToDelays(delayCalibration)
             }
-            Mode.ENTRALINK -> {
+            Gen5TimerMode.ENTRALINK -> {
                 model.calibration += calibrator.calibrateToDelays(secondCalibration)
                 model.entralinkCalibration += calibrator.calibrateToDelays(entralinkCalibration)
             }
-            Mode.ENHANCED_ENTRALINK -> {
+            Gen5TimerMode.ENHANCED_ENTRALINK -> {
                 model.calibration += calibrator.calibrateToDelays(secondCalibration)
                 model.entralinkCalibration += calibrator.calibrateToDelays(entralinkCalibration)
                 model.frameCalibration += enhancedEntralinkTimerFactory.calibrate(

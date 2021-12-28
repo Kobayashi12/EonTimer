@@ -1,13 +1,13 @@
 package io.eontimer
 
-import io.eontimer.timer.Settings
+import io.eontimer.timer.TimerSettings
 import io.eontimer.util.javafx.getValue
 import org.springframework.stereotype.Service
 import kotlin.math.roundToLong
 
 @Service
 class Calibrator(
-    timerSettings: Settings
+    timerSettings: TimerSettings
 ) {
     private val console by timerSettings.console
     private val precisionCalibration by timerSettings.precisionCalibration

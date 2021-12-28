@@ -9,7 +9,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 class ActionSettings(
-    storedSettings: StoredSettings = StoredSettings()
+    storedSettings: ActionStoredSettings = ActionStoredSettings()
 ) {
     val mode = SimpleObjectProperty(storedSettings.mode)
     val color = SimpleObjectProperty(Color.web(storedSettings.color))

@@ -1,6 +1,5 @@
 package io.eontimer
 
-import io.eontimer.util.javafx.disableWhen
 import io.eontimer.util.javafx.flip
 import io.eontimer.util.javafx.map
 import io.eontimer.util.javafx.subscribe
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component
 class TimerControlPane(
     private val state: TimerState,
     private val selectedTimerTab: ObjectProperty<TimerTab>,
-    private val aggregateTimerFactory: AggregateControllerTimerFactory
+    private val timerFactory: AggregateControllerTimerFactory
 ) {
 
     // @formatter:off
@@ -41,18 +40,23 @@ class TimerControlPane(
         )
         selectedTimerTab.subscribe {
             Platform.runLater {
-                state.stagesProperty.set(aggregateTimerFactory.stages)
+                state.stages = timerFactory.stages
             }
         }
 
-        gen3Tab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN3)))
-        gen4Tab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN4)))
-        gen5Tab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN5)))
-        customTab.disableWhen(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.CUSTOM)))
+        gen3Tab.disableProperty()
+            .bind(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN3)))
+        gen4Tab.disableProperty()
+            .bind(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN4)))
+        gen5Tab.disableProperty()
+            .bind(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.GEN5)))
+        customTab.disableProperty()
+            .bind(state.runningProperty.and(selectedTimerTab.isNotEqualTo(TimerTab.CUSTOM)))
 
-        updateBtn.disableWhen(state.runningProperty)
+        updateBtn.disableProperty()
+            .bind(state.runningProperty)
         updateBtn.setOnAction {
-            aggregateTimerFactory.calibrate()
+            timerFactory.calibrate()
         }
 
         timerBtn.textProperty()
@@ -65,6 +69,10 @@ class TimerControlPane(
                 })
         timerBtn.setOnAction {
             state.runningProperty.flip()
+        }
+
+        Platform.runLater {
+            state.stages = timerFactory.stages
         }
     }
 }

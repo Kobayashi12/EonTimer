@@ -1,6 +1,6 @@
 package io.eontimer.gen3
 
-data class StoredSettings(
+data class Gen3TimerStoredSettings(
     val mode: Gen3TimerMode = Gen3TimerModel.Defaults.MODE,
     val preTimer: Long = Gen3TimerModel.Defaults.PRE_TIMER,
     val targetFrame: Long = Gen3TimerModel.Defaults.TARGET_FRAME,

@@ -2,6 +2,18 @@ package io.eontimer.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.eontimer.action.ActionSettings
+import io.eontimer.action.ActionStoredSettings
+import io.eontimer.custom.CustomTimerModel
+import io.eontimer.custom.CustomTimerStoredSettings
+import io.eontimer.gen3.Gen3TimerModel
+import io.eontimer.gen3.Gen3TimerStoredSettings
+import io.eontimer.gen4.Gen4TimerModel
+import io.eontimer.gen4.Gen4TimerStoredSettings
+import io.eontimer.gen5.Gen5TimerModel
+import io.eontimer.gen5.Gen5TimerStoredSettings
+import io.eontimer.timer.TimerSettings
+import io.eontimer.timer.TimerStoredSettings
 import javafx.beans.property.SimpleObjectProperty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,18 +24,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.io.FileOutputStream
-import io.eontimer.action.ActionSettings as ActionSettings
-import io.eontimer.action.StoredSettings as ActionStoredSettings
-import io.eontimer.custom.CustomTimerModel as CustomModel
-import io.eontimer.custom.StoredSettings as CustomStoredSettings
-import io.eontimer.gen3.Gen3TimerModel as Gen3Model
-import io.eontimer.gen3.StoredSettings as Gen3StoredSettings
-import io.eontimer.gen4.Gen4TimerModel as Gen4Model
-import io.eontimer.gen4.StoredSettings as Gen4StoredSettings
-import io.eontimer.gen5.Model as Gen5Model
-import io.eontimer.gen5.StoredSettings as Gen5StoredSettings
-import io.eontimer.timer.Settings as TimerSettings
-import io.eontimer.timer.StoredSettings as TimerStoredSettings
 
 @Configuration
 @EnableConfigurationProperties(AppProperties::class, DebugProperties::class)
@@ -32,10 +32,10 @@ class AppConfig {
     fun shutdownHook(
         properties: AppProperties,
         objectMapper: ObjectMapper,
-        gen3Model: Gen3Model,
-        gen4Model: Gen4Model,
-        gen5Model: Gen5Model,
-        customModel: CustomModel,
+        gen3TimerModel: Gen3TimerModel,
+        gen4TimerModel: Gen4TimerModel,
+        gen5TimerModel: Gen5TimerModel,
+        customTimerModel: CustomTimerModel,
         actionSettings: ActionSettings,
         timerSettings: TimerSettings,
     ) = DisposableBean {
@@ -43,10 +43,10 @@ class AppConfig {
             objectMapper.writeValue(
                 FileOutputStream("${properties.name}.json"),
                 StoredSettings(
-                    gen3 = Gen3StoredSettings(gen3Model),
-                    gen4 = Gen4StoredSettings(gen4Model),
-                    gen5 = Gen5StoredSettings(gen5Model),
-                    custom = CustomStoredSettings(customModel),
+                    gen3 = Gen3TimerStoredSettings(gen3TimerModel),
+                    gen4 = Gen4TimerStoredSettings(gen4TimerModel),
+                    gen5 = Gen5TimerStoredSettings(gen5TimerModel),
+                    custom = CustomTimerStoredSettings(customTimerModel),
                     actionSettings = ActionStoredSettings(actionSettings),
                     timerSettings = TimerStoredSettings(timerSettings),
                 )
@@ -72,24 +72,24 @@ class AppConfig {
     ) = SimpleObjectProperty(storedSettings.selectedTimerTab)
 
     @Bean
-    fun gen3Model(
+    fun gen3TimerModel(
         storedSettings: StoredSettings
-    ) = Gen3Model(storedSettings.gen3)
+    ) = Gen3TimerModel(storedSettings.gen3)
 
     @Bean
-    fun gen4Model(
+    fun gen4TimerModel(
         storedSettings: StoredSettings
-    ) = Gen4Model(storedSettings.gen4)
+    ) = Gen4TimerModel(storedSettings.gen4)
 
     @Bean
-    fun gen5Model(
+    fun gen5TimerModel(
         storedSettings: StoredSettings
-    ) = Gen5Model(storedSettings.gen5)
+    ) = Gen5TimerModel(storedSettings.gen5)
 
     @Bean
-    fun customModel(
+    fun customTimerModel(
         storedSettings: StoredSettings
-    ) = CustomModel(storedSettings.custom)
+    ) = CustomTimerModel(storedSettings.custom)
 
     @Bean
     fun actionSettings(
